@@ -112,6 +112,7 @@
                             config:{
                                 type:"elementSelect",
                                 name:"script",
+                                label:' ',
                                 options:[{
                                     value:"this.save(event,config);",
                                     label:"保存"
@@ -129,6 +130,7 @@
                             value:"elementTextarea", 
                             config:{
                                 name:"script",
+                                label:' ',
                                 type:"elementTextarea",                          
                             }                            
                         }]
