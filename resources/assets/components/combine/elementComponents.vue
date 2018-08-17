@@ -9,7 +9,7 @@
             :key="key"
             :is="option.type"
             :config="option"
-            :form="config.form"
+            :form="form[config.name]"
             @e="e"
         ></component>
     </el-form-item>
@@ -27,14 +27,14 @@
         },
         computed:{
             configForm(){
-                return this.config.form;
+                return this.form[this.config.name];
             }
         },
         methods:{
             e(event,config){
                 switch(config.name){
                     default:
-                        eval(config.event);
+                        eval(config.script);
                 }
                 this.$emit('componentEvent',event,config);
             }
