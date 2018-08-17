@@ -5,6 +5,7 @@
         :prop="config.name" 
         @click.native="click"
         :class="{'size-small-font':config.size==='small'?true:false}"
+        class="elementRadioChange"
     >
         <el-radio-group 
             v-model="form[config.name]"
@@ -35,7 +36,14 @@
 </template>
 <script>
     export default {
-        props: ['config','form'],    
+        props: ['config','form'],
+        mounted(){
+            //样式调整
+            let item__content=document.querySelector('.elementRadioChange .el-form-item__content');
+            if(item__content){
+                item__content.style.marginLeft="0px";
+            }
+        },          
         methods: {
             click: function(event){
                 this.$emit('config',event,this.config,{
@@ -53,8 +61,8 @@
                 });
             },
             change(value){
-                console.log(this.form);
                 this.$emit('radioChange',value,this.config);
+                this.$emit('e',value,this.config);
             }
         }   
     }
