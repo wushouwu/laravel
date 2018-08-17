@@ -3,7 +3,13 @@
         <el-collapse-item title="组件" name="组件">
             <el-form :model="form" label-width="80px" style="width:100%;height:100%">
                 <draggable v-model="configs.form" :options="{group:{ name:'view',  pull:'clone', put: false },preventOnFilter: true,handle: 'label',animation: 250}" style="width:100%;height:100%">
-                    <component v-for="(config, key,index) in configs.form" :key="index" :is="config.type" :config="config" :form="form"></component>
+                    <component 
+                        v-for="(config, key,index) in configs.form" 
+                        :key="index" 
+                        :is="config.type" 
+                        :config="config" 
+                        :form="form"
+                    ></component>
                 </draggable>
             </el-form>
         </el-collapse-item>        
@@ -16,7 +22,6 @@
                     :config="attr" 
                     :form="attrForm"
                     v-show="!attr.hide"
-                    @radioChange="radioChange"
                     @cascaderActiveChange="cascaderActiveChange"
                     @e="e"
                 ></component>
@@ -99,16 +104,13 @@
             }
         },
         methods:{
-            radioChange(value,config){
-                eval(config.radioChange);
-            },
             cascaderActiveChange(value,config){
                 eval(config.cascaderActiveChange);
             },
             e(event,config){
                 switch(config.name){
                     default:
-                        eval(config.event);
+                        eval(config.script);
                 }
             }
         }
