@@ -1,0 +1,81 @@
+{
+    "tools":[{
+        "name":"add",
+        "buttonType":"primary",
+        "type":"elementButton",
+        "icon":"el-icon-circle-plus-outline"
+    },{
+        "name":"import",
+        "type":"elementButton",
+        "icon":"el-icon-upload2"
+    },{
+        "name":"export",
+        "type":"elementButton",
+        "icon":"el-icon-download"
+    }],
+    "form":{
+        "field":"COLUMN_COMMENT",
+        "operator": "like",
+        "value":""
+    },
+    "table":{
+        "border":true,
+        "stripe":true,
+        "url":"admin/table",
+        "defaultSort":{
+            "prop":"COLUMN_COMMENT",
+            "order":"ascending"
+        },
+        "defaultSearch":{
+            "value": "COLUMN_COMMENT",
+            "label":"字段名",
+            "type":"text",
+            "sortable": true,
+            "fixed": true,
+            "resizable": true
+        }, 
+        "fields":[{
+            "value": "COLUMN_COMMENT",
+            "label":"字段名",
+            "type":"text",
+            "sortable": true,
+            "fixed": true,
+            "resizable": true
+        },{
+            "value": "COLUMN_NAME",
+            "label":"字段别名",
+            "type":"text",
+            "sortable": true,
+            "fixed": true,
+            "resizable": true
+        },{
+            "value":"DATA_TYPE",
+            "label":"字段类型",
+            "type":"text",
+            "sortable": true,
+            "fixed": false,
+            "resizable":false
+        },{
+            "value":"CHARACTER_MAXIMUM_LENGTH",
+            "label":"长度",
+            "type":"inputNumber",
+            "sortable": true,
+            "fixed": false,
+            "resizable":false
+        }],            
+        "operator":[{
+            "text":"查看",
+            "script":"this.view(row,operator)"
+        },{
+            "text":"编辑",
+            "script":"this.edit(row,operator)"
+        },{
+            "text":"删除",
+            "script":"this.delete(row,operator)"
+        }]
+    },     
+    "pagination":{
+        "currentPage":1,
+        "pageSize":10
+    }    
+}

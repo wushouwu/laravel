@@ -1,0 +1,101 @@
+<template>
+    <el-form  v-model="form" label-width="80px" style="width:100%;height:100%;position:relative;">            
+        <div style="overflow:auto;height:100%;">
+            <component 
+                v-for="(field, key,index) in fields" 
+                :key="index" 
+                :is="field.type" 
+                :config="field" 
+                :form="form"
+                v-field="{field:field,form:form,query:query}"
+            ></component>            
+        </div>  
+        <el-footer style="height:0px;width:100%;display:flex;justify-content:center;align-items:center;position:absolute;bottom:21px;">
+            <elementButton
+                v-for="(tool,key,index) in tools"
+                :key="key"
+                :config="tool"
+                class="buttonBottom"
+                @buttonClick="buttonClick"
+            ></elementButton>
+        </el-footer>              
+    </el-form>
+</template>  
+<script>
+    export default {
+        props: ['query'],
+        data() {
+            return {
+                fields: [],
+                form: {},
+                tools:[]
+            }
+        },
+        //请求配置
+        created: function(){
+            this.my.axios({
+                vue: this,
+                axiosOption:{
+                    url:'admin/table/view',
+                    data:Object.assign({type:"form"},this.query)
+                },
+                success:function(response,option){
+                    option.vue=Object.assign(option.vue,response.data.data);
+                    
+                }
+            });
+        },  
+        directives:{
+            //字段设置
+            field:{
+                bind(el,binding,vnode){
+                    if(binding.value.field.script){
+                        eval(binding.value.field.script)
+                    }
+                }
+            }
+        },
+        methods: {
+            //工具按钮点击
+            buttonClick:function(event,config){
+                eval(config.script);
+            },       
+            //保存表单
+            save: function(event,config,cancel=false){
+                let option={
+                    vue: this,
+                    axiosOption:{
+                        url:config.query.url||'/admin/table/save',
+                        data: Object.assign({
+                            form:this.form
+                        },this.query)
+                    },
+                    successMsg: '保存成功!'
+                };
+                if(cancel){
+                    option.success=function(response,option){
+                        option.vue.cancel(event,config);
+                    }
+                }
+                this.my.axios(option);               
+            },
+            //取消
+            cancel:function(event,config){
+                this.$root.$children[0].removeTab(this.query.TABLE_NAME+'-add');
+            },
+            //配置视图
+            config:function(event,config){
+                this.save(event,config);
+                this.cancel(event,config);
+                this.$root.$children[0].addTab({
+                    name:this.query.TABLE_NAME+'-config',
+                    title:this.query.TABLE_COMMENT+'表-配置',
+                    content: this.form.type+'ConfigVue',
+                    query:Object.assign({},this.form,this.query,config.query)
+                });
+            }
+        }
+    }
+</script>
+<style>   
+</style>

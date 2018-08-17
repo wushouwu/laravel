@@ -1,0 +1,69 @@
+{
+    "tools":[{
+        "name":"add",
+        "buttonType":"primary",
+        "type":"elementButton",
+        "icon":"el-icon-circle-plus-outline"
+    },{
+        "name":"import",
+        "type":"elementButton",
+        "icon":"el-icon-upload2"
+    },{
+        "name":"export",
+        "type":"elementButton",
+        "icon":"el-icon-download"
+    }],
+    "form":{
+        "field":"id",
+        "operator": "like",
+        "value":""
+    },
+    "table":{
+        "border":true,
+        "stripe":true,
+        "defaultSort":{
+            "prop":"id",
+            "order":"ascending"
+        },
+        "defaultSearch":{
+            "value": "id",
+            "label":"id",
+            "type":"inputNumber",
+            "sortable": true,
+            "fixed": true,
+            "resizable": true
+        },
+        "fields": [{
+            "value": "id",
+            "label": "id",
+            "max": "",
+            "type": "inputNumber"
+        }, {
+            "value": "name",
+            "label": "姓名",
+            "max": "",
+            "type": "text"
+        }, {
+            "value": "email",
+            "label": "邮箱",
+            "max": "",
+            "type": "text"
+        }, {
+            "value": "password",
+            "label": "密码",
+            "max": "",
+            "type": "text"
+        }],     
+        "operator":[{
+            "text":"视图",
+            "script":"this.$root.$children[0].addTab('table-'+row.table_name,row.table_comment+'表','tableVue',{table:row.table_name});"
+        },{
+            "text":"字段",
+            "script":""
+        }]
+    },
+    "pagination":{
+        "currentPage":1,
+        "pageSize":10
+    }    
+}

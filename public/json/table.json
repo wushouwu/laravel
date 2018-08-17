@@ -1,0 +1,74 @@
+{
+    "tools":[{
+        "name":"add",
+        "buttonType":"primary",
+        "type":"elementButton",
+        "icon":"el-icon-circle-plus-outline"
+    },{
+        "name":"import",
+        "type":"elementButton",
+        "icon":"el-icon-upload2"
+    },{
+        "name":"export",
+        "type":"elementButton",
+        "icon":"el-icon-download"
+    }],
+    "form":{
+        "field":"TABLE_COMMENT",
+        "operator": "like",
+        "value":""
+    },
+    "table":{
+        "border":true,
+        "stripe":true,
+        "defaultSort":{
+            "prop":"TABLE_COMMENT",
+            "order":"ascending"
+        },
+        "defaultSearch":{
+            "value": "TABLE_COMMENT",
+            "label":"表名",
+            "type":"datetime",
+            "sortable": true,
+            "fixed": true,
+            "resizable": true
+        }, 
+        "fields":[{
+            "value": "TABLE_COMMENT",
+            "label":"表名",
+            "type":"datetime",
+            "sortable": true,
+            "fixed": true,
+            "resizable": true
+        },{
+            "value": "TABLE_NAME",
+            "label":"别名",
+            "type":"inputNumber",
+            "sortable": true,
+            "fixed": false,
+            "resizable": true
+        },{
+            "value":"desc",
+            "label":"备注",
+            "fixed": false,
+            "resizable":false,
+            "width": "400"
+        }],            
+        "operator":[{
+            "text":"字段",
+            "query":{"view":"../field"},
+            "script":"this.addTab({name:'table_field_'+row.TABLE_NAME,title:row.TABLE_COMMENT+'-字段',content:'tableVue',query:{table:'INFORMATION_SCHEMA.COLUMNS',where:{field:'TABLE_NAME',operator:'=',value:row.TABLE_NAME},name:row.TABLE_COMMENT,view:operator.query.view}});"
+        },{
+            "text":"视图",
+            "script":""
+        },{
+            "text":"数据",
+            "query":{"view":""},
+            "script":"this.addTab({name:'table_data-'+row.TABLE_NAME,title:row.TABLE_COMMENT+'-数据',content:'tableVue',query:{table:row.TABLE_NAME,name:row.TABLE_COMMENT,view:operator.query.view}});"
+        }]
+    },     
+    "pagination":{
+        "currentPage":1,
+        "pageSize":10
+    }    
+}
