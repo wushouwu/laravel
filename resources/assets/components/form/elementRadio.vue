@@ -45,6 +45,7 @@
             },            
             change(value){
                 this.$emit('radioChange',value,this.config);
+                this.$emit('e',value,this.config);
             }
         }   
     }
