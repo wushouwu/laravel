@@ -17,7 +17,7 @@
                 :style="config.itemStyle+';width:auto;'"
                 @buttonClick="add"
             ></elementButton>            
-        </div> 
+        </div>
         <div
             v-for="(option,key,index) in config.options"
             :key="key"
@@ -27,7 +27,7 @@
                 :key="k"
                 :config="item"
                 :is="item.type"
-                :form="config.form[key]"
+                :form="form[config.name][key]"
                 :style="config.itemStyle"
             ></component>
             <elementButton
@@ -73,18 +73,17 @@
         methods:{
             add(event,config){
                 this.config.options.push(this.config.options[0]);
-                let form=Object.assign({},this.config.form[0]);
+                let form=Object.assign({},this.form[this.config.name][0]);
                 if('label' in form && 'value' in form){
                     form.value='';
                     form.label='';
                 }
-                this.config.form.push(form);
+                this.form[this.config.name].push(form);
             },
             del(event,config,index){
-                console.log(this.form);
                 if(this.config.options.length>1){
                     this.$delete(this.config.options,index);
-                    this.$delete(this.config.form,index);
+                    this.$delete(this.form[this.config.name],index);
                 }else{
                     this.$message({
                         message: '最少须有一项',
