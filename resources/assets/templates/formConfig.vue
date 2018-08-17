@@ -18,7 +18,7 @@
                         @click.native="changeAside"
                     >
                         <component 
-                            :style="{border:'1px dotted '+(activeField===key?'#eee':'transparent')}"
+                            :style="{border:'1px dotted '+(activeField===key?'#409EFF':'transparent')}"
                             v-for="(field, key,index) in configs.fields" 
                             :key="index" 
                             :is="field.type" 
@@ -31,7 +31,7 @@
                     </draggable> 
                 </div>
                 <draggable
-                    style="width:99%;display:flex;justify-content:center;align-items:center;position:absolute;bottom:21px;border:1px dashed #eee;"
+                    style="width:99%;display:flex;justify-content:center;align-items:center;position:absolute;bottom:21px;border:1px dashed #c0c4cc;"
                     v-model="configs.tools" 
                     :options="{group:{ name:'view',  pull:false, put: true},preventOnFilter: true,animation: 250}"
                 >
