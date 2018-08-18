@@ -39,9 +39,9 @@
         props: ['config','form'],
         mounted(){
             //样式调整
-            let item__content=document.querySelector('.elementRadioChange .el-form-item__content');
-            if(item__content){
-                item__content.style.marginLeft="0px";
+            let item__content=document.querySelectorAll('.elementRadioChange>.el-form-item__content');
+            for(var i=0;i<item__content.length;i++){
+                item__content[i].style.marginLeft="0px";
             }
         },          
         methods: {
