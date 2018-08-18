@@ -56,12 +56,12 @@ class table extends Controller{
     //dd(DB::getQueryLog());
     //获取视图配置
     public function view(Request $request){  
-        $view=$request->input('view','');
+        $view=$request->input('view_name','');
         $type=$request->input('type','');
         $TABLE_NAME=$request->input('TABLE_NAME','');
         if($view){
             $tables = DB::table('view')->where([
-                ['name','=',$view],
+                ['view_name','=',$view],
                 ['type','=',$type],
                 ['TABLE_NAME','=',$TABLE_NAME]
             ])->value('json');
@@ -205,7 +205,7 @@ class table extends Controller{
                         'text' => '查看',
                         'query' => 
                         array (
-                        'view' => 'hello',
+                        'view_name' => 'hello',
                         ),
                         'script' => 'this.view(row,operator)',
                     ),
@@ -246,14 +246,13 @@ class table extends Controller{
     }
     //保存表单
     public function save(Request $request){
-
-        return response()->json([]);
         $TABLE_NAME=$request->input('TABLE_NAME','');
-        $form=$request->input('form','');
+        $form=$request->input('form',[]);
         if($TABLE_NAME&&$form){
             if(isset($form['id']) && $form['id']){  
+                $id=$form['id'];
                 unset($form['id']);
-                $table=DB::table($TABLE_NAME)->where('id',$form['id'])->update($form);
+                $table=DB::table($TABLE_NAME)->where('id',$id)->update($form);
             }else{
                 $table=DB::table($TABLE_NAME)->insertGetId($form);
             }
