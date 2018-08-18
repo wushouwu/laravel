@@ -15,7 +15,7 @@ class CreateViewTable extends Migration
     {
         Schema::create('view', function (Blueprint $table) {
             $table->increments('id')->comment('id');
-            $table->string('name')->nullable()->comment('名称');
+            $table->string('view_name')->nullable()->comment('名称');
             $table->string('desc')->nullable()->comment('描述');
             $table->string('TABLE_NAME')->nullable()->comment('所属表');
             $table->string('type')->nullable()->comment('类型');//table form view
