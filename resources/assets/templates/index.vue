@@ -64,18 +64,13 @@ export default {
     data() {
         return {
             isFullscreen:false,
-            activeTab: '1-1-1',
-            activeTabs:['1-1-1','3-1'],
+            activeTab: '3-1',
+            activeTabs:['3-1'],
             tabs: {'3-1': {
                 title: '表格',
                 name: '3-1',
                 content: 'tableVue',
-                query:{TABLE_NAME:'INFORMATION_SCHEMA.TABLES',view:'table'}
-            },'1-1-1': {
-                title: '视图',
-                name: '1-1-1',
-                content: 'formConfigVue',
-                query:{TABLE_NAME:'view',view:'视图添加',type:'form'}
+                query:{TABLE_NAME:'INFORMATION_SCHEMA.TABLES',view_name:'table'}
             }},
         }
     },
@@ -145,12 +140,13 @@ export default {
         width:100%;
     } 
     /*按钮组件下边距处理*/ 
-    .el-form-item.buttonBottom{
-        margin-bottom:0px;
+    .footer-tools .el-form-item.elementButton{
+        margin:5px;
     }
-    /*表单组件右边距处理*/
+    /*表单组件边距处理*/
     form .el-form-item{
         margin-right:10px;
+        margin-bottom:20px;
     }  
     /*size为small时label字体大小处理*/
     .size-small-font,.size-small-font [class*="label"]{
