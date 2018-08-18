@@ -351,11 +351,12 @@
 			},
 			//编辑数据
 			edit(row,operator){
+				console.log(this.query);
 				this.addTab({
-					name: this.query.table+'-'+row.id,
-					title: this.query.name+'表-'+row.id,
+					name: this.query.TABLE_NAME+'-'+row.id+'-edit',
+					title: this.query.TABLE_COMMENT+'-'+row.id+'-编辑',
 					content: 'formConfigVue',
-					query:{view:operator.query.view}
+					query:Object.assign({},this.query,{row:row})
 				})
 			},
 			//删除数据
@@ -365,8 +366,5 @@
 		}
 	}
 </script>
-<style scoped>
-	.el-form-item{
-		margin-bottom:20px;
-	}
+<style>
 </style>
