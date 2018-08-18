@@ -14,6 +14,7 @@
                     <draggable
                         v-model="configs.fields" 
                         style="width:100%;height:100%"
+                        class="draggable"
                         :options="{group:{ name:'view',  pull:false, put: true},preventOnFilter: true,animation: 250}"
                         @change="sort"
                         @click.native="changeAside"
@@ -32,7 +33,7 @@
                     </draggable> 
                 </div>
                 <draggable
-                    class="footer-tools"
+                    class="footer-tools draggable"
                     style="width:99%;min-height:42px;display:flex;justify-content:center;align-items:center;position:absolute;bottom:21px;border:1px dashed #c0c4cc;"
                     v-model="configs.tools" 
                     :options="{group:{ name:'view',  pull:false, put: true},preventOnFilter: true,animation: 250}"

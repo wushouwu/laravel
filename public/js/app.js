@@ -77843,7 +77843,7 @@ exports = module.exports = __webpack_require__(6)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/*菜单栏*/\n.el-menu:not(.el-menu--collapse) {\n    width: 300px;\n}\n.el-tabs{\n    display:-webkit-box;\n    display:-ms-flexbox;\n    display:flex;\n    -webkit-box-orient:vertical;\n    -webkit-box-direction:normal;\n        -ms-flex-flow:column;\n            flex-flow:column;\n    height:100%;\n}\n.el-tabs__content{\n    -webkit-box-flex: 1;\n        -ms-flex: 1;\n            flex: 1;\n}  \n/*时间选择框大小*/\n.el-date-editor.el-input, .el-date-editor.el-input__inner{\n    width:100%;\n} \n/*按钮组件下边距处理*/\n.footer-tools .el-form-item.elementButton{\n    margin:5px;\n}\n/*表单组件边距处理*/\nform .el-form-item{\n    margin-right:10px;\n    margin-bottom:20px;\n}  \n/*size为small时label字体大小处理*/\n.size-small-font,.size-small-font [class*=\"label\"]{\n    font-size:13px;\n}           \n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/*菜单栏*/\n.el-menu:not(.el-menu--collapse) {\n    width: 300px;\n}\n.el-tabs{\n    display:-webkit-box;\n    display:-ms-flexbox;\n    display:flex;\n    -webkit-box-orient:vertical;\n    -webkit-box-direction:normal;\n        -ms-flex-flow:column;\n            flex-flow:column;\n    height:100%;\n}\n.el-tabs__content{\n    -webkit-box-flex: 1;\n        -ms-flex: 1;\n            flex: 1;\n}  \n/*时间选择框大小*/\n.el-date-editor.el-input, .el-date-editor.el-input__inner{\n    width:100%;\n} \n/*按钮组件下边距处理*/\n.footer-tools .el-form-item.elementButton{\n    margin:5px;\n}\n/*表单组件边距处理*/\nform .el-form-item{\n    margin-right:10px;\n    margin-bottom:20px;\n}  \n/*size为small时label字体大小处理*/\n.size-small-font,.size-small-font [class*=\"label\"]{\n    font-size:13px;\n}\n.draggable label,.footer-tools.draggable button{\n    cursor:move;\n}\n", ""]);
 
 // exports
 
@@ -78077,7 +78077,7 @@ exports = module.exports = __webpack_require__(6)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -78092,6 +78092,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuedraggable___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vuedraggable__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_vue__ = __webpack_require__(84);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__components_vue__);
+//
 //
 //
 //
@@ -79854,6 +79855,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -80003,6 +80005,7 @@ var render = function() {
               _c(
                 "draggable",
                 {
+                  staticClass: "draggable",
                   staticStyle: { width: "100%", height: "100%" },
                   attrs: {
                     options: {
@@ -80128,6 +80131,7 @@ var render = function() {
                   _c(
                     "draggable",
                     {
+                      staticClass: "draggable",
                       staticStyle: { width: "100%", height: "100%" },
                       attrs: {
                         options: {
@@ -80179,7 +80183,7 @@ var render = function() {
               _c(
                 "draggable",
                 {
-                  staticClass: "footer-tools",
+                  staticClass: "footer-tools draggable",
                   staticStyle: {
                     width: "99%",
                     "min-height": "42px",

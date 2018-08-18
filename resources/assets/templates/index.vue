@@ -151,5 +151,8 @@ export default {
     /*size为small时label字体大小处理*/
     .size-small-font,.size-small-font [class*="label"]{
         font-size:13px;
-    }           
+    } 
+    .draggable label,.footer-tools.draggable button{
+        cursor:move;
+    }
 </style>

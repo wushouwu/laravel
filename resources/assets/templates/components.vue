@@ -22,6 +22,7 @@
                     v-model="configs.components" 
                     :options="{group:{ name:'view',  pull:'clone', put: false },preventOnFilter: true,handle: 'label',animation: 250}" 
                     style="width:100%;height:100%"
+                    class="draggable"
                     @remove="remove"
                     @update="update"
                 >
