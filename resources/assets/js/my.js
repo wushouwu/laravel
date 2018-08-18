@@ -17,10 +17,11 @@ export var my={
             if('msg' in response.data){
                 option.vue.$message({
                     showClose: true,
-                    message: response.data.msg,
-                    type: 'error',
-                    duration: 0 
+                    message: response.data.msg
                 });
+                if(typeof(option.error)=='function'){
+                    option.error(response,option);
+                }
             }else{
                 if(typeof(option.success)=='function'){
                     option.success(response,option);
