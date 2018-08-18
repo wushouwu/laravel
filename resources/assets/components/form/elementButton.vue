@@ -1,7 +1,10 @@
 <template>
     <el-form-item 
-        label-width="0px"
+        :label="config.label"
+        :label-width="config.labelWidth||'0px'"
         @click.native="click"
+        class="elementButton"
+        :style="config.style"
     >
         <el-button 
             :type="config.buttonType" 
@@ -13,7 +16,6 @@
             :native-type="config.nativeType"
             :title="config.title"
             :size="config.size"
-            class="elementButton"
         >{{config.text}}</el-button>
     </el-form-item>
 </template>
