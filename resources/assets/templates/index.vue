@@ -36,6 +36,7 @@
                     </template>
                     <el-menu-item index="3-1" ref="3-1" content="tableVue" :query="{}">表格</el-menu-item>
                     <el-menu-item index="3-2" ref="3-2" content="viewVue" :query="{}">视图</el-menu-item>
+                    <el-menu-item index="3-3" ref="3-3" content="formConfigVue" :query="{}">表单</el-menu-item>
                 </el-submenu>
             </el-menu>
         </el-aside>
@@ -140,7 +141,7 @@ export default {
         width:100%;
     } 
     /*按钮组件下边距处理*/ 
-    .footer-tools .el-form-item.elementButton{
+    .tools .el-form-item.elementButton{
         margin:5px;
     }
     /*表单组件边距处理*/
@@ -152,6 +153,7 @@ export default {
     .size-small-font,.size-small-font [class*="label"]{
         font-size:13px;
     } 
+    /*可拖动组件的光标*/
     .draggable label,.footer-tools.draggable button{
         cursor:move;
     }
