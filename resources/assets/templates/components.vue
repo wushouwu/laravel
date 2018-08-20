@@ -7,7 +7,7 @@
                     :key="index" 
                     :is="config.type" 
                     :config="config" 
-                    :form="query.row"
+                    :form="row"
                 ></component> 
                 <elementButton
                     :config="{name:'save',text:'保存',buttonType:'primary'}"
@@ -59,6 +59,14 @@
         props:['attrs','attrForm','query'],
         data() {
             return {
+                row:{
+                    TABLE_NAME:'',
+                    desc:'',
+                    json:'',
+                    type:'',
+                    view_name:'',
+                    id:''
+                },
                 activeAccordion:"组件",
                 initComponents:`[{
                     "type": "elementText",
@@ -118,6 +126,9 @@
             }
         },
         created(){
+            if(this.query.row){
+                this.row=this.query.row
+            }
             this.configs.components=JSON.parse(this.initComponents);
             //表单配置
             this.my.axios({
@@ -126,7 +137,7 @@
                     url:'admin/table/view',
                     data:{
                         TABLE_NAME:'view',
-                        view_name:'视图-编辑',
+                        view_name:this.query.row?'视图-编辑':'视图-添加',
                         type:'form'
                     }
                 },
@@ -138,7 +149,7 @@
         watch:{
             json:{
                 handler(newValue, oldValue){
-                    this.$set(this.query.row,'json',JSON.stringify(newValue));
+                    this.$set(this.row,'json',JSON.stringify(newValue));
                 },
                 deep:true
             }
@@ -164,12 +175,12 @@
             },
             //保存配置
             save: function(event){
-                this.$set(this.query.row,'json',JSON.stringify(this.json));
+                this.$set(this.row,'json',JSON.stringify(this.json));
                 this.my.axios({
                     vue: this,
                     axiosOption:{
                         url:'/admin/table/save',
-                        data: {form:this.query.row,TABLE_NAME:this.query.TABLE_NAME}
+                        data: {form:this.row,TABLE_NAME:'view'}
                     },
                     successMsg: '保存成功!'
                 });               
