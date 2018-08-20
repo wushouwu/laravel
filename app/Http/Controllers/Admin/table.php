@@ -258,7 +258,8 @@ class table extends Controller{
             }
              $data=['data'=>$table];
         }else{
-            $data=['msg'=>'表名不存在'];
+
+            $data=['msg'=>$TABLE_NAME?'表单信息未提交':'表名不存在'];
         }
         return response()->json($data);
 
