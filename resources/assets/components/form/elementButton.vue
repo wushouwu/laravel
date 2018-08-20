@@ -22,6 +22,17 @@
 <script>
     export default {
         props: ['config'],
+        mounted(){
+            //组件添加删除按钮
+            let vue=this,
+                span=document.createElement('span');
+            span.className="my-close";
+            span.addEventListener('click',function(){
+                vue.$emit('close',event,vue);
+            });
+            this.$el.style.position="relative";
+            this.$el.appendChild(span);
+        },          
         methods:{
             buttonClick: function(event){
                 this.$emit('buttonClick',event,this.config);

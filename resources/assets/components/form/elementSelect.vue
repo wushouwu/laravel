@@ -7,7 +7,8 @@
     >
         <el-select 
             v-model="form[config.name]" 
-            :filterable="config.filterable" 
+            :allow-create="config.allowCreate"
+            :filterable="config.filterable||config.allowCreate" 
             :placeholder="config.placeholder||'请选择'"
             :size="config.size"
             @change="change"
@@ -31,6 +32,17 @@
                 fields:[]
             }
         },
+        mounted(){
+            //组件添加删除按钮
+            let vue=this,
+                span=document.createElement('span');
+            span.className="my-close";
+            span.addEventListener('click',function(){
+                vue.$emit('close',event,vue);
+            });
+            this.$el.style.position="relative";
+            this.$el.appendChild(span);
+        }, 
         methods: {
             click: function(event){
                 //配置
@@ -76,6 +88,7 @@
                         type:"elementSelect",
                         label:"字段",
                         name:"name",
+                        allowCreate:true,
                         options:[]
                     },
                     label: {

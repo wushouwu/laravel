@@ -26,7 +26,18 @@
 </template>
 <script>
     export default {
-        props: ['config','form'],    
+        props: ['config','form'],
+        mounted(){
+            //组件添加删除按钮
+            let vue=this,
+                span=document.createElement('span');
+            span.className="my-close";
+            span.addEventListener('click',function(){
+                vue.$emit('close',event,vue);
+            });
+            this.$el.style.position="relative";
+            this.$el.appendChild(span);
+        },         
         methods: {
             click: function(event){
                 this.$emit('config',event,this.config,{
@@ -34,6 +45,7 @@
                         type:"elementSelect",
                         label:"字段",
                         name:"name",
+                        allowCreate:true,
                         options:[]
                     },
                     label: {
