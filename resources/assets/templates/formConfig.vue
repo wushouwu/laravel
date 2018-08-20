@@ -14,26 +14,27 @@
                     <draggable
                         v-model="configs.fields" 
                         style="width:100%;height:100%"
-                        class="draggable"
+                        class="fields draggable"
                         :options="{group:{ name:'view',  pull:false, put: true},preventOnFilter: true,animation: 250}"
                         @change="sort"
                         @click.native="changeAside"
                     >
                         <component 
-                            :style="{border:'1px dotted '+(activeField===key?'#409EFF':'transparent')}"
                             v-for="(field, key,index) in configs.fields" 
                             :key="index" 
                             :is="field.type" 
                             :config="field" 
                             :form="configs.form"
+                            :class="{active:activeField===key}"
                             @config="toConfig"
                             @click.native="activeField=key;activeButton='';"
+                            @close="del(key,'fields')"
                         >
                         </component>
                     </draggable> 
                 </div>
                 <draggable
-                    class="footer-tools draggable"
+                    class="tools draggable"
                     style="width:99%;min-height:42px;display:flex;justify-content:center;align-items:center;position:absolute;bottom:21px;border:1px dashed #c0c4cc;"
                     v-model="configs.tools" 
                     :options="{group:{ name:'view',  pull:false, put: true},preventOnFilter: true,animation: 250}"
@@ -43,9 +44,10 @@
                         v-for="(tool,key,index) in configs.tools"
                         :key="key"
                         :config="tool"
-                        :style="{border:'1px dotted '+(activeButton===key?'#409EFF':'transparent')}"
+                        :class="{active:activeButton===key}"
                         @config="toConfig"
                         @click.native="activeButton=key;activeField='';"
+                        @close="del(key,'tools')"
                     ></elementButton>
                 </draggable>               
             </el-form>
@@ -74,60 +76,79 @@
             }
         },
         created: function(){
+            let configs={
+                fields:[{
+                    type:'elementText',
+                    label:'示例',
+                    name:'text'
+                }],
+                tools:[{
+                    "buttonType":"primary",
+                    "shape":"plain",
+                    "text":"示例按钮"
+                }],
+                form:{
+                    text:'将组件拖放到此区域进行配置'
+                }
+            };
             //表单配置
-            this.my.axios({
-                vue: this,
-                axiosOption:{
-                    url:'admin/table/view',
-                    data:this.query.row
-                },
-                success:function(response,option){
-                    if(!response.data.data.fields){
-                        response.data.data.fields=[];
-                    }
-                    if(!response.data.data.tools){
-                        response.data.data.tools=[];
-                    }                    
-                    option.vue.configs=response.data.data;
-                },
-                error:function(response,option){
-                    option.vue.configs={
-                        fields:[{
-                            type:'elementText',
-                            label:'示例',
-                            name:'text'
-                        }],
-                        tools:[{
-                            "buttonType":"primary",
-                            "shape":"plain",
-                            "text":"示例按钮"
-                        }],
-                        form:{
-                            text:'将组件拖放到此区域进行配置'
+            if(this.query.row){
+                if(this.query.row.json){
+                   this.configs=JSON.parse(this.query.row.json);
+                }else{
+                    this.$message({
+                        showClose: true,
+                        message: '没有视图配置'
+                    });
+                    this.configs=configs;
+                }
+               /* this.my.axios({
+                    vue: this,
+                    axiosOption:{
+                        url:'admin/table/view',
+                        data:this.query.row
+                    },
+                    success:function(response,option){
+                        if(!response.data.data.fields){
+                            response.data.data.fields=[];
                         }
+                        if(!response.data.data.tools){
+                            response.data.data.tools=[];
+                        }                    
+                        option.vue.configs=response.data.data;
+                    },
+                    error:function(response,option){
+                        option.vue.configs=configs;
                     }
-                }
-            });
-            //表单字段
-            this.my.axios({
-                vue: this,
-                axiosOption:{
-                    url:'admin/table/field',
-                    data:this.query
-                },
-                success:function(response,option){
-                    option.vue.fields=response.data.data;
-                }
-            })
-        },       
+                });*/
+                //表单字段
+                this.my.axios({
+                    vue: this,
+                    axiosOption:{
+                        url:'admin/table/field',
+                        data:this.query
+                    },
+                    success:function(response,option){
+                        option.vue.fields=response.data.data;
+                    }
+                });
+            }else{
+                this.configs=configs;
+            }
+        },    
         methods: {
             //排序
-            sort: function(event,b){
+            sort: function(event){
                 //添加字段时设置字段属性
                 if('added' in event){
-                    //this.$refs.accordion.configs.components=this.$refs.accordion.initComponents;
-                    //event.added.element.name=event.added.newIndex;
                 }
+            },
+            //删除组件
+            del(key,type){
+                this.$delete(this.configs[type],key);
+                this.$refs.accordion.activeAccordion="组件";
+                this.attrForm={};
+                this.attrs={};    
             },
             //切换边栏为所有组件
             changeAside:function(event){
@@ -144,6 +165,7 @@
                 this.attrForm=config;
                 this.attrs=attr;
             },
+            //按钮拖放后去掉标签
             buttonChange(event){
                 if('added' in event){
                     this.$delete(event.added.element,'labelWidth');
@@ -154,4 +176,33 @@
     }
 </script>
 <style>
+    /*激活的组件显示虚线框*/
+    .draggable .el-form-item{
+        border:1px dotted transparent;
+    }
+    .draggable .el-form-item.active{
+        border:1px dotted #409EFF;
+    }
+    /*组件删除按钮*/
+    .my-close{
+        display: none;
+    }
+    .draggable .el-form-item.active .my-close{
+        position:absolute;
+        top:0px;
+        left:0px;
+        border-radius:12px;
+        font-size:12px;
+        border:1px solid #dddddd;
+        color:red;
+        width:12px;
+        height:12px;
+        text-align:center;
+        cursor:pointer;
+        line-height: 11px;
+        display:inline-block;
+    }
+    .draggable .el-form-item.active .my-close::after{
+        content:'×'
+    }
 </style>
