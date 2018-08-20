@@ -321,8 +321,8 @@
 			add(event,config){
 				this.addTab({
 					name: this.query.TABLE_NAME+'-add',
-					title: this.query.TABLE_COMMENT+'表-添加',
-					content: 'formVue',
+					title: this.query.TABLE_COMMENT+'-添加',
+					content: config.query.content||'formVue',
 					query:Object.assign({},this.query,config.query)
 				})
 			},			
@@ -351,12 +351,11 @@
 			},
 			//编辑数据
 			edit(row,operator){
-				console.log(this.query);
 				this.addTab({
 					name: this.query.TABLE_NAME+'-'+row.id+'-edit',
 					title: this.query.TABLE_COMMENT+'-'+row.id+'-编辑',
-					content: 'formConfigVue',
-					query:Object.assign({},this.query,{row:row})
+					content: 'formVue',
+					query:Object.assign({},this.query,{row:row},this.operate.query)
 				})
 			},
 			//删除数据
