@@ -343,10 +343,10 @@
 			//查看数据
 			view(row,operator){
 				this.addTab({
-					name: this.query.table+'-'+row.id,
-					title: this.query.name+'表-'+row.id,
-					content: 'formConfigVue',
-					query:{view:operator.query.view}
+					name: this.query.TABLE_NAME+'-'+row.id+'-view',
+					title: this.query.TABLE_COMMENT+'-'+row.id+'-查看',
+					content: 'formVue',
+					query:Object.assign({},this.query,{row:row},operator.query)
 				});
 			},
 			//编辑数据
@@ -355,7 +355,7 @@
 					name: this.query.TABLE_NAME+'-'+row.id+'-edit',
 					title: this.query.TABLE_COMMENT+'-'+row.id+'-编辑',
 					content: 'formVue',
-					query:Object.assign({},this.query,{row:row},this.operate.query)
+					query:Object.assign({},this.query,{row:row},operator.query)
 				})
 			},
 			//删除数据

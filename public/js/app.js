@@ -80831,10 +80831,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		//查看数据
 		view: function view(row, operator) {
 			this.addTab({
-				name: this.query.table + '-' + row.id,
-				title: this.query.name + '表-' + row.id,
-				content: 'formConfigVue',
-				query: { view: operator.query.view }
+				name: this.query.TABLE_NAME + '-' + row.id + '-view',
+				title: this.query.TABLE_COMMENT + '-' + row.id + '-查看',
+				content: 'formVue',
+				query: Object.assign({}, this.query, { row: row }, operator.query)
 			});
 		},
 
@@ -80844,7 +80844,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				name: this.query.TABLE_NAME + '-' + row.id + '-edit',
 				title: this.query.TABLE_COMMENT + '-' + row.id + '-编辑',
 				content: 'formVue',
-				query: Object.assign({}, this.query, { row: row }, this.operate.query)
+				query: Object.assign({}, this.query, { row: row }, operator.query)
 			});
 		},
 
@@ -81175,7 +81175,7 @@ exports = module.exports = __webpack_require__(6)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -81219,8 +81219,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         };
     },
 
-    //请求配置
     created: function created() {
+        //表单配置
         this.my.axios({
             vue: this,
             axiosOption: {
@@ -81229,11 +81229,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             },
             success: function success(response, option) {
                 option.vue = Object.assign(option.vue, response.data.data);
+                if (option.vue.query.row) {
+                    option.vue.$set(option.vue, 'form', option.vue.query.row);
+                }
             }
         });
     },
     directives: {
-        //字段设置
+        //字段动态设置
         field: {
             bind: function bind(el, binding, vnode) {
                 if (binding.value.field.script) {
@@ -81247,7 +81250,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         buttonClick: function buttonClick(event, config) {
             eval(config.script);
         },
-        //保存表单
+        //保存 保存并关闭
         save: function save(event, config) {
             var cancel = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
 

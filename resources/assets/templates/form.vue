@@ -30,8 +30,8 @@
                 tools:[]
             }
         },
-        //请求配置
         created: function(){
+            //表单配置
             this.my.axios({
                 vue: this,
                 axiosOption:{
@@ -40,12 +40,15 @@
                 },
                 success:function(response,option){
                     option.vue=Object.assign(option.vue,response.data.data);
+                    if(option.vue.query.row){
+                        option.vue.$set(option.vue,'form',option.vue.query.row);
+                    }
                     
                 }
             });
         },  
         directives:{
-            //字段设置
+            //字段动态设置
             field:{
                 bind(el,binding,vnode){
                     if(binding.value.field.script){
@@ -59,7 +62,7 @@
             buttonClick:function(event,config){
                 eval(config.script);
             },       
-            //保存表单
+            //保存 保存并关闭
             save: function(event,config,cancel=false){
                 let option={
                     vue: this,
