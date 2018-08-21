@@ -9,7 +9,7 @@
             ></components>
         </el-aside>
         <el-container>
-            <el-form  v-model="configs.form" label-width="80px" style="width:100%;height:100%;position:relative;">            
+            <el-form  :model="configs.form" label-width="80px" style="width:100%;height:100%;position:relative;">            
                 <div  style="overflow:auto;height:100%;">
                     <draggable
                         v-model="configs.fields" 
@@ -83,15 +83,36 @@
                     name:'text'
                 }],
                 tools:[{
+                    "type":"elementButton",
+                    "text":"保存并关闭",
                     "buttonType":"primary",
+                    "name":"button",
+                    "title":"保存并关闭",
+                    "operator":"elementSelect",
+                    "script":"this.save(event,config,true);"
+                },{
+                    "type":"elementButton",
+                    "text":"保存",
                     "shape":"plain",
-                    "text":"示例按钮"
+                    "buttonType":"primary",
+                    "name":"button",
+                    "title":"保存",
+                    "operator":"elementSelect",
+                    "script":"this.save(event,config);"
+                },{
+                    "type":"elementButton",
+                    "text":"取消",
+                    "buttonType":"",
+                    "name":"button",
+                    "title":"取消",
+                    "operator":"elementSelect",
+                    "script":"this.cancel(event,config);"
                 }],
                 form:{
                     text:'将组件拖放到此区域进行配置'
                 }
             };
-            //表单配置
+            //表单信息
             if(this.query.row){
                 if(this.query.row.json){
                    this.configs=JSON.parse(this.query.row.json);
@@ -126,7 +147,7 @@
                     vue: this,
                     axiosOption:{
                         url:'admin/table/field',
-                        data:this.query
+                        data:this.query.row
                     },
                     success:function(response,option){
                         option.vue.fields=response.data.data;
