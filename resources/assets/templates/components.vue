@@ -1,7 +1,7 @@
 <template>
     <el-collapse v-model="activeAccordion" accordion>
         <el-collapse-item title="表单" name="表单">
-            <el-form :model="form" label-width="80px" style="width:100%;height:100%">
+            <el-form :model="row" ref="rowForm"  label-width="80px" style="width:100%;height:100%">
                 <component 
                     v-for="(config, key,index) in configs.form.fields" 
                     :key="index" 
@@ -67,7 +67,7 @@
                     view_name:'',
                     id:''
                 },
-                activeAccordion:"组件",
+                activeAccordion:"表单",
                 initComponents:`[{
                     "type": "elementText",
                     "label": "文本",
@@ -127,7 +127,7 @@
         },
         created(){
             if(this.query.row){
-                this.row=this.query.row
+                this.row=Object.assign({},this.query.row);
             }
             this.configs.components=JSON.parse(this.initComponents);
             //表单配置
@@ -175,14 +175,23 @@
             },
             //保存配置
             save: function(event){
-                this.$set(this.row,'json',JSON.stringify(this.json));
-                this.my.axios({
-                    vue: this,
-                    axiosOption:{
-                        url:'/admin/table/save',
-                        data: {form:this.row,TABLE_NAME:'view'}
-                    },
-                    successMsg: '保存成功!'
+                let vue=this;
+                this.$refs.rowForm.validate((valid) => {
+                    if (valid) {
+                        vue.my.axios({
+                            vue: vue,
+                            axiosOption:{
+                                url:'/admin/table/save',
+                                data: {form:vue.row,TABLE_NAME:'view'}
+                            },
+                            success:function(response,option){
+                                option.vue.query.row=vue.row;
+                            },
+                            successMsg: '保存成功!'
+                        });
+                    } else {
+                        return false;
+                    }
                 });               
             }           
         }
