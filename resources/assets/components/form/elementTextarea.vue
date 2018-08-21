@@ -1,6 +1,9 @@
 <template>
     <el-form-item 
         :label="config.label"
+        :label-width="config.labelWidth"
+        :prop="config.name"
+        :rules="rules(config.rules)"
         @click.native="click"
     >
         <el-input 
@@ -16,7 +19,16 @@
 </template>
 <script>
     export default {
-        props: ['config','form'],   
+        props: ['config','form'],  
+        created(){
+            //默认验证
+            this.config.rules=Object.assign({
+                required:false,
+                trigger:[],
+                message:'',
+                custom:'pattern'
+            },this.config.rules);
+        },
         mounted(){
             //组件添加删除按钮
             let vue=this,
@@ -29,6 +41,24 @@
             this.$el.appendChild(span);
         },         
         methods:{
+            //验证函数validator与正则验证pattern解析
+            rules(rules=[]){   
+                let rule=['validator','pattern'];
+                for(var key in rules){
+                    for(var k in rule){
+                        let r=rule[k];
+                        if(key==r && rules[key] && typeof(rules[key])=='string'){
+                            //eval('rules.'+r+'='+rules[key]+';');
+                            eval('rules=Object.assign({},rules,{'+r+':'+rules[key]+'});')
+                        }
+                        if( rules[key][r] &&  typeof(rules[key][r])=='string'){
+                            //eval('rules[key].'+r+'='+rules[key][r]+';');
+                            eval('rules[key]=Object.assign({},rules[key],{'+r+':'+rules[key][r]+'});')
+                        }
+                    }
+                }
+                return rules;
+            },          
             click: function(event){
                 this.$emit('config',event,this.config,{
                     name:{
@@ -57,21 +87,79 @@
                         type:"elementComponents",
                         label:"自动尺寸",
                         name:"autosize",
-                        form:this.config.autosize,                     
+                        itemDefault:{
+                            size:"mini",
+                            labelWidth:'65px'
+                        },
+                        form:this.config.autosize,
                         options:[{
                             name:"minRows",
                             label:"最小行数",
                             type:"elementInputNumber",
-                            size:"mini",
                             script:"console.log(this.form,this.config)"
-
                         },{
                             name:"maxRows",
                             label:"最大行数",
-                            type:"elementInputNumber",
-                            size:"mini"
+                            type:"elementInputNumber"
                         }]
-                    }                                 
+                    },
+                    rules:{
+                        type:"elementComponents",
+                        label:"验证规则",
+                        name:"rules",
+                        itemDefault:{
+                            size:"small"
+                        },
+                        labelPositionTop:true,
+                        form:this.config.rules||{},
+                        options:[{
+                            type:"elementSwitch",
+                            label:"必填",
+                            name:"required",
+                        },{
+                            type:"elementSelect",
+                            label:"触发",
+                            name:"trigger",
+                            multiple:true,
+                            options:[{
+                                label:"失去焦点",
+                                value:"blur"
+                            },{
+                                label:"改变",
+                                value:"change"
+                            }]
+                        },{
+                            type:"elementText",
+                            label:"提示信息",
+                            name:"message",
+                        },{
+                            type:"elementRadioChange",
+                            label:"自定义",
+                            name:"custom",
+                            itemDefault:{
+                                size:"small",
+                                label:" "
+                            },
+                            options:[{
+                                type:'el-radio',
+                                label:"正则",
+                                value:"pattern",
+                                config:{
+                                    type:"elementText",
+                                    name:"pattern"
+                                }
+                            },{
+                                type:'el-radio',
+                                label:"函数",
+                                value:"validator",
+                                name:"validator",
+                                config:{
+                                    type:"elementTextarea",
+                                    name:"validator"
+                                }
+                            }]
+                        },]
+                    }                                                      
                 });
             },
             enter(event){
