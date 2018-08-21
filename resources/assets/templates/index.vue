@@ -150,11 +150,15 @@ export default {
         margin-bottom:20px;
     }  
     /*size为small时label字体大小处理*/
-    .size-small-font,.size-small-font [class*="label"]{
+    .size-small-font [class*="label"]{
         font-size:13px;
     } 
     /*可拖动组件的光标*/
     .draggable label,.footer-tools.draggable button{
         cursor:move;
     }
+    /*标签换行处理
+    .label-position-top>.el-form-item__label{
+        float:none;
+    }   */ 
 </style>
