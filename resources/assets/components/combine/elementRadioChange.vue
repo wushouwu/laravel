@@ -4,7 +4,7 @@
         :label="config.label" 
         :prop="config.name" 
         @click.native="click"
-        :class="{'size-small-font':config.size==='small'?true:false}"
+        :class="{'size-small-font':config.size==='small'||config.size==='mini'?true:false,'label-position-top':config.labelPositionTop}"
         class="elementRadioChange"
     >
         <el-radio-group 
@@ -26,7 +26,7 @@
         <component 
             v-for="(option,key,index) in config.options" 
             :key="key"
-            :config="option.config"
+            :config="Object.assign({},config.itemDefault,option.config)"
             :is="option.config.type"
             :form="form"
             :style="config.itemStyle"
@@ -39,9 +39,9 @@
         props: ['config','form'],
         mounted(){
             //样式调整
-            let item__content=document.querySelectorAll('.elementRadioChange>.el-form-item__content');
-            for(var i=0;i<item__content.length;i++){
-                item__content[i].style.marginLeft="0px";
+            let item__content=this.$el.querySelector('.el-form-item__content');
+            if(item__content){
+                item__content.style.marginLeft="0px";
             }
         },          
         methods: {

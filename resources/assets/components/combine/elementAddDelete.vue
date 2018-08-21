@@ -10,11 +10,11 @@
         <div style="line-height:30px;"><label 
                 v-for="(label,key,index) in config.labels" 
                 :key="key"
-                :style="config.itemStyle+';text-align:center;font-size:13px;color: #606266;'"
+                :style="(config.itemDefault&&config.itemDefault.style?config.itemDefault.style:'')+';text-align:center;font-size:13px;color: #606266;'"
             >{{label.label}}</label>
             <elementButton
-                :config="addButton"
-                :style="config.itemStyle+';width:auto;'"
+                :config="Object.assign({},config.itemDefault,addButton)"
+                style="width:auto;"
                 @buttonClick="add"
             ></elementButton>            
         </div>
@@ -25,14 +25,13 @@
             <component 
                 v-for="(item,k,i) in option" 
                 :key="k"
-                :config="item"
+                :config="Object.assign({},config.itemDefault,item)"
                 :is="item.type"
                 :form="form[config.name][key]"
-                :style="config.itemStyle"
             ></component>
             <elementButton
-                :config="deleteButton"
-                :style="config.itemStyle+';width:auto;'"
+                :config="Object.assign({},config.itemDefault,deleteButton)"
+                style="width:auto;"
                 @buttonClick="del($event,deleteButton,key)"
             ></elementButton>
         </div>      
@@ -48,29 +47,34 @@
                     icon:"el-icon-plus",
                     buttonType:"primary",
                     plain:true,
-                    circle:true,
-                    size:'mini'
+                    circle:true
                 },
                 deleteButton:{
                     type:"elementButton",
                     icon:"el-icon-minus",
                     buttonType:"danger",
                     plain:true,
-                    circle:true,
-                    size:'mini'
+                    circle:true
                 }
             }
         },
         mounted(){
-            //样式调整
-            if(this.config.labelPositionTop){
-                let item__content=document.querySelector('.label-position-top .el-form-item__content');
-                if(item__content){
-                    item__content.style.marginLeft="0px";
-                }
-            }
+            this.labelPositionTop();
         },
+        updated(){
+           this.labelPositionTop();
+        }, 
         methods:{
+            labelPositionTop(){
+                //labelPositionTop样式调整
+                if(this.config.labelPositionTop){
+                    let item__content=this.$el.querySelector('.el-form-item__content');
+                    if(item__content){
+                        item__content.style.cssText="marginLeft:0px;clear:both;";
+                        
+                    }
+                }
+            },            
             add(event,config){
                 this.config.options.push(this.config.options[0]);
                 let form=Object.assign({},this.form[this.config.name][0]);
@@ -120,10 +124,6 @@
     }
 </script>
 <style>
-    /*标签换行处理*/
-    .label-position-top .el-form-item__label{
-        float:none;
-    }
     /*elementAddDelete组件下的button变形处理*/
     .elementAddDelete [class*=el-icon-]+span{
         margin-left:0px;

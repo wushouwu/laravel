@@ -2,13 +2,14 @@
     <el-form-item 
         :label="config.label" 
         :label-width="config.labelWidth"
+        :class="{'size-small-font':config.size==='small'||config.size==='mini'?true:false,'label-position-top':config.labelPositionTop}"
         :prop="config.name" 
     >
         <component 
             v-for="(option,key,index) in config.options"
             :key="key"
             :is="option.type"
-            :config="option"
+            :config="Object.assign({},config.itemDefault,option)"
             :form="form[config.name]"
             @e="e"
         ></component>
@@ -17,6 +18,12 @@
 <script>
     export default {
         props: ['config','form'],
+        mounted(){
+            this.labelPositionTop();
+        },
+        updated(){
+           this.labelPositionTop();
+        },        
         watch:{
             configForm:{
         　　　　handler(newValue, oldValue) {
@@ -37,6 +44,16 @@
                         eval(config.script);
                 }
                 this.$emit('componentEvent',event,config);
+            },
+            labelPositionTop(){
+                //labelPositionTop样式调整
+                if(this.config.labelPositionTop){
+                    let item__content=this.$el.querySelector('.el-form-item__content');
+                    if(item__content){
+                        item__content.style.cssText="marginLeft:0px;clear:both;";
+                        
+                    }
+                }
             }
         }  
     }
