@@ -1,5 +1,9 @@
 <template>
-    <el-form-item  :label="config.label" @click.native="click">
+    <el-form-item  
+        :label="config.label" 
+        :label-width="config.labelWidth"
+        @click.native="click"
+    >
         <el-input-number v-model="form[config.name][0]"></el-input-number>
         <el-input-number v-model="form[config.name][1]"></el-input-number>
     </el-form-item>

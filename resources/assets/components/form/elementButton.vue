@@ -118,6 +118,9 @@
                         name:"operator",
                         type:"elementRadioChange",
                         label:"操作",
+                        itemDefault:{
+                            label:" "
+                        },
                         options:[{
                             type:"el-radio",
                             label:"默认",
@@ -125,7 +128,6 @@
                             config:{
                                 type:"elementSelect",
                                 name:"script",
-                                label:' ',
                                 options:[{
                                     value:"this.save(event,config);",
                                     label:"保存"
@@ -143,7 +145,6 @@
                             value:"elementTextarea", 
                             config:{
                                 name:"script",
-                                label:' ',
                                 type:"elementTextarea",                          
                             }                            
                         }]

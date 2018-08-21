@@ -1,13 +1,16 @@
 <template>
     <el-form-item 
-        :label="config.label" 
+        :label="config.label"
+        :label-width="config.labelWidth"
         :prop="config.name" 
+        :rules="rules(config.rules)"
         @click.native="click"
-        :class="{'size-small-font':config.size==='small'?true:false}"
+        :class="{'size-small-font':config.size==='small'||config.size==='mini'?true:false}"
     >
         <el-select 
             v-model="form[config.name]" 
             :allow-create="config.allowCreate"
+            :multiple="config.multiple"
             :filterable="config.filterable||config.allowCreate" 
             :placeholder="config.placeholder||'请选择'"
             :size="config.size"
@@ -43,7 +46,7 @@
             this.$el.style.position="relative";
             this.$el.appendChild(span);
         }, 
-        methods: {
+        methods: {           
             click: function(event){
                 //配置
                 if('tableField' in this.config){
@@ -124,6 +127,9 @@
                                 }                                                  
                             }
                         `,
+                        itemDefault:{
+                            labelWidth:'0px',
+                        },
                         options:[{
                             value:'options',
                             label:'自定义',
@@ -131,18 +137,16 @@
                             config:{
                                 type:"elementAddDelete",
                                 name:"options",
-                                labelWidth:'0px',
                                 labels:[{label:'显示值'},{label:'保存值'}],
-                                itemStyle:"width:40%;display:inline-block;margin-right:2%",
+                                itemDefault:{
+                                    style:"width:40%;display:inline-block;margin-right:2%",
+                                    size:"mini"
+                                },
                                 options:Array(this.config.options.length).fill([{
                                     type:"elementText",
-                                    inline:true,
-                                    size:'mini',
                                     name:"label"
                                 },{
                                     type:"elementText",
-                                    inline:true,
-                                    size:'mini',
                                     name:"value"
                                 }])
                             },
@@ -153,7 +157,9 @@
                             config:{
                                 type:"elementComponents",
                                 name:"tableField",
-                                labelWidth:"0px",
+                                itemDefault:{
+                                    size:"small"
+                                },
                                 formWatch:`
                                     if(newValue.table && newValue.fieldLabel && newValue.fieldValue){
                                         this.my.axios({
@@ -177,7 +183,6 @@
                                     type:"elementSelect",
                                     name:"table",
                                     label:"表格",
-                                    size:'small',
                                     options:this.tables,
                                     script:`
                                         this.form.tableField.fieldLabel='';
@@ -205,13 +210,11 @@
                                     type:"elementSelect",
                                     name:"fieldLabel",
                                     label:"显示值",
-                                    size:'small',
                                     options:this.fields,
                                 },{
                                     type:"elementSelect",
                                     name:"fieldValue",
                                     label:"保存值",
-                                    size:'small',
                                     options:this.fields,
                                 }]
                             }

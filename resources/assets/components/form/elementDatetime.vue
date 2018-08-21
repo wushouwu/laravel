@@ -1,5 +1,9 @@
 <template>
-    <el-form-item :label="config.label" :prop="config.name">
+    <el-form-item 
+        :label="config.label"
+        :label-width="config.labelWidth"
+        :prop="config.name"
+    >
         <el-date-picker 
             v-model="form[config.name]" 
             :type="config.pickerType||'datetime'"  

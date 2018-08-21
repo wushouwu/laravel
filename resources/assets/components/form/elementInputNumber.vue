@@ -1,12 +1,16 @@
 <template>
-    <el-form-item :label="config.label" :prop="config.name">
+    <el-form-item 
+        :label="config.label"
+        :label-width="config.labelWidth"
+        :prop="config.name" 
+        :class="{'size-small-font':config.size==='small'||config.size==='mini'?true:false}"
+    >
         <el-input-number 
             v-model="form[config.name]"  
             :min="config.min" 
             :max="config.max"
             :size="config.size"
             :controls-position="config.controlsPosition"
-            :class="{'size-small-font':config.size==='small'?true:false}"
             @change="change"
         ></el-input-number>
     </el-form-item>

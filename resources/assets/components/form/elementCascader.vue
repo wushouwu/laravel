@@ -1,9 +1,9 @@
 <template>
     <el-form-item  
-        :label="config.label" 
+        :label="config.label"
+        :label-width="config.labelWidth"
         @click.native="click" 
         :style="config.style"
-        :label-width="config.labelWidth"
     >
         <el-cascader
             :options="config.options"

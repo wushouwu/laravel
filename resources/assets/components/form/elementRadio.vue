@@ -4,7 +4,7 @@
         :label="config.label" 
         :prop="config.name" 
         @click.native="click"
-        :class="{'size-small-font':config.size==='small'?true:false}"
+        :class="{'size-small-font':config.size==='small'||config.size==='mini'?true:false}"
     >
         <el-radio-group 
             v-model="form[config.name]"

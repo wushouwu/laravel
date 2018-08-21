@@ -1,5 +1,9 @@
 <template>
-    <el-form-item :label="config.label">
+    <el-form-item 
+        :label="config.label"
+        :label-width="config.labelWidth"
+        :class="{'size-small-font':config.size==='small'||config.size==='mini'?true:false}"
+    >
         <el-switch v-model="form[config.name]"></el-switch>
     </el-form-item>    
 </template>

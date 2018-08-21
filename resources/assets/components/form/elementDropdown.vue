@@ -1,7 +1,7 @@
 <template>
     <el-form-item 
-        :label-width="config.labelWidth"
         :label="config.label" 
+        :label-width="config.labelWidth"
         :prop="config.name" 
     >
         <el-dropdown 
