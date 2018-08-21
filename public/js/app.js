@@ -75052,7 +75052,7 @@ exports = module.exports = __webpack_require__(6)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/*标签换行处理*/\n.label-position-top .el-form-item__label{\n    float:none;\n}\n/*elementAddDelete组件下的button变形处理*/\n.elementAddDelete [class*=el-icon-]+span{\n    margin-left:0px;\n}\n/*elementAddDelete组件下标签行高*/\n.elementAddDelete .el-form-item__content label,.elementAddDelete .el-form-item__content label+.el-form-item .el-form-item__content{\n    line-height:30px;\n}\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/*elementAddDelete组件下的button变形处理*/\n.elementAddDelete [class*=el-icon-]+span{\n    margin-left:0px;\n}\n/*elementAddDelete组件下标签行高*/\n.elementAddDelete .el-form-item__content label,.elementAddDelete .el-form-item__content label+.el-form-item .el-form-item__content{\n    line-height:30px;\n}\n", ""]);
 
 // exports
 
@@ -75135,7 +75135,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['config', 'form'],
@@ -75146,30 +75145,34 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 icon: "el-icon-plus",
                 buttonType: "primary",
                 plain: true,
-                circle: true,
-                size: 'mini'
+                circle: true
             },
             deleteButton: {
                 type: "elementButton",
                 icon: "el-icon-minus",
                 buttonType: "danger",
                 plain: true,
-                circle: true,
-                size: 'mini'
+                circle: true
             }
         };
     },
     mounted: function mounted() {
-        //样式调整
-        if (this.config.labelPositionTop) {
-            var item__content = document.querySelector('.label-position-top .el-form-item__content');
-            if (item__content) {
-                item__content.style.marginLeft = "0px";
-            }
-        }
+        this.labelPositionTop();
+    },
+    updated: function updated() {
+        this.labelPositionTop();
     },
 
     methods: {
+        labelPositionTop: function labelPositionTop() {
+            //labelPositionTop样式调整
+            if (this.config.labelPositionTop) {
+                var item__content = this.$el.querySelector('.el-form-item__content');
+                if (item__content) {
+                    item__content.style.cssText = "marginLeft:0px;clear:both;";
+                }
+            }
+        },
         add: function add(event, config) {
             this.config.options.push(this.config.options[0]);
             var form = Object.assign({}, this.form[this.config.name][0]);
@@ -75251,16 +75254,19 @@ var render = function() {
               {
                 key: key,
                 style:
-                  _vm.config.itemStyle +
-                  ";text-align:center;font-size:13px;color: #606266;"
+                  (_vm.config.itemDefault && _vm.config.itemDefault.style
+                    ? _vm.config.itemDefault.style
+                    : "") + ";text-align:center;font-size:13px;color: #606266;"
               },
               [_vm._v(_vm._s(label.label))]
             )
           }),
           _vm._v(" "),
           _c("elementButton", {
-            style: _vm.config.itemStyle + ";width:auto;",
-            attrs: { config: _vm.addButton },
+            staticStyle: { width: "auto" },
+            attrs: {
+              config: Object.assign({}, _vm.config.itemDefault, _vm.addButton)
+            },
             on: { buttonClick: _vm.add }
           })
         ],
@@ -75276,14 +75282,22 @@ var render = function() {
               return _c(item.type, {
                 key: k,
                 tag: "component",
-                style: _vm.config.itemStyle,
-                attrs: { config: item, form: _vm.form[_vm.config.name][key] }
+                attrs: {
+                  config: Object.assign({}, _vm.config.itemDefault, item),
+                  form: _vm.form[_vm.config.name][key]
+                }
               })
             }),
             _vm._v(" "),
             _c("elementButton", {
-              style: _vm.config.itemStyle + ";width:auto;",
-              attrs: { config: _vm.deleteButton },
+              staticStyle: { width: "auto" },
+              attrs: {
+                config: Object.assign(
+                  {},
+                  _vm.config.itemDefault,
+                  _vm.deleteButton
+                )
+              },
               on: {
                 buttonClick: function($event) {
                   _vm.del($event, _vm.deleteButton, key)
@@ -75377,9 +75391,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['config', 'form'],
+    mounted: function mounted() {
+        this.labelPositionTop();
+    },
+    updated: function updated() {
+        this.labelPositionTop();
+    },
+
     watch: {
         configForm: {
             handler: function handler(newValue, oldValue) {
@@ -75401,6 +75423,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     eval(config.script);
             }
             this.$emit('componentEvent', event, config);
+        },
+        labelPositionTop: function labelPositionTop() {
+            //labelPositionTop样式调整
+            if (this.config.labelPositionTop) {
+                var item__content = this.$el.querySelector('.el-form-item__content');
+                if (item__content) {
+                    item__content.style.cssText = "marginLeft:0px;clear:both;";
+                }
+            }
         }
     }
 });
@@ -75416,6 +75447,13 @@ var render = function() {
   return _c(
     "el-form-item",
     {
+      class: {
+        "size-small-font":
+          _vm.config.size === "small" || _vm.config.size === "mini"
+            ? true
+            : false,
+        "label-position-top": _vm.config.labelPositionTop
+      },
       attrs: {
         label: _vm.config.label,
         "label-width": _vm.config.labelWidth,
@@ -75426,7 +75464,10 @@ var render = function() {
       return _c(option.type, {
         key: key,
         tag: "component",
-        attrs: { config: option, form: _vm.form[_vm.config.name] },
+        attrs: {
+          config: Object.assign({}, _vm.config.itemDefault, option),
+          form: _vm.form[_vm.config.name]
+        },
         on: { e: _vm.e }
       })
     })
@@ -75536,9 +75577,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     props: ['config', 'form'],
     mounted: function mounted() {
         //样式调整
-        var item__content = document.querySelectorAll('.elementRadioChange>.el-form-item__content');
-        for (var i = 0; i < item__content.length; i++) {
-            item__content[i].style.marginLeft = "0px";
+        var item__content = this.$el.querySelector('.el-form-item__content');
+        if (item__content) {
+            item__content.style.marginLeft = "0px";
         }
     },
 
@@ -75577,7 +75618,13 @@ var render = function() {
     "el-form-item",
     {
       staticClass: "elementRadioChange",
-      class: { "size-small-font": _vm.config.size === "small" ? true : false },
+      class: {
+        "size-small-font":
+          _vm.config.size === "small" || _vm.config.size === "mini"
+            ? true
+            : false,
+        "label-position-top": _vm.config.labelPositionTop
+      },
       attrs: {
         "label-width": _vm.config.labelWidth,
         label: _vm.config.label,
@@ -75630,7 +75677,14 @@ var render = function() {
               key: key,
               tag: "component",
               style: _vm.config.itemStyle,
-              attrs: { config: option.config, form: _vm.form }
+              attrs: {
+                config: Object.assign(
+                  {},
+                  _vm.config.itemDefault,
+                  option.config
+                ),
+                form: _vm.form
+              }
             })
           : _vm._e()
       })
@@ -75866,6 +75920,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     name: "operator",
                     type: "elementRadioChange",
                     label: "操作",
+                    itemDefault: {
+                        label: " "
+                    },
                     options: [{
                         type: "el-radio",
                         label: "默认",
@@ -75873,7 +75930,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                         config: {
                             type: "elementSelect",
                             name: "script",
-                            label: ' ',
                             options: [{
                                 value: "this.save(event,config);",
                                 label: "保存"
@@ -75891,7 +75947,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                         value: "elementTextarea",
                         config: {
                             name: "script",
-                            label: ' ',
                             type: "elementTextarea"
                         }
                     }]
@@ -76190,6 +76245,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['config', 'form'],
@@ -76220,7 +76279,13 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "el-form-item",
-    { attrs: { label: _vm.config.label, prop: _vm.config.name } },
+    {
+      attrs: {
+        label: _vm.config.label,
+        "label-width": _vm.config.labelWidth,
+        prop: _vm.config.name
+      }
+    },
     [
       _c("el-date-picker", {
         attrs: {
@@ -76408,8 +76473,8 @@ var render = function() {
     "el-form-item",
     {
       attrs: {
-        "label-width": _vm.config.labelWidth,
         label: _vm.config.label,
+        "label-width": _vm.config.labelWidth,
         prop: _vm.config.name
       }
     },
@@ -76518,6 +76583,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['config', 'form'],
@@ -76567,12 +76636,21 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "el-form-item",
-    { attrs: { label: _vm.config.label, prop: _vm.config.name } },
+    {
+      class: {
+        "size-small-font":
+          _vm.config.size === "small" || _vm.config.size === "mini"
+            ? true
+            : false
+      },
+      attrs: {
+        label: _vm.config.label,
+        "label-width": _vm.config.labelWidth,
+        prop: _vm.config.name
+      }
+    },
     [
       _c("el-input-number", {
-        class: {
-          "size-small-font": _vm.config.size === "small" ? true : false
-        },
         attrs: {
           min: _vm.config.min,
           max: _vm.config.max,
@@ -76661,6 +76739,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['config', 'form'],
@@ -76710,7 +76792,7 @@ var render = function() {
   return _c(
     "el-form-item",
     {
-      attrs: { label: _vm.config.label },
+      attrs: { label: _vm.config.label, "label-width": _vm.config.labelWidth },
       nativeOn: {
         click: function($event) {
           return _vm.click($event)
@@ -76880,7 +76962,12 @@ var render = function() {
   return _c(
     "el-form-item",
     {
-      class: { "size-small-font": _vm.config.size === "small" ? true : false },
+      class: {
+        "size-small-font":
+          _vm.config.size === "small" || _vm.config.size === "mini"
+            ? true
+            : false
+      },
       attrs: {
         "label-width": _vm.config.labelWidth,
         label: _vm.config.label,
@@ -77026,7 +77113,7 @@ exports = module.exports = __webpack_require__(6)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -77037,6 +77124,9 @@ exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
 //
 //
 //
@@ -77140,6 +77230,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     name: "source",
                     label: "选项来源",
                     script: '\n                        if(event=="options"){\n                            this.$set(this.attrForm,\'options\',this.attrForm.options.slice(0,this.attrs.source.options[0].config.options.length));\n                        }else{   \n                            let tableField=this.attrForm.tableField;\n                            if(tableField.table && tableField.fieldLabel && tableField.fieldValue){\n                                this.my.axios({\n                                    vue: this,\n                                    axiosOption:{\n                                        url: \'admin/table/table\',\n                                        data:{\n                                            TABLE_NAME:tableField.table,\n                                            fields:\'`\'+tableField.fieldLabel+\'` as label,`\'+tableField.fieldValue+\'` as value\',\n                                            pageSize: 10\n                                        }\n                                    },\n                                    success:function(response,option){\n                                        option.vue.$set(option.vue.attrForm,\'options\',response.data.data);\n                                        \n                                    }\n                                });\n                            }                                                  \n                        }\n                    ',
+                    itemDefault: {
+                        labelWidth: '0px'
+                    },
                     options: [{
                         value: 'options',
                         label: '自定义',
@@ -77147,18 +77240,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                         config: {
                             type: "elementAddDelete",
                             name: "options",
-                            labelWidth: '0px',
                             labels: [{ label: '显示值' }, { label: '保存值' }],
-                            itemStyle: "width:40%;display:inline-block;margin-right:2%",
+                            itemDefault: {
+                                style: "width:40%;display:inline-block;margin-right:2%",
+                                size: "mini"
+                            },
                             options: Array(this.config.options.length).fill([{
                                 type: "elementText",
-                                inline: true,
-                                size: 'mini',
                                 name: "label"
                             }, {
                                 type: "elementText",
-                                inline: true,
-                                size: 'mini',
                                 name: "value"
                             }])
                         }
@@ -77169,26 +77260,25 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                         config: {
                             type: "elementComponents",
                             name: "tableField",
-                            labelWidth: "0px",
+                            itemDefault: {
+                                size: "small"
+                            },
                             formWatch: '\n                                if(newValue.table && newValue.fieldLabel && newValue.fieldValue){\n                                    this.my.axios({\n                                        vue: this,\n                                        axiosOption:{\n                                            url: \'admin/table/table\',\n                                            data:{\n                                                TABLE_NAME:newValue.table,\n                                                fields:\'`\'+newValue.fieldLabel+\'` as label,`\'+newValue.fieldValue+\'` as value\',\n                                                pageSize: 10\n                                            }\n                                        },\n                                        success:function(response,option){\n                                            option.vue.$set(option.vue.form,\'options\',response.data.data);\n                                            \n                                        }\n                                    });\n                                }\n                            ',
                             options: [{
                                 type: "elementSelect",
                                 name: "table",
                                 label: "表格",
-                                size: 'small',
                                 options: this.tables,
                                 script: '\n                                    this.form.tableField.fieldLabel=\'\';\n                                    this.form.tableField.fieldValue=\'\';                                \n                                    this.my.axios({\n                                        vue: this,\n                                        axiosOption:{\n                                            url: \'admin/table/field\',\n                                            data:{\n                                                TABLE_NAME:event\n                                            }\n                                        },\n                                        success:function(response,option){\n                                            option.vue.config.options[1].options=response.data.data;\n                                            option.vue.config.options[2].options=response.data.data;\n                                            if(response.data.data.length){\n                                                option.vue.form.tableField.fieldLabel=response.data.data[0].value;\n                                                option.vue.form.tableField.fieldValue=response.data.data[0].value;                                            \n                                            }\n                                            \n                                        }\n                                    });\n                                '
                             }, {
                                 type: "elementSelect",
                                 name: "fieldLabel",
                                 label: "显示值",
-                                size: 'small',
                                 options: this.fields
                             }, {
                                 type: "elementSelect",
                                 name: "fieldValue",
                                 label: "保存值",
-                                size: 'small',
                                 options: this.fields
                             }]
                         }
@@ -77214,8 +77304,18 @@ var render = function() {
   return _c(
     "el-form-item",
     {
-      class: { "size-small-font": _vm.config.size === "small" ? true : false },
-      attrs: { label: _vm.config.label, prop: _vm.config.name },
+      class: {
+        "size-small-font":
+          _vm.config.size === "small" || _vm.config.size === "mini"
+            ? true
+            : false
+      },
+      attrs: {
+        label: _vm.config.label,
+        "label-width": _vm.config.labelWidth,
+        prop: _vm.config.name,
+        rules: _vm.rules(_vm.config.rules)
+      },
       nativeOn: {
         click: function($event) {
           return _vm.click($event)
@@ -77228,6 +77328,7 @@ var render = function() {
         {
           attrs: {
             "allow-create": _vm.config.allowCreate,
+            multiple: _vm.config.multiple,
             filterable: _vm.config.filterable || _vm.config.allowCreate,
             placeholder: _vm.config.placeholder || "请选择",
             size: _vm.config.size
@@ -77324,6 +77425,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['config', 'form'],
@@ -77350,7 +77455,15 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "el-form-item",
-    { attrs: { label: _vm.config.label } },
+    {
+      class: {
+        "size-small-font":
+          _vm.config.size === "small" || _vm.config.size === "mini"
+            ? true
+            : false
+      },
+      attrs: { label: _vm.config.label, "label-width": _vm.config.labelWidth }
+    },
     [
       _c("el-switch", {
         model: {
@@ -77441,9 +77554,26 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['config', 'form'],
+    created: function created() {
+        //默认验证
+        this.config.rules = Object.assign({
+            required: false,
+            trigger: [],
+            message: '',
+            custom: 'pattern'
+        }, this.config.rules);
+    },
     mounted: function mounted() {
         //组件添加删除按钮
         var vue = this,
@@ -77457,6 +77587,27 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
 
     methods: {
+        //验证函数validator与正则验证pattern解析
+        rules: function rules() {
+            var rules = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+
+            var rule = ['validator', 'pattern'];
+            for (var key in rules) {
+                for (var k in rule) {
+                    var r = rule[k];
+                    if (key == r && rules[key] && typeof rules[key] == 'string') {
+                        //eval('rules.'+r+'='+rules[key]+';');
+                        eval('rules=Object.assign({},rules,{' + r + ':' + rules[key] + '});');
+                    }
+                    if (rules[key][r] && typeof rules[key][r] == 'string') {
+                        //eval('rules[key].'+r+'='+rules[key][r]+';');
+                        eval('rules[key]=Object.assign({},rules[key],{' + r + ':' + rules[key][r] + '});');
+                    }
+                }
+            }
+            return rules;
+        },
+
         click: function click(event) {
             this.$emit('config', event, this.config, {
                 name: {
@@ -77480,6 +77631,74 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     type: "elementText",
                     label: "空白提示",
                     name: "placeholder"
+                },
+                rules: {
+                    type: "elementComponents",
+                    label: "验证规则",
+                    name: "rules",
+                    itemDefault: {
+                        size: "small"
+                    },
+                    labelPositionTop: true,
+                    form: this.config.rules,
+                    options: [{
+                        type: "elementSwitch",
+                        label: "必填",
+                        name: "required"
+                    }, {
+                        type: "elementSelect",
+                        label: "类型",
+                        name: "type",
+                        options: [{
+                            label: "数值",
+                            value: "number"
+                        }, {
+                            label: "邮箱",
+                            value: "email"
+                        }]
+                    }, {
+                        type: "elementSelect",
+                        label: "触发",
+                        name: "trigger",
+                        multiple: true,
+                        options: [{
+                            label: "失去焦点",
+                            value: "blur"
+                        }, {
+                            label: "改变",
+                            value: "change"
+                        }]
+                    }, {
+                        type: "elementText",
+                        label: "提示信息",
+                        name: "message"
+                    }, {
+                        type: "elementRadioChange",
+                        label: "自定义",
+                        name: "custom",
+                        itemDefault: {
+                            size: "small",
+                            label: " "
+                        },
+                        options: [{
+                            type: 'el-radio',
+                            label: "正则",
+                            value: "pattern",
+                            config: {
+                                type: "elementText",
+                                name: "pattern"
+                            }
+                        }, {
+                            type: 'el-radio',
+                            label: "函数",
+                            value: "validator",
+                            name: "validator",
+                            config: {
+                                type: "elementTextarea",
+                                name: "validator"
+                            }
+                        }]
+                    }]
                 }
             });
         },
@@ -77500,8 +77719,19 @@ var render = function() {
   return _c(
     "el-form-item",
     {
+      class: {
+        "size-small-font":
+          _vm.config.size === "small" || _vm.config.size === "mini"
+            ? true
+            : false
+      },
       style: _vm.config.style,
-      attrs: { label: _vm.config.label },
+      attrs: {
+        label: _vm.config.label,
+        "label-width": _vm.config.labelWidth,
+        prop: _vm.config.name,
+        rules: _vm.rules(_vm.config.rules)
+      },
       nativeOn: {
         click: function($event) {
           return _vm.click($event)
@@ -77531,7 +77761,7 @@ var render = function() {
         model: {
           value: _vm.form[_vm.config.name],
           callback: function($$v) {
-            _vm.$set(_vm.form, _vm.config.name, $$v)
+            _vm.$set(_vm.form, _vm.config.name, _vm._n($$v))
           },
           expression: "form[config.name]"
         }
@@ -77619,9 +77849,21 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['config', 'form'],
+    created: function created() {
+        //默认验证
+        this.config.rules = Object.assign({
+            required: false,
+            trigger: [],
+            message: '',
+            custom: 'pattern'
+        }, this.config.rules);
+    },
     mounted: function mounted() {
         //组件添加删除按钮
         var vue = this,
@@ -77635,6 +77877,27 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
 
     methods: {
+        //验证函数validator与正则验证pattern解析
+        rules: function rules() {
+            var rules = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+
+            var rule = ['validator', 'pattern'];
+            for (var key in rules) {
+                for (var k in rule) {
+                    var r = rule[k];
+                    if (key == r && rules[key] && typeof rules[key] == 'string') {
+                        //eval('rules.'+r+'='+rules[key]+';');
+                        eval('rules=Object.assign({},rules,{' + r + ':' + rules[key] + '});');
+                    }
+                    if (rules[key][r] && typeof rules[key][r] == 'string') {
+                        //eval('rules[key].'+r+'='+rules[key][r]+';');
+                        eval('rules[key]=Object.assign({},rules[key],{' + r + ':' + rules[key][r] + '});');
+                    }
+                }
+            }
+            return rules;
+        },
+
         click: function click(event) {
             this.$emit('config', event, this.config, {
                 name: {
@@ -77663,19 +77926,77 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     type: "elementComponents",
                     label: "自动尺寸",
                     name: "autosize",
+                    itemDefault: {
+                        size: "mini",
+                        labelWidth: '65px'
+                    },
                     form: this.config.autosize,
                     options: [{
                         name: "minRows",
                         label: "最小行数",
                         type: "elementInputNumber",
-                        size: "mini",
                         script: "console.log(this.form,this.config)"
-
                     }, {
                         name: "maxRows",
                         label: "最大行数",
-                        type: "elementInputNumber",
-                        size: "mini"
+                        type: "elementInputNumber"
+                    }]
+                },
+                rules: {
+                    type: "elementComponents",
+                    label: "验证规则",
+                    name: "rules",
+                    itemDefault: {
+                        size: "small"
+                    },
+                    labelPositionTop: true,
+                    form: this.config.rules || {},
+                    options: [{
+                        type: "elementSwitch",
+                        label: "必填",
+                        name: "required"
+                    }, {
+                        type: "elementSelect",
+                        label: "触发",
+                        name: "trigger",
+                        multiple: true,
+                        options: [{
+                            label: "失去焦点",
+                            value: "blur"
+                        }, {
+                            label: "改变",
+                            value: "change"
+                        }]
+                    }, {
+                        type: "elementText",
+                        label: "提示信息",
+                        name: "message"
+                    }, {
+                        type: "elementRadioChange",
+                        label: "自定义",
+                        name: "custom",
+                        itemDefault: {
+                            size: "small",
+                            label: " "
+                        },
+                        options: [{
+                            type: 'el-radio',
+                            label: "正则",
+                            value: "pattern",
+                            config: {
+                                type: "elementText",
+                                name: "pattern"
+                            }
+                        }, {
+                            type: 'el-radio',
+                            label: "函数",
+                            value: "validator",
+                            name: "validator",
+                            config: {
+                                type: "elementTextarea",
+                                name: "validator"
+                            }
+                        }]
                     }]
                 }
             });
@@ -77697,7 +78018,12 @@ var render = function() {
   return _c(
     "el-form-item",
     {
-      attrs: { label: _vm.config.label },
+      attrs: {
+        label: _vm.config.label,
+        "label-width": _vm.config.labelWidth,
+        prop: _vm.config.name,
+        rules: _vm.rules(_vm.config.rules)
+      },
       nativeOn: {
         click: function($event) {
           return _vm.click($event)
@@ -77983,7 +78309,7 @@ exports = module.exports = __webpack_require__(6)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/*菜单栏*/\n.el-menu:not(.el-menu--collapse) {\n    width: 300px;\n}\n.el-tabs{\n    display:-webkit-box;\n    display:-ms-flexbox;\n    display:flex;\n    -webkit-box-orient:vertical;\n    -webkit-box-direction:normal;\n        -ms-flex-flow:column;\n            flex-flow:column;\n    height:100%;\n}\n.el-tabs__content{\n    -webkit-box-flex: 1;\n        -ms-flex: 1;\n            flex: 1;\n}  \n/*时间选择框大小*/\n.el-date-editor.el-input, .el-date-editor.el-input__inner{\n    width:100%;\n} \n/*按钮组件下边距处理*/\n.tools .el-form-item.elementButton{\n    margin:5px;\n}\n/*表单组件边距处理*/\nform .el-form-item{\n    margin-right:10px;\n    margin-bottom:20px;\n}  \n/*size为small时label字体大小处理*/\n.size-small-font,.size-small-font [class*=\"label\"]{\n    font-size:13px;\n} \n/*可拖动组件的光标*/\n.draggable label,.footer-tools.draggable button{\n    cursor:move;\n}\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/*菜单栏*/\n.el-menu:not(.el-menu--collapse) {\n    width: 300px;\n}\n.el-tabs{\n    display:-webkit-box;\n    display:-ms-flexbox;\n    display:flex;\n    -webkit-box-orient:vertical;\n    -webkit-box-direction:normal;\n        -ms-flex-flow:column;\n            flex-flow:column;\n    height:100%;\n}\n.el-tabs__content{\n    -webkit-box-flex: 1;\n        -ms-flex: 1;\n            flex: 1;\n}  \n/*时间选择框大小*/\n.el-date-editor.el-input, .el-date-editor.el-input__inner{\n    width:100%;\n} \n/*按钮组件下边距处理*/\n.tools .el-form-item.elementButton{\n    margin:5px;\n}\n/*表单组件边距处理*/\nform .el-form-item{\n    margin-right:10px;\n    margin-bottom:20px;\n}  \n/*size为small时label字体大小处理*/\n.size-small-font [class*=\"label\"]{\n    font-size:13px;\n} \n/*可拖动组件的光标*/\n.draggable label,.footer-tools.draggable button{\n    cursor:move;\n}\n/*标签换行处理\n.label-position-top>.el-form-item__label{\n    float:none;\n}   */ \n", ""]);
 
 // exports
 
@@ -78218,7 +78544,7 @@ exports = module.exports = __webpack_require__(6)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/*激活的组件显示虚线框*/\n.draggable .el-form-item{\n    border:1px dotted transparent;\n}\n.draggable .el-form-item.active{\n    border:1px dotted #409EFF;\n}\n/*组件删除按钮*/\n.my-close{\n    display: none;\n}\n.draggable .el-form-item.active .my-close{\n    position:absolute;\n    top:0px;\n    left:0px;\n    border-radius:12px;\n    font-size:12px;\n    border:1px solid #dddddd;\n    color:red;\n    width:12px;\n    height:12px;\n    text-align:center;\n    cursor:pointer;\n    line-height: 11px;\n    display:inline-block;\n}\n.draggable .el-form-item.active .my-close::after{\n    content:'\\D7'\n}\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/*激活的组件显示虚线框*/\n.draggable .el-form-item{\n    border:1px dotted transparent;\n}\n.draggable .el-form-item.active{\n    border:1px dotted #409EFF;\n}\n/*组件删除按钮*/\n.my-close{\n    display: none;\n}\n.draggable .el-form-item.active .my-close{\n    position:absolute;\n    top:0px;\n    left:0px;\n    border-radius:12px;\n    font-size:12px;\n    border:1px solid #dddddd;\n    color:red;\n    width:12px;\n    height:12px;\n    text-align:center;\n    cursor:pointer;\n    line-height: 11px;\n    display:inline-block;\n}\n.draggable .el-form-item.active .my-close::after{\n    content:'\\D7'\n}\n", ""]);
 
 // exports
 
@@ -78317,15 +78643,36 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 name: 'text'
             }],
             tools: [{
+                "type": "elementButton",
+                "text": "保存并关闭",
                 "buttonType": "primary",
+                "name": "button",
+                "title": "保存并关闭",
+                "operator": "elementSelect",
+                "script": "this.save(event,config,true);"
+            }, {
+                "type": "elementButton",
+                "text": "保存",
                 "shape": "plain",
-                "text": "示例按钮"
+                "buttonType": "primary",
+                "name": "button",
+                "title": "保存",
+                "operator": "elementSelect",
+                "script": "this.save(event,config);"
+            }, {
+                "type": "elementButton",
+                "text": "取消",
+                "buttonType": "",
+                "name": "button",
+                "title": "取消",
+                "operator": "elementSelect",
+                "script": "this.cancel(event,config);"
             }],
             form: {
                 text: '将组件拖放到此区域进行配置'
             }
         };
-        //表单配置
+        //表单信息
         if (this.query.row) {
             if (this.query.row.json) {
                 this.configs = JSON.parse(this.query.row.json);
@@ -78360,7 +78707,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 vue: this,
                 axiosOption: {
                     url: 'admin/table/field',
-                    data: this.query
+                    data: this.query.row
                 },
                 success: function success(response, option) {
                     option.vue.fields = response.data.data;
@@ -80036,7 +80383,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 view_name: '',
                 id: ''
             },
-            activeAccordion: "组件",
+            activeAccordion: "表单",
             initComponents: '[{\n                "type": "elementText",\n                "label": "\u6587\u672C",\n                "name": "text"\n            },{\n                "type": "elementSelect",\n                "label": "\u9009\u9879",\n                "name": "select",\n                "source":"options",\n                "options": [{\n                    "value": "1",\n                    "label": "\u9009\u98791"\n                }, {\n                    "value": "2",\n                    "label": "\u9009\u98792"\n                }],\n                "tableField":{\n                    "table":"",\n                    "fieldLabel":"",\n                    "fieldValue":""\n                }\n            },{\n                "type": "elementSwitch",\n                "label": "\u5F00\u5173",\n                "name": "switch"\n            },{\n                "type": "elementTextarea",\n                "label": "\u591A\u884C\u6587\u672C",\n                "name": "textarea",\n                "autosize":{"minRows":3,"maxRows":5}\n            },{\n                "type": "elementDatetime",\n                "label": "\u65E5\u671F\u65F6\u95F4",\n                "name": "datetime"\n            },{\n                "type": "elementInputNumber",\n                "label": "\u6570\u5B57",\n                "name": "inputNumber",\n                "min": 0,\n                "max": 10\n            },{\n                "type": "elementButton",\n                "labelWidth":"80px",\n                "label": "\u6309\u94AE",\n                "text": "\u6309\u94AE",\n                "shape":"plain",\n                "buttonType":"primary",\n                "name": "button"\n            }]',
             configs: {
                 components: [],
@@ -80047,7 +80394,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
     created: function created() {
         if (this.query.row) {
-            this.row = this.query.row;
+            this.row = Object.assign({}, this.query.row);
         }
         this.configs.components = JSON.parse(this.initComponents);
         //表单配置
@@ -80098,14 +80445,23 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
         //保存配置
         save: function save(event) {
-            this.$set(this.row, 'json', JSON.stringify(this.json));
-            this.my.axios({
-                vue: this,
-                axiosOption: {
-                    url: '/admin/table/save',
-                    data: { form: this.row, TABLE_NAME: 'view' }
-                },
-                successMsg: '保存成功!'
+            var vue = this;
+            this.$refs.rowForm.validate(function (valid) {
+                if (valid) {
+                    vue.my.axios({
+                        vue: vue,
+                        axiosOption: {
+                            url: '/admin/table/save',
+                            data: { form: vue.row, TABLE_NAME: 'view' }
+                        },
+                        success: function success(response, option) {
+                            option.vue.query.row = vue.row;
+                        },
+                        successMsg: '保存成功!'
+                    });
+                } else {
+                    return false;
+                }
             });
         }
     }
@@ -80139,8 +80495,9 @@ var render = function() {
           _c(
             "el-form",
             {
+              ref: "rowForm",
               staticStyle: { width: "100%", height: "100%" },
-              attrs: { model: _vm.form, "label-width": "80px" }
+              attrs: { model: _vm.row, "label-width": "80px" }
             },
             [
               _vm._l(_vm.configs.form.fields, function(config, key, index) {
@@ -80288,14 +80645,7 @@ var render = function() {
                 height: "100%",
                 position: "relative"
               },
-              attrs: { "label-width": "80px" },
-              model: {
-                value: _vm.configs.form,
-                callback: function($$v) {
-                  _vm.$set(_vm.configs, "form", $$v)
-                },
-                expression: "configs.form"
-              }
+              attrs: { model: _vm.configs.form, "label-width": "80px" }
             },
             [
               _c(
