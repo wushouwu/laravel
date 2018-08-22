@@ -1,15 +1,19 @@
 <template>
     <el-form-item 
+        :prop="config.name" 
+        :rules="config.rules"
         :label="config.label"
         :label-width="config.labelWidth"
-        :prop="config.name" 
         :class="{'size-small-font':config.size==='small'||config.size==='mini'?true:false}"
+        @click.native="click"
     >
         <el-input-number 
             v-model="form[config.name]"  
             :min="config.min" 
             :max="config.max"
             :size="config.size"
+            :precision="config.precision"
+            :step="config.step"
             :controls-position="config.controlsPosition"
             @change="change"
         ></el-input-number>
@@ -17,7 +21,15 @@
 </template>
 <script>
     export default {
-        props: ['config','form'],
+        props: ['config','form'],  
+        created(){
+           //默认验证
+           this.$set(this.config,'rules',Object.assign([{
+                required:false,
+                trigger:[],
+                message:"字段不能为空",
+            }],this.config.rules));
+        },             
         mounted(){
             //组件添加删除按钮
             let vue=this,
@@ -43,7 +55,89 @@
                         type:"elementText",
                         label:"字段名",
                         name:"label"
-                    }
+                    },
+                    disabled: {
+                        type:"elementSwitch",
+                        label:"只读",
+                        name:"disabled"
+                    },
+                    controlsPosition:{
+                        type:"elementSelect",
+                        label:"按钮位置",
+                        name:"controlsPosition",
+                        options:[{
+                            label:"两边",
+                            value:""
+                        },{
+                            label:"右边",
+                            value:"right"
+                        }]
+                    },
+                    min:{
+                        type:"elementInputNumber",
+                        name:"min",
+                        label:"最小值",
+                        controlsPosition:'right'
+                    },
+                    max:{
+                        type:"elementInputNumber",
+                        name:"max",
+                        label:"最大值",
+                        controlsPosition:'right'
+                    },
+                    precision:{
+                        type:"elementInputNumber",
+                        name:"precision",
+                        label:"数值精度",
+                        min:0,
+                        controlsPosition:'right'
+                    },                   
+                    step:{
+                        type:"elementInputNumber",
+                        name:"step",
+                        label:"步长",
+                        min:1,
+                        controlsPosition:'right'
+                    },
+                    rules:{
+                        type:"elementComponents",
+                        label:"验证规则",
+                        name:"rules",
+                        itemDefault:{
+                            size:"small",
+                            //style:"border-bottom:1px solid #eee;margin-bottom:10px;padding-bottom:10px;"
+                        },
+                        labelPositionTop:true,
+                        options:[{
+                            type:"elementComponents",
+                            labelWidth:"0px",
+                            name:"0",
+                            itemDefault:{
+                                size:"small"
+                            },
+                            options:[{
+                                type:"elementSwitch",
+                                label:"必填",
+                                name:"required",
+                            },{
+                                type:"elementSelect",
+                                label:"触发",
+                                name:"trigger",
+                                multiple:true,
+                                options:[{
+                                    label:"失去焦点",
+                                    value:"blur"
+                                },{
+                                    label:"改变",
+                                    value:"change"
+                                }]
+                            },{
+                                type:"elementText",
+                                label:"提示信息",
+                                name:"message",
+                            }]
+                        }]
+                    }                  
                 });
             },            
             change(value){
