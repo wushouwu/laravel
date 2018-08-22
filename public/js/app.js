@@ -75392,6 +75392,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['config', 'form'],
@@ -75454,10 +75455,11 @@ var render = function() {
             : false,
         "label-position-top": _vm.config.labelPositionTop
       },
+      style: _vm.config.style,
       attrs: {
+        prop: _vm.config.name,
         label: _vm.config.label,
-        "label-width": _vm.config.labelWidth,
-        prop: _vm.config.name
+        "label-width": _vm.config.labelWidth
       }
     },
     _vm._l(_vm.config.options, function(option, key, index) {
@@ -76587,9 +76589,21 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['config', 'form'],
+    created: function created() {
+        //默认验证
+        this.$set(this.config, 'rules', Object.assign([{
+            required: false,
+            trigger: [],
+            message: "字段不能为空"
+        }], this.config.rules));
+    },
     mounted: function mounted() {
         //组件添加删除按钮
         var vue = this,
@@ -76616,6 +76630,88 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     type: "elementText",
                     label: "字段名",
                     name: "label"
+                },
+                disabled: {
+                    type: "elementSwitch",
+                    label: "只读",
+                    name: "disabled"
+                },
+                controlsPosition: {
+                    type: "elementSelect",
+                    label: "按钮位置",
+                    name: "controlsPosition",
+                    options: [{
+                        label: "两边",
+                        value: ""
+                    }, {
+                        label: "右边",
+                        value: "right"
+                    }]
+                },
+                min: {
+                    type: "elementInputNumber",
+                    name: "min",
+                    label: "最小值",
+                    controlsPosition: 'right'
+                },
+                max: {
+                    type: "elementInputNumber",
+                    name: "max",
+                    label: "最大值",
+                    controlsPosition: 'right'
+                },
+                precision: {
+                    type: "elementInputNumber",
+                    name: "precision",
+                    label: "数值精度",
+                    min: 0,
+                    controlsPosition: 'right'
+                },
+                step: {
+                    type: "elementInputNumber",
+                    name: "step",
+                    label: "步长",
+                    min: 1,
+                    controlsPosition: 'right'
+                },
+                rules: {
+                    type: "elementComponents",
+                    label: "验证规则",
+                    name: "rules",
+                    itemDefault: {
+                        size: "small"
+                        //style:"border-bottom:1px solid #eee;margin-bottom:10px;padding-bottom:10px;"
+                    },
+                    labelPositionTop: true,
+                    options: [{
+                        type: "elementComponents",
+                        labelWidth: "0px",
+                        name: "0",
+                        itemDefault: {
+                            size: "small"
+                        },
+                        options: [{
+                            type: "elementSwitch",
+                            label: "必填",
+                            name: "required"
+                        }, {
+                            type: "elementSelect",
+                            label: "触发",
+                            name: "trigger",
+                            multiple: true,
+                            options: [{
+                                label: "失去焦点",
+                                value: "blur"
+                            }, {
+                                label: "改变",
+                                value: "change"
+                            }]
+                        }, {
+                            type: "elementText",
+                            label: "提示信息",
+                            name: "message"
+                        }]
+                    }]
                 }
             });
         },
@@ -76644,9 +76740,15 @@ var render = function() {
             : false
       },
       attrs: {
+        prop: _vm.config.name,
+        rules: _vm.config.rules,
         label: _vm.config.label,
-        "label-width": _vm.config.labelWidth,
-        prop: _vm.config.name
+        "label-width": _vm.config.labelWidth
+      },
+      nativeOn: {
+        click: function($event) {
+          return _vm.click($event)
+        }
       }
     },
     [
@@ -76655,6 +76757,8 @@ var render = function() {
           min: _vm.config.min,
           max: _vm.config.max,
           size: _vm.config.size,
+          precision: _vm.config.precision,
+          step: _vm.config.step,
           "controls-position": _vm.config.controlsPosition
         },
         on: { change: _vm.change },
@@ -77113,7 +77217,7 @@ exports = module.exports = __webpack_require__(6)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -77160,6 +77264,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             tables: [],
             fields: []
         };
+    },
+    created: function created() {
+        //默认验证
+        this.$set(this.config, 'rules', Object.assign([{
+            required: false,
+            trigger: [],
+            message: "字段不能为空"
+        }], this.config.rules));
     },
     mounted: function mounted() {
         //组件添加删除按钮
@@ -77283,6 +77395,45 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                             }]
                         }
                     }]
+                },
+                rules: {
+                    type: "elementComponents",
+                    label: "验证规则",
+                    name: "rules",
+                    itemDefault: {
+                        size: "small"
+                        //style:"border-bottom:1px solid #eee;margin-bottom:10px;padding-bottom:10px;"
+                    },
+                    labelPositionTop: true,
+                    options: [{
+                        type: "elementComponents",
+                        labelWidth: "0px",
+                        name: "0",
+                        itemDefault: {
+                            size: "small"
+                        },
+                        options: [{
+                            type: "elementSwitch",
+                            label: "必填",
+                            name: "required"
+                        }, {
+                            type: "elementSelect",
+                            label: "触发",
+                            name: "trigger",
+                            multiple: true,
+                            options: [{
+                                label: "失去焦点",
+                                value: "blur"
+                            }, {
+                                label: "改变",
+                                value: "change"
+                            }]
+                        }, {
+                            type: "elementText",
+                            label: "提示信息",
+                            name: "message"
+                        }]
+                    }]
                 }
             });
         },
@@ -77314,7 +77465,7 @@ var render = function() {
         label: _vm.config.label,
         "label-width": _vm.config.labelWidth,
         prop: _vm.config.name,
-        rules: _vm.rules(_vm.config.rules)
+        rules: _vm.config.rules
       },
       nativeOn: {
         click: function($event) {
@@ -77567,12 +77718,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     props: ['config', 'form'],
     created: function created() {
         //默认验证
-        this.config.rules = Object.assign({
+        this.$set(this.config, 'rules', Object.assign([{
             required: false,
             trigger: [],
-            message: '',
-            custom: 'pattern'
-        }, this.config.rules);
+            message: "字段不能为空"
+        }, {
+            type: '',
+            trigger: [],
+            message: ''
+        }, {
+            custom: 'pattern',
+            trigger: [],
+            message: ''
+        }], this.config.rules));
     },
     mounted: function mounted() {
         //组件添加删除按钮
@@ -77586,28 +77744,34 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         this.$el.appendChild(span);
     },
 
-    methods: {
-        //验证函数validator与正则验证pattern解析
+    computed: {
+        //验证函数validator与正则验证pattern解析            
         rules: function rules() {
-            var rules = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
-
-            var rule = ['validator', 'pattern'];
-            for (var key in rules) {
+            var rules = this.config.rules;
+            if (rules) {
+                var rule = ['validator', 'pattern'];
                 for (var k in rule) {
                     var r = rule[k];
-                    if (key == r && rules[key] && typeof rules[key] == 'string') {
-                        //eval('rules.'+r+'='+rules[key]+';');
-                        eval('rules=Object.assign({},rules,{' + r + ':' + rules[key] + '});');
+                    if (rules[r]) {
+                        try {
+                            eval('rules=Object.assign({},rules,{' + r + ':' + rules[r] + '});');
+                        } catch (e) {
+                            console.log(e);
+                        }
                     }
-                    if (rules[key][r] && typeof rules[key][r] == 'string') {
-                        //eval('rules[key].'+r+'='+rules[key][r]+';');
-                        eval('rules[key]=Object.assign({},rules[key],{' + r + ':' + rules[key][r] + '});');
+                    if (rules[2] && rules[2][r]) {
+                        try {
+                            eval('rules=Object.assign([],rules,{' + 2 + ':{' + r + ':' + rules[2][r] + '}});');
+                        } catch (e) {
+                            console.log(e);
+                        }
                     }
                 }
             }
             return rules;
-        },
-
+        }
+    },
+    methods: {
         click: function click(event) {
             this.$emit('config', event, this.config, {
                 name: {
@@ -77637,66 +77801,140 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     label: "验证规则",
                     name: "rules",
                     itemDefault: {
-                        size: "small"
+                        size: "small",
+                        style: "border-bottom:1px solid #eee;margin-bottom:10px;padding-bottom:10px;"
                     },
                     labelPositionTop: true,
-                    form: this.config.rules,
                     options: [{
-                        type: "elementSwitch",
-                        label: "必填",
-                        name: "required"
-                    }, {
-                        type: "elementSelect",
-                        label: "类型",
-                        name: "type",
-                        options: [{
-                            label: "数值",
-                            value: "number"
-                        }, {
-                            label: "邮箱",
-                            value: "email"
-                        }]
-                    }, {
-                        type: "elementSelect",
-                        label: "触发",
-                        name: "trigger",
-                        multiple: true,
-                        options: [{
-                            label: "失去焦点",
-                            value: "blur"
-                        }, {
-                            label: "改变",
-                            value: "change"
-                        }]
-                    }, {
-                        type: "elementText",
-                        label: "提示信息",
-                        name: "message"
-                    }, {
-                        type: "elementRadioChange",
-                        label: "自定义",
-                        name: "custom",
+                        type: "elementComponents",
+                        labelWidth: "0px",
+                        name: "0",
                         itemDefault: {
-                            size: "small",
-                            label: " "
+                            size: "small"
                         },
                         options: [{
-                            type: 'el-radio',
-                            label: "正则",
-                            value: "pattern",
-                            config: {
-                                type: "elementText",
-                                name: "pattern"
-                            }
+                            type: "elementSwitch",
+                            label: "必填",
+                            name: "required"
                         }, {
-                            type: 'el-radio',
-                            label: "函数",
-                            value: "validator",
-                            name: "validator",
-                            config: {
-                                type: "elementTextarea",
-                                name: "validator"
-                            }
+                            type: "elementSelect",
+                            label: "触发",
+                            name: "trigger",
+                            multiple: true,
+                            options: [{
+                                label: "失去焦点",
+                                value: "blur"
+                            }, {
+                                label: "改变",
+                                value: "change"
+                            }]
+                        }, {
+                            type: "elementText",
+                            label: "提示信息",
+                            name: "message"
+                        }]
+                    }, {
+                        type: "elementComponents",
+                        labelWidth: "0px",
+                        name: "1",
+                        itemDefault: {
+                            size: "small"
+                        },
+                        options: [{
+                            type: "elementSelect",
+                            label: "类型",
+                            name: "type",
+                            options: [{
+                                label: "字符",
+                                value: "string"
+                            }, {
+                                label: "邮箱",
+                                value: "email"
+                            }, {
+                                label: "url地址",
+                                value: "url"
+                            }, {
+                                label: "正则表达式",
+                                value: "regexp"
+                            }, {
+                                label: "函数",
+                                value: "method"
+                            }]
+                        }, {
+                            type: "elementSelect",
+                            label: "触发",
+                            name: "trigger",
+                            multiple: true,
+                            options: [{
+                                label: "失去焦点",
+                                value: "blur"
+                            }, {
+                                label: "改变",
+                                value: "change"
+                            }]
+                        }, {
+                            type: "elementText",
+                            label: "提示信息",
+                            name: "message"
+                        }]
+                    }, {
+                        type: "elementComponents",
+                        labelWidth: "0px",
+                        name: "2",
+                        itemDefault: {
+                            size: "small"
+                        },
+                        options: [{
+                            type: "elementRadioChange",
+                            label: "自定义",
+                            name: "custom",
+                            itemDefault: {
+                                size: "small",
+                                label: " "
+                            },
+                            options: [{
+                                type: 'el-radio',
+                                label: "正则",
+                                value: "pattern",
+                                config: {
+                                    type: "elementText",
+                                    name: "pattern",
+                                    rules: [{
+                                        type: "regexp",
+                                        trigger: ["change"],
+                                        message: "正则表达式格式错误"
+                                    }]
+                                }
+                            }, {
+                                type: 'el-radio',
+                                label: "函数",
+                                value: "validator",
+                                config: {
+                                    type: "elementTextarea",
+                                    name: "validator",
+                                    rules: [{
+                                        type: "method",
+                                        trigger: ["change"],
+                                        message: "函数格式错误"
+                                    }]
+                                }
+                            }]
+                        }, {
+                            type: "elementSelect",
+                            label: "触发",
+                            name: "trigger",
+                            multiple: true,
+                            options: [{
+                                label: "失去焦点",
+                                value: "blur"
+                            }, {
+                                label: "改变",
+                                value: "change"
+                            }]
+                        }, {
+                            type: "elementText",
+                            label: "提示信息",
+                            name: "message"
                         }]
                     }]
                 }
@@ -77730,7 +77968,7 @@ var render = function() {
         label: _vm.config.label,
         "label-width": _vm.config.labelWidth,
         prop: _vm.config.name,
-        rules: _vm.rules(_vm.config.rules)
+        rules: _vm.rules
       },
       nativeOn: {
         click: function($event) {
@@ -77761,7 +77999,7 @@ var render = function() {
         model: {
           value: _vm.form[_vm.config.name],
           callback: function($$v) {
-            _vm.$set(_vm.form, _vm.config.name, _vm._n($$v))
+            _vm.$set(_vm.form, _vm.config.name, $$v)
           },
           expression: "form[config.name]"
         }
@@ -77857,12 +78095,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     props: ['config', 'form'],
     created: function created() {
         //默认验证
-        this.config.rules = Object.assign({
+        this.$set(this.config, 'rules', Object.assign([{
             required: false,
             trigger: [],
-            message: '',
-            custom: 'pattern'
-        }, this.config.rules);
+            message: "字段不能为空"
+        }, {
+            type: '',
+            trigger: [],
+            message: ''
+        }, {
+            custom: 'pattern',
+            trigger: [],
+            message: ''
+        }], this.config.rules));
     },
     mounted: function mounted() {
         //组件添加删除按钮
@@ -77876,28 +78121,34 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         this.$el.appendChild(span);
     },
 
-    methods: {
-        //验证函数validator与正则验证pattern解析
+    computed: {
+        //验证函数validator与正则验证pattern解析            
         rules: function rules() {
-            var rules = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
-
-            var rule = ['validator', 'pattern'];
-            for (var key in rules) {
+            var rules = this.config.rules;
+            if (rules) {
+                var rule = ['validator', 'pattern'];
                 for (var k in rule) {
                     var r = rule[k];
-                    if (key == r && rules[key] && typeof rules[key] == 'string') {
-                        //eval('rules.'+r+'='+rules[key]+';');
-                        eval('rules=Object.assign({},rules,{' + r + ':' + rules[key] + '});');
+                    if (rules[r]) {
+                        try {
+                            eval('rules=Object.assign({},rules,{' + r + ':' + rules[r] + '});');
+                        } catch (e) {
+                            console.log(e);
+                        }
                     }
-                    if (rules[key][r] && typeof rules[key][r] == 'string') {
-                        //eval('rules[key].'+r+'='+rules[key][r]+';');
-                        eval('rules[key]=Object.assign({},rules[key],{' + r + ':' + rules[key][r] + '});');
+                    if (rules[2] && rules[2][r]) {
+                        try {
+                            eval('rules=Object.assign([],rules,{' + 2 + ':{' + r + ':' + rules[2][r] + '}});');
+                        } catch (e) {
+                            console.log(e);
+                        }
                     }
                 }
             }
             return rules;
-        },
-
+        }
+    },
+    methods: {
         click: function click(event) {
             this.$emit('config', event, this.config, {
                 name: {
@@ -77930,7 +78181,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                         size: "mini",
                         labelWidth: '65px'
                     },
-                    form: this.config.autosize,
                     options: [{
                         name: "minRows",
                         label: "最小行数",
@@ -77947,55 +78197,168 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     label: "验证规则",
                     name: "rules",
                     itemDefault: {
-                        size: "small"
+                        size: "small",
+                        style: "border-bottom:1px solid #eee;margin-bottom:10px;padding-bottom:10px;"
                     },
                     labelPositionTop: true,
-                    form: this.config.rules || {},
                     options: [{
-                        type: "elementSwitch",
-                        label: "必填",
-                        name: "required"
-                    }, {
-                        type: "elementSelect",
-                        label: "触发",
-                        name: "trigger",
-                        multiple: true,
-                        options: [{
-                            label: "失去焦点",
-                            value: "blur"
-                        }, {
-                            label: "改变",
-                            value: "change"
-                        }]
-                    }, {
-                        type: "elementText",
-                        label: "提示信息",
-                        name: "message"
-                    }, {
-                        type: "elementRadioChange",
-                        label: "自定义",
-                        name: "custom",
+                        type: "elementComponents",
+                        labelWidth: "0px",
+                        name: "0",
                         itemDefault: {
-                            size: "small",
-                            label: " "
+                            size: "small"
                         },
                         options: [{
-                            type: 'el-radio',
-                            label: "正则",
-                            value: "pattern",
-                            config: {
-                                type: "elementText",
-                                name: "pattern"
-                            }
+                            type: "elementSwitch",
+                            label: "必填",
+                            name: "required"
                         }, {
-                            type: 'el-radio',
-                            label: "函数",
-                            value: "validator",
-                            name: "validator",
-                            config: {
-                                type: "elementTextarea",
-                                name: "validator"
-                            }
+                            type: "elementSelect",
+                            label: "触发",
+                            name: "trigger",
+                            multiple: true,
+                            options: [{
+                                label: "失去焦点",
+                                value: "blur"
+                            }, {
+                                label: "改变",
+                                value: "change"
+                            }]
+                        }, {
+                            type: "elementText",
+                            label: "提示信息",
+                            name: "message"
+                        }]
+                    }, {
+                        type: "elementComponents",
+                        labelWidth: "0px",
+                        name: "1",
+                        itemDefault: {
+                            size: "small"
+                        },
+                        options: [{
+                            type: "elementSelect",
+                            label: "类型",
+                            name: "type",
+                            options: [{
+                                label: "字符",
+                                value: "string"
+                            }, {
+                                label: "邮箱",
+                                value: "email"
+                            }, {
+                                label: "url地址",
+                                value: "url"
+                            }, {
+                                label: "正则表达式",
+                                value: "regexp"
+                            }, {
+                                label: "函数",
+                                value: "method"
+                            }]
+                        }, {
+                            type: "elementSelect",
+                            label: "触发",
+                            name: "trigger",
+                            multiple: true,
+                            options: [{
+                                label: "失去焦点",
+                                value: "blur"
+                            }, {
+                                label: "改变",
+                                value: "change"
+                            }]
+                        }, {
+                            type: "elementText",
+                            label: "提示信息",
+                            name: "message"
+                        }]
+                    }, {
+                        type: "elementComponents",
+                        labelWidth: "0px",
+                        name: "2",
+                        itemDefault: {
+                            size: "small"
+                        },
+                        options: [{
+                            type: "elementRadioChange",
+                            label: "自定义",
+                            name: "custom",
+                            itemDefault: {
+                                size: "small",
+                                label: " "
+                            },
+                            options: [{
+                                type: 'el-radio',
+                                label: "正则",
+                                value: "pattern",
+                                config: {
+                                    type: "elementText",
+                                    name: "pattern"
+                                    /*rules:{
+                                        2:{
+                                            custom:"validator",
+                                            trigger:["change"],
+                                            validator: `
+                                                function(rule, value, callback){
+                                                    if(value){
+                                                        try{
+                                                            eval('let test='+value+';');
+                                                            callback();
+                                                        }catch(e){
+                                                            callback(new Error('格式错误,'+e));
+                                                        }
+                                                    }else{
+                                                        callback();
+                                                    }
+                                                }`
+                                        }
+                                    }*/
+                                }
+                            }, {
+                                type: 'el-radio',
+                                label: "函数",
+                                value: "validator",
+                                config: {
+                                    type: "elementTextarea",
+                                    name: "validator"
+                                    /*rules:{
+                                        2:{
+                                            custom:"validator",
+                                            trigger:["change"],
+                                            validator: `
+                                                function(rule, value, callback){
+                                                    if(value){
+                                                        try{
+                                                            eval('let test='+value+';');
+                                                            callback();
+                                                        }catch(e){
+                                                            callback(new Error('格式错误,'+e));
+                                                        }
+                                                    }else{
+                                                        callback();
+                                                    }
+                                                }`
+                                        }
+                                    }*/
+                                }
+                            }]
+                        }, {
+                            type: "elementSelect",
+                            label: "触发",
+                            name: "trigger",
+                            multiple: true,
+                            options: [{
+                                label: "失去焦点",
+                                value: "blur"
+                            }, {
+                                label: "改变",
+                                value: "change"
+                            }]
+                        }, {
+                            type: "elementText",
+                            label: "提示信息",
+                            name: "message"
                         }]
                     }]
                 }
@@ -78022,7 +78385,7 @@ var render = function() {
         label: _vm.config.label,
         "label-width": _vm.config.labelWidth,
         prop: _vm.config.name,
-        rules: _vm.rules(_vm.config.rules)
+        rules: _vm.rules
       },
       nativeOn: {
         click: function($event) {
@@ -78399,7 +78762,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     title: '表格',
                     name: '3-1',
                     content: 'tableVue',
-                    query: { TABLE_NAME: 'INFORMATION_SCHEMA.TABLES', view_name: 'table' }
+                    query: { TABLE_NAME: 'INFORMATION_SCHEMA.TABLES', view_name: 'table', fields: 'TABLE_COMMENT,TABLE_NAME' }
                 } }
         };
     },
@@ -78674,34 +79037,34 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         };
         //表单信息
         if (this.query.row) {
-            if (this.query.row.json) {
-                this.configs = JSON.parse(this.query.row.json);
-            } else {
+            this.my.axios({
+                vue: this,
+                axiosOption: {
+                    url: 'admin/table/view',
+                    data: this.query.row
+                },
+                success: function success(response, option) {
+                    if (!response.data.data.fields) {
+                        response.data.data.fields = [];
+                    }
+                    if (!response.data.data.tools) {
+                        response.data.data.tools = [];
+                    }
+                    option.vue.configs = response.data.data;
+                },
+                error: function error(response, option) {
+                    option.vue.configs = configs;
+                }
+            });
+            /*if(this.query.row.json){
+               this.configs=JSON.parse(this.query.row.json);
+            }else{
                 this.$message({
                     showClose: true,
                     message: '没有视图配置'
                 });
-                this.configs = configs;
-            }
-            /* this.my.axios({
-                 vue: this,
-                 axiosOption:{
-                     url:'admin/table/view',
-                     data:this.query.row
-                 },
-                 success:function(response,option){
-                     if(!response.data.data.fields){
-                         response.data.data.fields=[];
-                     }
-                     if(!response.data.data.tools){
-                         response.data.data.tools=[];
-                     }                    
-                     option.vue.configs=response.data.data;
-                 },
-                 error:function(response,option){
-                     option.vue.configs=configs;
-                 }
-             });*/
+                this.configs=configs;
+            }*/
             //表单字段
             this.my.axios({
                 vue: this,
@@ -80384,7 +80747,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 id: ''
             },
             activeAccordion: "表单",
-            initComponents: '[{\n                "type": "elementText",\n                "label": "\u6587\u672C",\n                "name": "text"\n            },{\n                "type": "elementSelect",\n                "label": "\u9009\u9879",\n                "name": "select",\n                "source":"options",\n                "options": [{\n                    "value": "1",\n                    "label": "\u9009\u98791"\n                }, {\n                    "value": "2",\n                    "label": "\u9009\u98792"\n                }],\n                "tableField":{\n                    "table":"",\n                    "fieldLabel":"",\n                    "fieldValue":""\n                }\n            },{\n                "type": "elementSwitch",\n                "label": "\u5F00\u5173",\n                "name": "switch"\n            },{\n                "type": "elementTextarea",\n                "label": "\u591A\u884C\u6587\u672C",\n                "name": "textarea",\n                "autosize":{"minRows":3,"maxRows":5}\n            },{\n                "type": "elementDatetime",\n                "label": "\u65E5\u671F\u65F6\u95F4",\n                "name": "datetime"\n            },{\n                "type": "elementInputNumber",\n                "label": "\u6570\u5B57",\n                "name": "inputNumber",\n                "min": 0,\n                "max": 10\n            },{\n                "type": "elementButton",\n                "labelWidth":"80px",\n                "label": "\u6309\u94AE",\n                "text": "\u6309\u94AE",\n                "shape":"plain",\n                "buttonType":"primary",\n                "name": "button"\n            }]',
+            initComponents: '[{\n                "type": "elementText",\n                "label": "\u6587\u672C",\n                "name": "text"\n            },{\n                "type": "elementSelect",\n                "label": "\u9009\u9879",\n                "name": "select",\n                "source":"options",\n                "options": [{\n                    "value": "1",\n                    "label": "\u9009\u98791"\n                }, {\n                    "value": "2",\n                    "label": "\u9009\u98792"\n                }],\n                "tableField":{\n                    "table":"",\n                    "fieldLabel":"",\n                    "fieldValue":""\n                }\n            },{\n                "type": "elementSwitch",\n                "label": "\u5F00\u5173",\n                "name": "switch"\n            },{\n                "type": "elementTextarea",\n                "label": "\u591A\u884C\u6587\u672C",\n                "name": "textarea",\n                "autosize":{"minRows":3,"maxRows":5}\n            },{\n                "type": "elementDatetime",\n                "label": "\u65E5\u671F\u65F6\u95F4",\n                "name": "datetime"\n            },{\n                "type": "elementInputNumber",\n                "label": "\u6570\u5B57",\n                "name": "inputNumber"\n            },{\n                "type": "elementButton",\n                "labelWidth":"80px",\n                "label": "\u6309\u94AE",\n                "text": "\u6309\u94AE",\n                "shape":"plain",\n                "buttonType":"primary",\n                "name": "button"\n            }]',
             configs: {
                 components: [],
                 form: []
@@ -80393,9 +80756,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         };
     },
     created: function created() {
-        if (this.query.row) {
-            this.row = Object.assign({}, this.query.row);
-        }
         this.configs.components = JSON.parse(this.initComponents);
         //表单配置
         this.my.axios({
@@ -80412,6 +80772,23 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 option.vue.$set(option.vue.configs, 'form', response.data.data);
             }
         });
+        //表单数据
+        if (this.query.row) {
+            this.my.axios({
+                vue: this,
+                axiosOption: {
+                    url: 'admin/table/row',
+                    data: {
+                        TABLE_NAME: 'view',
+                        id: this.query.row.id
+                    }
+                },
+                success: function success(response, option) {
+
+                    option.vue.$set(option.vue, 'row', response.data.data);
+                }
+            });
+        }
     },
 
     watch: {
@@ -80454,9 +80831,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                             url: '/admin/table/save',
                             data: { form: vue.row, TABLE_NAME: 'view' }
                         },
-                        success: function success(response, option) {
-                            option.vue.query.row = vue.row;
-                        },
+                        success: function success(response, option) {},
                         successMsg: '保存成功!'
                     });
                 } else {
@@ -80645,7 +81020,11 @@ var render = function() {
                 height: "100%",
                 position: "relative"
               },
-              attrs: { model: _vm.configs.form, "label-width": "80px" }
+              attrs: {
+                model: _vm.configs.form,
+                "status-icon": "",
+                "label-width": "80px"
+              }
             },
             [
               _c(
