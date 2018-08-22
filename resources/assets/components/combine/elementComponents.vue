@@ -1,9 +1,10 @@
 <template>
-    <el-form-item 
+    <el-form-item
+        :prop="config.name"
         :label="config.label" 
         :label-width="config.labelWidth"
         :class="{'size-small-font':config.size==='small'||config.size==='mini'?true:false,'label-position-top':config.labelPositionTop}"
-        :prop="config.name" 
+        :style="config.style"
     >
         <component 
             v-for="(option,key,index) in config.options"
