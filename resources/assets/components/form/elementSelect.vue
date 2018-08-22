@@ -3,7 +3,7 @@
         :label="config.label"
         :label-width="config.labelWidth"
         :prop="config.name" 
-        :rules="rules(config.rules)"
+        :rules="config.rules"
         @click.native="click"
         :class="{'size-small-font':config.size==='small'||config.size==='mini'?true:false}"
     >
@@ -35,6 +35,14 @@
                 fields:[]
             }
         },
+        created(){
+           //默认验证
+           this.$set(this.config,'rules',Object.assign([{
+                required:false,
+                trigger:[],
+                message:"字段不能为空",
+            }],this.config.rules));
+        },        
         mounted(){
             //组件添加删除按钮
             let vue=this,
@@ -219,7 +227,46 @@
                                 }]
                             }
                         }]
-                    }
+                    },
+                    rules:{
+                        type:"elementComponents",
+                        label:"验证规则",
+                        name:"rules",
+                        itemDefault:{
+                            size:"small",
+                            //style:"border-bottom:1px solid #eee;margin-bottom:10px;padding-bottom:10px;"
+                        },
+                        labelPositionTop:true,
+                        options:[{
+                            type:"elementComponents",
+                            labelWidth:"0px",
+                            name:"0",
+                            itemDefault:{
+                                size:"small"
+                            },
+                            options:[{
+                                type:"elementSwitch",
+                                label:"必填",
+                                name:"required",
+                            },{
+                                type:"elementSelect",
+                                label:"触发",
+                                name:"trigger",
+                                multiple:true,
+                                options:[{
+                                    label:"失去焦点",
+                                    value:"blur"
+                                },{
+                                    label:"改变",
+                                    value:"change"
+                                }]
+                            },{
+                                type:"elementText",
+                                label:"提示信息",
+                                name:"message",
+                            }]
+                        }]
+                    }                     
                 });
             },
             change(value){
