@@ -52,6 +52,29 @@ class table extends Controller{
         }
         return response()->json($data);
     }
+    //获取表格一行数据
+    public function row(Request $request,$callback=''){
+        $TABLE_NAME=$request->input('TABLE_NAME','');
+        if($TABLE_NAME){
+            $fields=$request->input('fields','*');
+            $tables = DB::table($TABLE_NAME)->select(DB::raw($fields));
+            if($TABLE_NAME=='INFORMATION_SCHEMA.TABLES'||$TABLE_NAME=='INFORMATION_SCHEMA.COLUMNS'){
+                 $tables->where('TABLE_SCHEMA',env('DB_DATABASE'));
+            }  
+            if($request->has('id') && $id=$request->input('id')){
+                $request->offsetSet('where', ['field'=>'id','operator'=>'=','value'=>$id]);
+            }
+            $this->query($request,$tables,'where');     
+            $this->query($request,$tables,'query');
+            if(is_callable($callback)){
+                call_user_func_array($callback,array($tables));
+            }
+            $data=['data'=>$tables->first()];
+        }else{
+            $data=['msg'=>'表名不存在'];
+        }
+        return response()->json($data);
+    }    
     //DB::connection()->enableQueryLog();
     //dd(DB::getQueryLog());
     //获取视图配置
