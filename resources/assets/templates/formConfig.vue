@@ -9,7 +9,7 @@
             ></components>
         </el-aside>
         <el-container>
-            <el-form  :model="configs.form" label-width="80px" style="width:100%;height:100%;position:relative;">            
+            <el-form  :model="configs.form" status-icon label-width="80px" style="width:100%;height:100%;position:relative;">            
                 <div  style="overflow:auto;height:100%;">
                     <draggable
                         v-model="configs.fields" 
@@ -114,16 +114,7 @@
             };
             //表单信息
             if(this.query.row){
-                if(this.query.row.json){
-                   this.configs=JSON.parse(this.query.row.json);
-                }else{
-                    this.$message({
-                        showClose: true,
-                        message: '没有视图配置'
-                    });
-                    this.configs=configs;
-                }
-               /* this.my.axios({
+                this.my.axios({
                     vue: this,
                     axiosOption:{
                         url:'admin/table/view',
@@ -141,7 +132,16 @@
                     error:function(response,option){
                         option.vue.configs=configs;
                     }
-                });*/
+                });                
+                /*if(this.query.row.json){
+                   this.configs=JSON.parse(this.query.row.json);
+                }else{
+                    this.$message({
+                        showClose: true,
+                        message: '没有视图配置'
+                    });
+                    this.configs=configs;
+                }*/
                 //表单字段
                 this.my.axios({
                     vue: this,
