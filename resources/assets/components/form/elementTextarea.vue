@@ -3,7 +3,7 @@
         :label="config.label"
         :label-width="config.labelWidth"
         :prop="config.name"
-        :rules="rules(config.rules)"
+        :rules="rules"
         @click.native="click"
     >
         <el-input 
@@ -19,15 +19,22 @@
 </template>
 <script>
     export default {
-        props: ['config','form'],  
+        props: ['config','form'],
         created(){
             //默认验证
-            this.config.rules=Object.assign({
+            this.$set(this.config,'rules',Object.assign([{
                 required:false,
                 trigger:[],
+                message:"字段不能为空",
+            },{
+                type:'',
+                trigger:[],
                 message:'',
-                custom:'pattern'
-            },this.config.rules);
+            },{
+                custom:'pattern',
+                trigger:[],
+                message:'',
+            }],this.config.rules));
         },
         mounted(){
             //组件添加删除按钮
@@ -39,26 +46,35 @@
             });
             this.$el.style.position="relative";
             this.$el.appendChild(span);
-        },         
-        methods:{
-            //验证函数validator与正则验证pattern解析
-            rules(rules=[]){   
-                let rule=['validator','pattern'];
-                for(var key in rules){
+        },
+        computed:{
+            //验证函数validator与正则验证pattern解析            
+            rules(){
+                let rules=this.config.rules;
+                if(rules){
+                    let rule=['validator','pattern'];
                     for(var k in rule){
                         let r=rule[k];
-                        if(key==r && rules[key] && typeof(rules[key])=='string'){
-                            //eval('rules.'+r+'='+rules[key]+';');
-                            eval('rules=Object.assign({},rules,{'+r+':'+rules[key]+'});')
+                        if(rules[r]){
+                            try{
+                                eval('rules=Object.assign({},rules,{'+r+':'+rules[r]+'});');
+                            }catch(e){
+                                console.log(e);
+                            }
                         }
-                        if( rules[key][r] &&  typeof(rules[key][r])=='string'){
-                            //eval('rules[key].'+r+'='+rules[key][r]+';');
-                            eval('rules[key]=Object.assign({},rules[key],{'+r+':'+rules[key][r]+'});')
+                        if(rules[2] && rules[2][r]){
+                            try{
+                                eval('rules=Object.assign([],rules,{'+2+':{'+r+':'+rules[2][r]+'}});')
+                            }catch(e){
+                                console.log(e);
+                            }
                         }
                     }
                 }
                 return rules;
-            },          
+            }
+        },      
+        methods:{         
             click: function(event){
                 this.$emit('config',event,this.config,{
                     name:{
@@ -91,7 +107,6 @@
                             size:"mini",
                             labelWidth:'65px'
                         },
-                        form:this.config.autosize,
                         options:[{
                             name:"minRows",
                             label:"最小行数",
@@ -108,57 +123,170 @@
                         label:"验证规则",
                         name:"rules",
                         itemDefault:{
-                            size:"small"
+                            size:"small",
+                            style:"border-bottom:1px solid #eee;margin-bottom:10px;padding-bottom:10px;"
                         },
                         labelPositionTop:true,
-                        form:this.config.rules||{},
                         options:[{
-                            type:"elementSwitch",
-                            label:"必填",
-                            name:"required",
-                        },{
-                            type:"elementSelect",
-                            label:"触发",
-                            name:"trigger",
-                            multiple:true,
-                            options:[{
-                                label:"失去焦点",
-                                value:"blur"
-                            },{
-                                label:"改变",
-                                value:"change"
-                            }]
-                        },{
-                            type:"elementText",
-                            label:"提示信息",
-                            name:"message",
-                        },{
-                            type:"elementRadioChange",
-                            label:"自定义",
-                            name:"custom",
+                            type:"elementComponents",
+                            labelWidth:"0px",
+                            name:"0",
                             itemDefault:{
-                                size:"small",
-                                label:" "
+                                size:"small"
                             },
                             options:[{
-                                type:'el-radio',
-                                label:"正则",
-                                value:"pattern",
-                                config:{
-                                    type:"elementText",
-                                    name:"pattern"
-                                }
+                                type:"elementSwitch",
+                                label:"必填",
+                                name:"required",
                             },{
-                                type:'el-radio',
-                                label:"函数",
-                                value:"validator",
-                                name:"validator",
-                                config:{
-                                    type:"elementTextarea",
-                                    name:"validator"
-                                }
+                                type:"elementSelect",
+                                label:"触发",
+                                name:"trigger",
+                                multiple:true,
+                                options:[{
+                                    label:"失去焦点",
+                                    value:"blur"
+                                },{
+                                    label:"改变",
+                                    value:"change"
+                                }]
+                            },{
+                                type:"elementText",
+                                label:"提示信息",
+                                name:"message",
                             }]
-                        },]
+                        },{
+                            type:"elementComponents",
+                            labelWidth:"0px",
+                            name:"1",
+                            itemDefault:{
+                                size:"small"
+                            },
+                            options:[{
+                                type:"elementSelect",
+                                label:"类型",
+                                name:"type",
+                                options:[{
+                                    label:"字符",
+                                    value:"string"
+                                },{
+                                    label:"邮箱",
+                                    value:"email"
+                                },{
+                                    label:"url地址",
+                                    value:"url"
+                                },{
+                                    label:"正则表达式",
+                                    value:"regexp"
+                                },{
+                                    label:"函数",
+                                    value:"method"
+                                }]
+                            },{
+                                type:"elementSelect",
+                                label:"触发",
+                                name:"trigger",
+                                multiple:true,
+                                options:[{
+                                    label:"失去焦点",
+                                    value:"blur"
+                                },{
+                                    label:"改变",
+                                    value:"change"
+                                }]
+                            },{
+                                type:"elementText",
+                                label:"提示信息",
+                                name:"message",
+                            }]
+                        },{
+                            type:"elementComponents",
+                            labelWidth:"0px",
+                            name:"2",
+                            itemDefault:{
+                                size:"small"
+                            },
+                            options:[{
+                                type:"elementRadioChange",
+                                label:"自定义",
+                                name:"custom",
+                                itemDefault:{
+                                    size:"small",
+                                    label:" "
+                                },
+                                options:[{
+                                    type:'el-radio',
+                                    label:"正则",
+                                    value:"pattern",
+                                    config:{
+                                        type:"elementText",
+                                        name:"pattern",
+                                        /*rules:{
+                                            2:{
+                                                custom:"validator",
+                                                trigger:["change"],
+                                                validator: `
+                                                    function(rule, value, callback){
+                                                        if(value){
+                                                            try{
+                                                                eval('let test='+value+';');
+                                                                callback();
+                                                            }catch(e){
+                                                                callback(new Error('格式错误,'+e));
+                                                            }
+                                                        }else{
+                                                            callback();
+                                                        }
+                                                    }`
+                                            }
+                                        }*/
+                                    }
+                                },{
+                                    type:'el-radio',
+                                    label:"函数",
+                                    value:"validator",
+                                    config:{
+                                        type:"elementTextarea",
+                                        name:"validator",
+                                        /*rules:{
+                                            2:{
+                                                custom:"validator",
+                                                trigger:["change"],
+                                                validator: `
+                                                    function(rule, value, callback){
+                                                        if(value){
+                                                            try{
+                                                                eval('let test='+value+';');
+                                                                callback();
+                                                            }catch(e){
+                                                                callback(new Error('格式错误,'+e));
+                                                            }
+                                                        }else{
+                                                            callback();
+                                                        }
+                                                    }`
+                                            }
+                                        }*/
+                                    }
+                                }]
+                            },{
+                                type:"elementSelect",
+                                label:"触发",
+                                name:"trigger",
+                                multiple:true,
+                                options:[{
+                                    label:"失去焦点",
+                                    value:"blur"
+                                },{
+                                    label:"改变",
+                                    value:"change"
+                                }]
+                            },{
+                                type:"elementText",
+                                label:"提示信息",
+                                name:"message",
+                            }]
+                        }]
                     }                                                      
                 });
             },
