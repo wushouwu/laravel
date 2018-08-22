@@ -105,9 +105,7 @@
                 },{
                     "type": "elementInputNumber",
                     "label": "数字",
-                    "name": "inputNumber",
-                    "min": 0,
-                    "max": 10
+                    "name": "inputNumber"
                 },{
                     "type": "elementButton",
                     "labelWidth":"80px",
@@ -126,9 +124,6 @@
             }
         },
         created(){
-            if(this.query.row){
-                this.row=Object.assign({},this.query.row);
-            }
             this.configs.components=JSON.parse(this.initComponents);
             //表单配置
             this.my.axios({
@@ -144,7 +139,25 @@
                 success:function(response,option){
                     option.vue.$set(option.vue.configs,'form',response.data.data);
                 }
-            });            
+            }); 
+            //表单数据
+            if(this.query.row){
+                this.my.axios({
+                    vue: this,
+                    axiosOption:{
+                        url:'admin/table/row',
+                        data:{
+                            TABLE_NAME:'view',
+                            id: this.query.row.id,
+                        }
+                    },
+                    success:function(response,option){
+
+                        option.vue.$set(option.vue,'row',response.data.data);
+                    }
+                });                
+                
+            }
         },
         watch:{
             json:{
@@ -175,7 +188,7 @@
             },
             //保存配置
             save: function(event){
-                let vue=this;
+                let vue=this;             
                 this.$refs.rowForm.validate((valid) => {
                     if (valid) {
                         vue.my.axios({
@@ -185,7 +198,6 @@
                                 data: {form:vue.row,TABLE_NAME:'view'}
                             },
                             success:function(response,option){
-                                option.vue.query.row=vue.row;
                             },
                             successMsg: '保存成功!'
                         });
