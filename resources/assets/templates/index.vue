@@ -71,7 +71,7 @@ export default {
                 title: '表格',
                 name: '3-1',
                 content: 'tableVue',
-                query:{TABLE_NAME:'INFORMATION_SCHEMA.TABLES',view_name:'table'}
+                query:{TABLE_NAME:'INFORMATION_SCHEMA.TABLES',view_name:'table',fields:'TABLE_COMMENT,TABLE_NAME'}
             }},
         }
     },
