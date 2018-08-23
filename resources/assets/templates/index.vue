@@ -98,6 +98,9 @@ export default {
         //添加tab
         addTab(option) {
             if(!(option.name in this.tabs)){
+                if(!option.title){
+                    option.title=option.name;
+                }
                 this.tabs[option.name]=option;  
                 this.activeTabs.push(option.name);
             }
