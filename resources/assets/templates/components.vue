@@ -162,7 +162,7 @@
         watch:{
             json:{
                 handler(newValue, oldValue){
-                    this.$set(this.row,'json',JSON.stringify(newValue));
+                    this.$set(this.row,'json',JSON.stringify(newValue,null,4));
                 },
                 deep:true
             }
