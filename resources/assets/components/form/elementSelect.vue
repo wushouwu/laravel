@@ -17,7 +17,7 @@
             @change="change"
         >
             <el-option 
-                v-for="opiton in config.options" 
+                v-for="opiton in options" 
                 value-key="value"
                 :key="opiton.value" 
                 :label="opiton.label" 
@@ -36,8 +36,12 @@
             }
         },
         created(){
-           //默认验证
-           this.$set(this.config,'rules',Object.assign([{
+            this.source(this.config.tableField);
+            if(this.config.allowCreate){
+                this.$set(this.config,'filterable',true);
+            }
+            //默认验证
+            this.$set(this.config,'rules',Object.assign([{
                 required:false,
                 trigger:[],
                 message:"字段不能为空",
@@ -53,11 +57,58 @@
             });
             this.$el.style.position="relative";
             this.$el.appendChild(span);
-        }, 
-        methods: {           
+        },
+        watch:{
+            tableField:{
+                handler(newValue,oldValue){
+                    this.source(newValue);
+                },
+                deep:true
+            },
+            sourceChange(newValue,oldValue){
+                this.source(this.config.tableField);
+            }            
+        },
+        computed:{
+            tableField(){
+                return this.config.tableField;
+            },
+            options:{
+                get(){
+                    return this.config.options;
+                },
+                set(newValue){
+                    this.config.options=newValue;
+                }
+            },
+            sourceChange(){
+                return this.config.source;
+            }
+        },
+        methods: { 
+            //options来源处理
+            source(tableField){
+                if(this.config.source=='tableField' && tableField.table && tableField.fieldLabel && tableField.fieldValue){
+                    this.my.axios({
+                        vue: this,
+                        axiosOption:{
+                            url: 'admin/table/table',
+                            data:{
+                                TABLE_NAME:tableField.table,
+                                fields:'`'+tableField.fieldLabel+'` as label,`'+tableField.fieldValue+'` as value',
+                            }
+                        },
+                        success:function(response,option){
+                            option.vue.options=response.data.data;
+                        }
+                    });
+                }else{
+                    this.options=this.config.options;
+                }               
+            },                 
             click: function(event){
                 //配置
-                if('tableField' in this.config){
+                if(this.config.source=='tableField' && this.config.tableField){
                     if(this.tables.length){ 
                         //所属表所有字段
                         if(this.config.tableField.table){
@@ -90,6 +141,8 @@
                             }
                         });
                     }
+                }else{
+                    this.emit(event);
                 }
 
             },  
@@ -114,25 +167,6 @@
                         script:`
                             if(event=="options"){
                                 this.$set(this.attrForm,'options',this.attrForm.options.slice(0,this.attrs.source.options[0].config.options.length));
-                            }else{   
-                                let tableField=this.attrForm.tableField;
-                                if(tableField.table && tableField.fieldLabel && tableField.fieldValue){
-                                    this.my.axios({
-                                        vue: this,
-                                        axiosOption:{
-                                            url: 'admin/table/table',
-                                            data:{
-                                                TABLE_NAME:tableField.table,
-                                                fields:'\`'+tableField.fieldLabel+'\` as label,\`'+tableField.fieldValue+'\` as value',
-                                                pageSize: 10
-                                            }
-                                        },
-                                        success:function(response,option){
-                                            option.vue.$set(option.vue.attrForm,'options',response.data.data);
-                                            
-                                        }
-                                    });
-                                }                                                  
                             }
                         `,
                         itemDefault:{
@@ -168,33 +202,21 @@
                                 itemDefault:{
                                     size:"small"
                                 },
-                                formWatch:`
-                                    if(newValue.table && newValue.fieldLabel && newValue.fieldValue){
-                                        this.my.axios({
-                                            vue: this,
-                                            axiosOption:{
-                                                url: 'admin/table/table',
-                                                data:{
-                                                    TABLE_NAME:newValue.table,
-                                                    fields:'\`'+newValue.fieldLabel+'\` as label,\`'+newValue.fieldValue+'\` as value',
-                                                    pageSize: 10
-                                                }
-                                            },
-                                            success:function(response,option){
-                                                option.vue.$set(option.vue.form,'options',response.data.data);
-                                                
-                                            }
-                                        });
-                                    }
-                                `,
                                 options:[{
                                     type:"elementSelect",
                                     name:"table",
                                     label:"表格",
+                                    allowCreate:true,
                                     options:this.tables,
+                                    /*source:"tableField",
+                                    tableField:{
+                                        table:"INFORMATION_SCHEMA.TABLES",
+                                        fieldLabel:"TABLE_COMMENT",
+                                        fieldValue:"TABLE_NAME"
+                                    },*/
                                     script:`
                                         this.form.tableField.fieldLabel='';
-                                        this.form.tableField.fieldValue='';                                
+                                        this.form.tableField.fieldValue='';
                                         this.my.axios({
                                             vue: this,
                                             axiosOption:{
@@ -218,15 +240,27 @@
                                     type:"elementSelect",
                                     name:"fieldLabel",
                                     label:"显示值",
+                                    allowCreate:true,
                                     options:this.fields,
                                 },{
                                     type:"elementSelect",
                                     name:"fieldValue",
                                     label:"保存值",
+                                    allowCreate:true,
                                     options:this.fields,
                                 }]
                             }
                         }]
+                    },
+                    filterable:{
+                        type:"elementSwitch",
+                        label:"允许搜索",
+                        name:"filterable"
+                    },
+                    allowCreate:{
+                        type:"elementSwitch",
+                        label:"允许创建",
+                        name:"allowCreate"
                     },
                     rules:{
                         type:"elementComponents",
