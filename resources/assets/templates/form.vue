@@ -1,5 +1,5 @@
 <template>
-    <el-form  v-model="form" label-width="80px" style="width:100%;height:100%;position:relative;">            
+    <el-form  :model="form" label-width="80px" style="width:100%;height:100%;position:relative;">            
         <div style="overflow:auto;height:100%;">
             <component 
                 v-for="(field, key,index) in fields" 
@@ -40,8 +40,22 @@
                 },
                 success:function(response,option){
                     option.vue=Object.assign(option.vue,response.data.data);
-                    if(option.vue.query.row){
-                        option.vue.$set(option.vue,'form',option.vue.query.row);
+                    if(option.vue.query.row && option.vue.query.row.id){
+                        //表单数据
+                        option.vue.my.axios({
+                            vue: option.vue,
+                            axiosOption:{
+                                url:'admin/table/row',
+                                data:{
+                                    TABLE_NAME:option.vue.query.TABLE_NAME,
+                                    id:option.vue.query.row.id,
+                                    row:option.vue.query.row
+                                }
+                            },
+                            success:function(response,option){
+                                option.vue.form=response.data.data;
+                            }
+                        });
                     }
                     
                 }
@@ -83,7 +97,7 @@
             },
             //取消
             cancel:function(event,config){
-                this.$root.$children[0].removeTab(this.query.TABLE_NAME+'-add');
+                this.$root.$children[0].removeTab(this.$root.$children[0].activeTab);
             },
             //配置视图
             config:function(event,config){
