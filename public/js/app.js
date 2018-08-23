@@ -77217,7 +77217,7 @@ exports = module.exports = __webpack_require__(6)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -77266,6 +77266,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         };
     },
     created: function created() {
+        this.source(this.config.tableField);
+        if (this.config.allowCreate) {
+            this.$set(this.config, 'filterable', true);
+        }
         //默认验证
         this.$set(this.config, 'rules', Object.assign([{
             required: false,
@@ -77285,10 +77289,60 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         this.$el.appendChild(span);
     },
 
+    watch: {
+        tableField: {
+            handler: function handler(newValue, oldValue) {
+                this.source(newValue);
+            },
+
+            deep: true
+        },
+        sourceChange: function sourceChange(newValue, oldValue) {
+            this.source(this.config.tableField);
+        }
+    },
+    computed: {
+        tableField: function tableField() {
+            return this.config.tableField;
+        },
+
+        options: {
+            get: function get() {
+                return this.config.options;
+            },
+            set: function set(newValue) {
+                this.config.options = newValue;
+            }
+        },
+        sourceChange: function sourceChange() {
+            return this.config.source;
+        }
+    },
     methods: {
+        //options来源处理
+        source: function source(tableField) {
+            if (this.config.source == 'tableField' && tableField.table && tableField.fieldLabel && tableField.fieldValue) {
+                this.my.axios({
+                    vue: this,
+                    axiosOption: {
+                        url: 'admin/table/table',
+                        data: {
+                            TABLE_NAME: tableField.table,
+                            fields: '`' + tableField.fieldLabel + '` as label,`' + tableField.fieldValue + '` as value'
+                        }
+                    },
+                    success: function success(response, option) {
+                        option.vue.options = response.data.data;
+                    }
+                });
+            } else {
+                this.options = this.config.options;
+            }
+        },
+
         click: function click(event) {
             //配置
-            if ('tableField' in this.config) {
+            if (this.config.source == 'tableField' && this.config.tableField) {
                 if (this.tables.length) {
                     //所属表所有字段
                     if (this.config.tableField.table) {
@@ -77321,6 +77375,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                         }
                     });
                 }
+            } else {
+                this.emit(event);
             }
         },
         emit: function emit(event) {
@@ -77341,7 +77397,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     type: "elementRadioChange",
                     name: "source",
                     label: "选项来源",
-                    script: '\n                        if(event=="options"){\n                            this.$set(this.attrForm,\'options\',this.attrForm.options.slice(0,this.attrs.source.options[0].config.options.length));\n                        }else{   \n                            let tableField=this.attrForm.tableField;\n                            if(tableField.table && tableField.fieldLabel && tableField.fieldValue){\n                                this.my.axios({\n                                    vue: this,\n                                    axiosOption:{\n                                        url: \'admin/table/table\',\n                                        data:{\n                                            TABLE_NAME:tableField.table,\n                                            fields:\'`\'+tableField.fieldLabel+\'` as label,`\'+tableField.fieldValue+\'` as value\',\n                                            pageSize: 10\n                                        }\n                                    },\n                                    success:function(response,option){\n                                        option.vue.$set(option.vue.attrForm,\'options\',response.data.data);\n                                        \n                                    }\n                                });\n                            }                                                  \n                        }\n                    ',
+                    script: '\n                        if(event=="options"){\n                            this.$set(this.attrForm,\'options\',this.attrForm.options.slice(0,this.attrs.source.options[0].config.options.length));\n                        }\n                    ',
                     itemDefault: {
                         labelWidth: '0px'
                     },
@@ -77375,26 +77431,44 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                             itemDefault: {
                                 size: "small"
                             },
-                            formWatch: '\n                                if(newValue.table && newValue.fieldLabel && newValue.fieldValue){\n                                    this.my.axios({\n                                        vue: this,\n                                        axiosOption:{\n                                            url: \'admin/table/table\',\n                                            data:{\n                                                TABLE_NAME:newValue.table,\n                                                fields:\'`\'+newValue.fieldLabel+\'` as label,`\'+newValue.fieldValue+\'` as value\',\n                                                pageSize: 10\n                                            }\n                                        },\n                                        success:function(response,option){\n                                            option.vue.$set(option.vue.form,\'options\',response.data.data);\n                                            \n                                        }\n                                    });\n                                }\n                            ',
                             options: [{
                                 type: "elementSelect",
                                 name: "table",
                                 label: "表格",
+                                allowCreate: true,
                                 options: this.tables,
-                                script: '\n                                    this.form.tableField.fieldLabel=\'\';\n                                    this.form.tableField.fieldValue=\'\';                                \n                                    this.my.axios({\n                                        vue: this,\n                                        axiosOption:{\n                                            url: \'admin/table/field\',\n                                            data:{\n                                                TABLE_NAME:event\n                                            }\n                                        },\n                                        success:function(response,option){\n                                            option.vue.config.options[1].options=response.data.data;\n                                            option.vue.config.options[2].options=response.data.data;\n                                            if(response.data.data.length){\n                                                option.vue.form.tableField.fieldLabel=response.data.data[0].value;\n                                                option.vue.form.tableField.fieldValue=response.data.data[0].value;                                            \n                                            }\n                                            \n                                        }\n                                    });\n                                '
+                                /*source:"tableField",
+                                tableField:{
+                                    table:"INFORMATION_SCHEMA.TABLES",
+                                    fieldLabel:"TABLE_COMMENT",
+                                    fieldValue:"TABLE_NAME"
+                                },*/
+                                script: '\n                                    this.form.tableField.fieldLabel=\'\';\n                                    this.form.tableField.fieldValue=\'\';\n                                    this.my.axios({\n                                        vue: this,\n                                        axiosOption:{\n                                            url: \'admin/table/field\',\n                                            data:{\n                                                TABLE_NAME:event\n                                            }\n                                        },\n                                        success:function(response,option){\n                                            option.vue.config.options[1].options=response.data.data;\n                                            option.vue.config.options[2].options=response.data.data;\n                                            if(response.data.data.length){\n                                                option.vue.form.tableField.fieldLabel=response.data.data[0].value;\n                                                option.vue.form.tableField.fieldValue=response.data.data[0].value;                                            \n                                            }\n                                            \n                                        }\n                                    });\n                                '
                             }, {
                                 type: "elementSelect",
                                 name: "fieldLabel",
                                 label: "显示值",
+                                allowCreate: true,
                                 options: this.fields
                             }, {
                                 type: "elementSelect",
                                 name: "fieldValue",
                                 label: "保存值",
+                                allowCreate: true,
                                 options: this.fields
                             }]
                         }
                     }]
+                },
+                filterable: {
+                    type: "elementSwitch",
+                    label: "允许搜索",
+                    name: "filterable"
+                },
+                allowCreate: {
+                    type: "elementSwitch",
+                    label: "允许创建",
+                    name: "allowCreate"
                 },
                 rules: {
                     type: "elementComponents",
@@ -77493,7 +77567,7 @@ var render = function() {
             expression: "form[config.name]"
           }
         },
-        _vm._l(_vm.config.options, function(opiton) {
+        _vm._l(_vm.options, function(opiton) {
           return _c("el-option", {
             key: opiton.value,
             attrs: {
@@ -78672,7 +78746,7 @@ exports = module.exports = __webpack_require__(6)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/*菜单栏*/\n.el-menu:not(.el-menu--collapse) {\n    width: 300px;\n}\n.el-tabs{\n    display:-webkit-box;\n    display:-ms-flexbox;\n    display:flex;\n    -webkit-box-orient:vertical;\n    -webkit-box-direction:normal;\n        -ms-flex-flow:column;\n            flex-flow:column;\n    height:100%;\n}\n.el-tabs__content{\n    -webkit-box-flex: 1;\n        -ms-flex: 1;\n            flex: 1;\n}  \n/*时间选择框大小*/\n.el-date-editor.el-input, .el-date-editor.el-input__inner{\n    width:100%;\n} \n/*按钮组件下边距处理*/\n.tools .el-form-item.elementButton{\n    margin:5px;\n}\n/*表单组件边距处理*/\nform .el-form-item{\n    margin-right:10px;\n    margin-bottom:20px;\n}  \n/*size为small时label字体大小处理*/\n.size-small-font [class*=\"label\"]{\n    font-size:13px;\n} \n/*可拖动组件的光标*/\n.draggable label,.footer-tools.draggable button{\n    cursor:move;\n}\n/*标签换行处理\n.label-position-top>.el-form-item__label{\n    float:none;\n}   */ \n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/*菜单栏*/\n.el-menu:not(.el-menu--collapse) {\n    width: 300px;\n}\n.el-tabs{\n    display:-webkit-box;\n    display:-ms-flexbox;\n    display:flex;\n    -webkit-box-orient:vertical;\n    -webkit-box-direction:normal;\n        -ms-flex-flow:column;\n            flex-flow:column;\n    height:100%;\n}\n.el-tabs__content{\n    -webkit-box-flex: 1;\n        -ms-flex: 1;\n            flex: 1;\n}  \n/*时间选择框大小*/\n.el-date-editor.el-input, .el-date-editor.el-input__inner{\n    width:100%;\n} \n/*按钮组件下边距处理*/\n.tools .el-form-item.elementButton{\n    margin:5px;\n}\n/*表单组件边距处理*/\nform .el-form-item{\n    margin-right:10px;\n    margin-bottom:20px;\n}  \n/*size为small时label字体大小处理*/\n.size-small-font [class*=\"label\"]{\n    font-size:13px;\n} \n/*可拖动组件的光标*/\n.draggable label,.footer-tools.draggable button{\n    cursor:move;\n}\n/*标签换行处理\n.label-position-top>.el-form-item__label{\n    float:none;\n}   */ \n", ""]);
 
 // exports
 
@@ -78793,6 +78867,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         //添加tab
         addTab: function addTab(option) {
             if (!(option.name in this.tabs)) {
+                if (!option.title) {
+                    option.title = option.name;
+                }
                 this.tabs[option.name] = option;
                 this.activeTabs.push(option.name);
             }
@@ -80794,7 +80871,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     watch: {
         json: {
             handler: function handler(newValue, oldValue) {
-                this.$set(this.row, 'json', JSON.stringify(newValue));
+                this.$set(this.row, 'json', JSON.stringify(newValue, null, 4));
             },
 
             deep: true
@@ -81187,7 +81264,7 @@ exports = module.exports = __webpack_require__(6)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -81532,9 +81609,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 		//添加
 		add: function add(event, config) {
+			var title = this.query.TABLE_COMMENT + '-' + this.query.view_name + '-添加';
 			this.addTab({
-				name: this.query.TABLE_NAME + '-add',
-				title: this.query.TABLE_COMMENT + '-添加',
+				name: title,
 				content: config.query.content || 'formVue',
 				query: Object.assign({}, this.query, config.query)
 			});
@@ -81561,7 +81638,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		view: function view(row, operator) {
 			this.addTab({
 				name: this.query.TABLE_NAME + '-' + row.id + '-view',
-				title: this.query.TABLE_COMMENT + '-' + row.id + '-查看',
 				content: 'formVue',
 				query: Object.assign({}, this.query, { row: row }, operator.query)
 			});
@@ -81569,10 +81645,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 		//编辑数据
 		edit: function edit(row, operator) {
+			var title = this.query.TABLE_COMMENT + '-' + this.query.view_name + '-' + row.id + '-编辑';
 			this.addTab({
-				name: this.query.TABLE_NAME + '-' + row.id + '-edit',
-				title: this.query.TABLE_COMMENT + '-' + row.id + '-编辑',
-				content: 'formVue',
+				name: title,
+				content: operator.query.content || 'formVue',
 				query: Object.assign({}, this.query, { row: row }, operator.query)
 			});
 		},
@@ -81904,7 +81980,7 @@ exports = module.exports = __webpack_require__(6)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -81958,8 +82034,22 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             },
             success: function success(response, option) {
                 option.vue = Object.assign(option.vue, response.data.data);
-                if (option.vue.query.row) {
-                    option.vue.$set(option.vue, 'form', option.vue.query.row);
+                if (option.vue.query.row && option.vue.query.row.id) {
+                    //表单数据
+                    option.vue.my.axios({
+                        vue: option.vue,
+                        axiosOption: {
+                            url: 'admin/table/row',
+                            data: {
+                                TABLE_NAME: option.vue.query.TABLE_NAME,
+                                id: option.vue.query.row.id,
+                                row: option.vue.query.row
+                            }
+                        },
+                        success: function success(response, option) {
+                            option.vue.form = response.data.data;
+                        }
+                    });
                 }
             }
         });
@@ -82002,7 +82092,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         //取消
         cancel: function cancel(event, config) {
-            this.$root.$children[0].removeTab(this.query.TABLE_NAME + '-add');
+            this.$root.$children[0].removeTab(this.$root.$children[0].activeTab);
         },
         //配置视图
         config: function config(event, _config) {
@@ -82030,14 +82120,7 @@ var render = function() {
     "el-form",
     {
       staticStyle: { width: "100%", height: "100%", position: "relative" },
-      attrs: { "label-width": "80px" },
-      model: {
-        value: _vm.form,
-        callback: function($$v) {
-          _vm.form = $$v
-        },
-        expression: "form"
-      }
+      attrs: { model: _vm.form, "label-width": "80px" }
     },
     [
       _c(
