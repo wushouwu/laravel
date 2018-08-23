@@ -32,8 +32,6 @@ class table extends Controller{
     public function table(Request $request,$callback=''){
         $TABLE_NAME=$request->input('TABLE_NAME','');
         if($TABLE_NAME){
-            $pageSize=$request->input('pageSize',10);
-            $currentPage=$request->input('currentPage',1);
             $fields=$request->input('fields','*');
             $tables = DB::table($TABLE_NAME)->select(DB::raw($fields));
             if($TABLE_NAME=='INFORMATION_SCHEMA.TABLES'||$TABLE_NAME=='INFORMATION_SCHEMA.COLUMNS'){
@@ -42,7 +40,13 @@ class table extends Controller{
             $this->query($request,$tables,'where');     
             $this->query($request,$tables,'query');
             $total=$tables->count();
-            $page=$tables->offset(($currentPage-1)*$pageSize)->limit($pageSize);
+            if($request->has('pageSize')){
+                $pageSize=$request->input('pageSize');
+                $currentPage=$request->input('currentPage',1);            
+                $page=$tables->offset(($currentPage-1)*$pageSize)->limit($pageSize);
+            }else{
+                $page=$tables;
+            }
             if(is_callable($callback)){
                 call_user_func_array($callback,array($page));
             }
@@ -59,10 +63,16 @@ class table extends Controller{
             $fields=$request->input('fields','*');
             $tables = DB::table($TABLE_NAME)->select(DB::raw($fields));
             if($TABLE_NAME=='INFORMATION_SCHEMA.TABLES'||$TABLE_NAME=='INFORMATION_SCHEMA.COLUMNS'){
-                 $tables->where('TABLE_SCHEMA',env('DB_DATABASE'));
-            }  
-            if($request->has('id') && $id=$request->input('id')){
-                $request->offsetSet('where', ['field'=>'id','operator'=>'=','value'=>$id]);
+                $tables->where('TABLE_SCHEMA',env('DB_DATABASE'));
+                if($TABLE_NAME=='INFORMATION_SCHEMA.COLUMNS'){
+                    $row=$request->input('row');
+                    $request->offsetSet('where', ['field'=>'TABLE_NAME','operator'=>'=','value'=>$row['TABLE_NAME']]);
+                    $request->offsetSet('query', ['field'=>'COLUMN_NAME','operator'=>'=','value'=>$row['COLUMN_NAME']]);
+                 }
+            }else{
+                if($request->has('id') && $id=$request->input('id')){
+                    $request->offsetSet('where', ['field'=>'id','operator'=>'=','value'=>$id]);
+                }
             }
             $this->query($request,$tables,'where');     
             $this->query($request,$tables,'query');
@@ -272,11 +282,20 @@ class table extends Controller{
         $TABLE_NAME=$request->input('TABLE_NAME','');
         $form=$request->input('form',[]);
         if($TABLE_NAME&&$form){
-            if(isset($form['id']) && $form['id']){  
+            //字段处理
+            /*if(isset($form['json'])){
+                $json=json_decode($form['json'],true);
+                if($json){
+                    $form['json']=json_encode($json,JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT);
+                }
+            }*/
+            if(isset($form['id']) && $form['id']){
+                //更新
                 $id=$form['id'];
                 unset($form['id']);
                 $table=DB::table($TABLE_NAME)->where('id',$id)->update($form);
             }else{
+                //新增
                 $table=DB::table($TABLE_NAME)->insertGetId($form);
             }
              $data=['data'=>$table];
