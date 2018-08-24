@@ -55,12 +55,12 @@
     </el-container>
 </template>  
 <script>
-import formConfigVue from './formConfig.vue';
+import configVue from './config.vue';
 import tableVue from './table.vue';
 import formVue from './form.vue';
 export default {
     components:{
-        formConfigVue,tableVue,formVue
+        configVue,tableVue,formVue
     },
     data() {
         return {
