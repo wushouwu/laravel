@@ -22,25 +22,25 @@
 				inline 
 				label-width="0px" 
 				style="width:100%;height:100%"
-				:model="form"
+				:model="configs.form"
 				ref="form"
 			> 
 				<searchTool :style="{width:searchTool.width}"
-					v-for="(searchTool, key,index) in searchTools" 
+					v-for="(searchTool, key) in configs.searchTools" 
 					:key="key" 
 					:is="searchTool.type" 
 					:config="searchTool" 
-					:form="form"
+					:form="configs.form"
 					@buttonClick="buttonClick"
 					@buttonItemClick="buttonItemClick"
 					@enter="currentChange(1)"
-				></searchTool>		
+				></searchTool>
 				<tool
-					v-for="(tool, key,index) in tools" 
+					v-for="(tool, key,index) in configs.tools" 
 					:key="index" 
 					:is="tool.type" 
 					:config="tool" 
-					:form="form"
+					:form="configs.form"
 					@buttonClick="buttonClick"
 				></tool>
 			</el-form>
@@ -48,15 +48,15 @@
 		<div style="flex:1;">
 			<el-table  
 				:max-height="tableHeight"
-				:data="data"
-				:border="Boolean(table.border)"
-				:stripe="Boolean(table.stripe)"
-				:default-sort = "table.defaultSort"
+				:data="data.data"
+				:border="Boolean(configs.table.border)"
+				:stripe="Boolean(configs.table.stripe)"
+				:default-sort="configs.table.defaultSort"
 				:fit="true"
 				ref="table"
 			>
 				<el-table-column 
-					v-for="(field,key,index) in table.fields" 
+					v-for="(field,key) in configs.table.fields" 
 					:key="key" 
 					:label="field.label"
 					:prop="field.value"
@@ -71,11 +71,11 @@
 					fixed="right"
 					label="操作"
 					:resizable="false"
-					:width="this.table.operator?this.table.operator.length*50:100"
+					:width="configs.table.operator?configs.table.operator.length*50:100"
 				>
 					<template slot-scope="scope">
 						<el-button 
-							v-for="(operator,key,index) in table.operator" 
+							v-for="(operator,key) in configs.table.operator" 
 							:key="key"
 							@click="operate(scope.row,operator)" 
 							type="text" 
@@ -89,119 +89,122 @@
 			@current-change="currentChange"
 			@size-change="sizeChange"
 			background
-			:current-page="pagination.currentPage"
+			:current-page="configs.pagination.currentPage"
 			:page-sizes="[1,5,10, 20, 30, 50,100]"
-			:page-size="pagination.pageSize"
+			:page-size="configs.pagination.pageSize"
 			layout="total, sizes, prev, pager, next, jumper"
-			:total="total"
+			:total="data.total"
 		>
 		</el-pagination>		
 	</div>
 </template>
 
 <script>
-	import camelCase from 'lodash/camelCase';
 	export default {
 		props:['query'],
 		data() {
 			return {
 				multiSearch:false,
 				tableHeight:400,
-				searchTools:{
-					"field":{
-						"name":"field",
-						"type": "elementSelect",
-						"options": []			
+				configs:{
+					searchTools:{
+						"field":{
+							"name":"field",
+							"type": "elementSelect",
+							"options": []			
+						},
+						"operator":{
+							"name":"operator",
+							"type": "elementSelect",
+							"width": "90px",	
+							"options": [{
+								"value": "like",
+								"label": "包含"
+							}, {
+								"value": "=",
+								"label": "等于"
+							}, {
+								"value": "not like",
+								"label": "不包含"
+							}, {
+								"value": "!=",
+								"label": "不等于"
+							}, {
+								"value": ">",
+								"label": "大于"
+							}, {
+								"value": "<",
+								"label": "小于"
+							},{
+								"value": "between",
+								"label": "间于"
+							},{
+								"value": "not between",
+								"label": "非间于"
+							}]			
+						},
+						"value":{
+							"name":"value",
+							"type": "elementText",
+						},
+						"search":{
+							"name":"search",
+							"type":"elementDropdown",
+							"buttonType":"primary",
+							"icon":"el-icon-search",
+							"script":"this.search(event,config);",
+							"options":[{
+								"text":"高级搜索"
+							}]
+						},
+						"reset":{
+							"name":"reset",
+							"buttonType":"primary",
+							"shape":"plain",
+							"title":"重置",
+							"type":"elementButton",
+							"icon":"el-icon-refresh",
+							"script":"this.reset(event,config);",
+						}
 					},
-					"operator":{
-						"name":"operator",
-						"type": "elementSelect",
-						"width": "90px",	
-						"options": [{
-							"value": "like",
-							"label": "包含"
-						}, {
-							"value": "=",
-							"label": "等于"
-						}, {
-							"value": "not like",
-							"label": "不包含"
-						}, {
-							"value": "!=",
-							"label": "不等于"
-						}, {
-							"value": ">",
-							"label": "大于"
-						}, {
-							"value": "<",
-							"label": "小于"
-						},{
-							"value": "between",
-							"label": "间于"
-						},{
-							"value": "not between",
-							"label": "非间于"
-						}]			
+					tools:[],
+					form:{
+						operator: 'like'
 					},
-					"value":{
-						"name":"value",
-						"type": "elementText",
-					},
-					"search":{
-						"name":"search",
-						"type":"elementDropdown",
-						"buttonType":"primary",
-						"icon":"el-icon-search",
-						"script":"this.search(event,config);",
-						"options":[{
-							"text":"高级搜索"
+					//默认表格配置，避免首次加载表格变形
+					"table":{
+						"border":true,
+						"stripe":true,
+						"defaultSort":{
+							"prop":"",
+							"order":"ascending"
+						},
+						"defaultSearch":{
+							"value": "default",
+							"label":" ",
+							"type":"text",
+							"sortable": true,
+							"fixed": true,
+							"resizable": true
+						}, 
+						"fields":[{
+							"value": "default",
+							"label":" ",
+							"type":"text",
+							"sortable": true,
+							"fixed": true,
+							"resizable": true
 						}]
+					},     
+					"pagination":{
+						"currentPage":1,
+						"pageSize":10
 					},
-					"reset":{
-						"name":"reset",
-						"buttonType":"primary",
-						"shape":"plain",
-						"title":"重置",
-						"type":"elementButton",
-						"icon":"el-icon-refresh",
-						"script":"this.reset(event,config);",
-					}
 				},
-				tools:[],
-				form:{
-					operator: 'like'
-				},
-				//默认表格配置，避免首次加载表格变形
-				"table":{
-					"border":true,
-					"stripe":true,
-					"defaultSort":{
-						"prop":"",
-						"order":"ascending"
-					},
-					"defaultSearch":{
-						"value": "default",
-						"label":" ",
-						"type":"text",
-						"sortable": true,
-						"fixed": true,
-						"resizable": true
-					}, 
-					"fields":[{
-						"value": "default",
-						"label":" ",
-						"type":"text",
-						"sortable": true,
-						"fixed": true,
-						"resizable": true
-					}]
-				},     
-				"pagination":{
-					"currentPage":1,
-					"pageSize":10
-				},
-				data: [],
-				total:0
+				data:{
+					data: [],
+					total:0
+				}
 			}
 		},
 		created: function(){
@@ -209,15 +212,15 @@
 				vue: this,
 				axiosOption:{
 					url:'admin/table/view',
-					data: Object.assign({type:'table'},this.query)
+					data: Object.assign({},this.query,{type:'table'})
 				},
 				success:function(response,option){
 					let data=response.data.data;
 					//搜索配置
-					option.vue.searchTools.field.options=data.table.fields;
-					option.vue.searchTools.value.type=option.vue.camelCase('element-'+data.table.defaultSearch.type);
+					option.vue.$set(option.vue.configs.searchTools.field,'options',data.table.fields);
+					option.vue.$set(option.vue.configs.searchTools.value,'type',option.vue.camelCase('element-'+data.table.defaultSearch.type));
 					//其他配置
-					option.vue=Object.assign(option.vue,data);
+					option.vue.configs=Object.assign({},option.vue.configs,data);
 					//数据
 					option.vue.request();
 				}
@@ -237,26 +240,26 @@
 		watch:{
 			//监测搜索字段变化
 			formField(newValue,oldValue){
-				let option = this.searchTools.field.options.find((item)=>{
-					return item.value === this.form.field;
+				let option = this.configs.searchTools.field.options.find((item)=>{
+					return item.value === this.configs.form.field;
 				});
-				this.$set(this.searchTools.value,'type',this.camelCase('element-'+option.type))
-				this.$set(this.form,'value','');
+				this.$set(this.configs.searchTools.value,'type',this.camelCase('element-'+option.type))
+				this.$set(this.configs.form,'value','');
 				switch(option.type){
 					case 'datetime':
-						if(this.form.operator=='between'||this.form.operator=='not between'){
-							this.$set(this.searchTools.value,'pickerType','datetimerange');
+						if(this.configs.form.operator=='between'||this.configs.form.operator=='not between'){
+							this.$set(this.configs.searchTools.value,'pickerType','datetimerange');
 						}else{
-							this.$delete(this.searchTools.value,'pickerType');
+							this.$delete(this.configs.searchTools.value,'pickerType');
 						}
 						break;
 					case 'inputNumber':
-						if(this.form.operator=='between'||this.form.operator=='not between'){
-							this.$set(this.searchTools.value,'type',this.camelCase('element-'+'inputRange'));
-							this.$set(this.form,'value',[0,100]);
+						if(this.configs.form.operator=='between'||this.configs.form.operator=='not between'){
+							this.$set(this.configs.searchTools.value,'type',this.camelCase('element-'+'inputRange'));
+							this.$set(this.configs.form,'value',[0,100]);
 						}else{
-							this.$set(this.searchTools.value,'type',this.camelCase('element-'+'inputNumber'));
-							this.$set(this.form,'value','');
+							this.$set(this.configs.searchTools.value,'type',this.camelCase('element-'+'inputNumber'));
+							this.$set(this.configs.form,'value','');
 						}	
 						break;
 				}			
@@ -264,43 +267,41 @@
 		},
 		computed:{
 			formField(){
-				return this.form.field+'-'+this.form.operator;
+				return this.configs.form.field+'-'+this.configs.form.operator;
 			}			
 		},
 		updated(){
 			//处理后台加载配置默认排序不正常的bug
-			if(this.table.defaultSort){
-				this.$refs.table.sort(this.table.defaultSort.prop);
+			if(this.configs.table.defaultSort){
+				this.$refs.table.sort(this.configs.table.defaultSort.prop);
 			}
 		},
 		methods: {
 			//请求数据
 			request(){
-				let pagination=Object.assign({},this.pagination);
-				//pagination.table=this.query.table;
-				pagination=Object.assign({},pagination,this.query);
-				if(this.form.search){
-					pagination.query=this.form;
+				let data=Object.assign({TABLE_NAME:this.query.TABLE_NAME},this.configs.pagination);
+				if(this.configs.form.search){
+					data.query=this.configs.form;
 				}
 				this.my.axios({
 					vue: this,
 					axiosOption:{
-						url: this.table.url||'admin/table/table',
-						data:pagination
+						url: this.configs.table.url||'admin/table/table',
+						data:data
 					},
 					success:function(response,option){
-						option.vue=Object.assign(option.vue,response.data);
+						option.vue.data=response.data;
 					}
 				});
 			},
 			//换页
 			currentChange(page){
-				this.$set(this.pagination,'currentPage',page);
+				this.$set(this.configs.pagination,'currentPage',page);
 				this.request();
 			},
 			//一页条数更改
 			sizeChange(size){
-				this.$set(this.pagination,'pageSize',size);	
+				this.$set(this.configs.pagination,'pageSize',size);	
 				this.request();
 			},	
 			//工具栏事件	
@@ -309,9 +310,9 @@
 			},
 			//搜索
 			search(event,config){
-				this.$set(this.pagination,'currentPage',1);
-				this.$set(this.form,'search',config.name=='search'?true:false);			
-				this.request(this.pagination);
+				this.$set(this.configs.pagination,'currentPage',1);
+				this.$set(this.configs.form,'search',config.name=='search'?true:false);			
+				this.request(this.configs.pagination);
 			},
 			//重置
 			reset(event,config){
