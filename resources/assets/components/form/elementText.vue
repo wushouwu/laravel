@@ -75,7 +75,8 @@
                 }
                 return rules;
             }
-        },                  
+        },    
+                      
         methods:{            
             click: function(event){
                 this.$emit('config',event,this.config,{
