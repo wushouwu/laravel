@@ -7,6 +7,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 class table extends Controller{
+    public function __construct(){
+        $this->db=config('database.connections.mysql.database');
+    }
     //条件搜索
     public function query(Request $request,$tables,$queryName){
         if($request->has($queryName)){
@@ -35,7 +38,7 @@ class table extends Controller{
             $fields=$request->input('fields','*');
             $tables = DB::table($TABLE_NAME)->select(DB::raw($fields));
             if($TABLE_NAME=='INFORMATION_SCHEMA.TABLES'||$TABLE_NAME=='INFORMATION_SCHEMA.COLUMNS'){
-                 $tables->where('TABLE_SCHEMA',env('DB_DATABASE'));
+                 $tables->where('TABLE_SCHEMA',$this->db);
             }  
             $this->query($request,$tables,'where');     
             $this->query($request,$tables,'query');
@@ -63,7 +66,7 @@ class table extends Controller{
             $fields=$request->input('fields','*');
             $tables = DB::table($TABLE_NAME)->select(DB::raw($fields));
             if($TABLE_NAME=='INFORMATION_SCHEMA.TABLES'||$TABLE_NAME=='INFORMATION_SCHEMA.COLUMNS'){
-                $tables->where('TABLE_SCHEMA',env('DB_DATABASE'));
+                $tables->where('TABLE_SCHEMA',$this->db);
                 if($TABLE_NAME=='INFORMATION_SCHEMA.COLUMNS'){
                     $row=$request->input('row');
                     $request->offsetSet('where', ['field'=>'TABLE_NAME','operator'=>'=','value'=>$row['TABLE_NAME']]);
@@ -123,7 +126,6 @@ class table extends Controller{
     public function field(Request $request){
         $TABLE_NAME=$request->input('TABLE_NAME','');
         if($TABLE_NAME){
-            $db=env('DB_DATABASE');
             $fields = DB::table('INFORMATION_SCHEMA.COLUMNS')
                     ->select(DB::raw(
                         '`COLUMN_NAME` value,
@@ -142,10 +144,10 @@ class table extends Controller{
                             ELSE `DATA_TYPE`
                         end `type`'
                     ))
-                    ->where('TABLE_SCHEMA',$db)
+                    ->where('TABLE_SCHEMA',$this->db)
                     ->where('TABLE_NAME',$TABLE_NAME)
                     ->get();
-            $data=['data'=>$fields];
+            $data=['data'=>$fields,'a'=>$TABLE_NAME,'b'=>$this->db,'cout'=>count($fields)];
         }else{
             $data=['msg'=>'表名不存在'];
         }
