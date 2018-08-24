@@ -36,7 +36,7 @@
             }
         },
         created(){
-            this.source(this.config.tableField);
+            //this.source(this.config.tableField);
             if(this.config.allowCreate){
                 this.$set(this.config,'filterable',true);
             }
