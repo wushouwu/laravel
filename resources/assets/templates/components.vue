@@ -152,7 +152,6 @@
                         }
                     },
                     success:function(response,option){
-
                         option.vue.$set(option.vue,'row',response.data.data);
                     }
                 });                
@@ -165,11 +164,20 @@
                     this.$set(this.row,'json',JSON.stringify(newValue,null,4));
                 },
                 deep:true
+            },
+            type:{
+                handler(newValue,oldValue){
+                    this.$set(this.query.row,'type',newValue);
+                },
+                deep:true
             }
         },
         computed:{
             json(){
                 return this.$parent.$parent.$parent.configs;
+            },
+            type(){
+                return this.row.type;
             }
         },
         methods:{  
