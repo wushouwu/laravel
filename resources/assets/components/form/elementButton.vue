@@ -1,23 +1,26 @@
 <template>
-    <el-form-item 
+    <wrapper
+        :is="config.wrapper||'el-form-item'"
         :label="config.label"
         :label-width="config.labelWidth||'0px'"
+        @click="click"
         @click.native="click"
         class="elementButton"
         :style="config.style"
     >
         <el-button 
             :type="config.buttonType" 
-            @click="buttonClick"
             :icon="config.icon"
             :round="config.shape=='round'||config.round"
             :circle="config.shape=='circle'||config.circle"
-            :plain="config.shape=='plain'||config.plain"
+            :plain="config.saturation=='plain'?true:false||config.plain"
             :native-type="config.nativeType"
             :title="config.title"
             :size="config.size"
+            :class="{noText:!config.textShow}"
+            @click="buttonClick"
         >{{config.text}}</el-button>
-    </el-form-item>
+    </wrapper>
 </template>
 <script>
     export default {
@@ -39,6 +42,11 @@
             },
             click(event){
                 this.$emit('config',event,this.config,{
+                    textShow:{
+                        name:"textShow",
+                        type:"elementSwitch",
+                        label:"显示文字"
+                    },
                     text:{
                         name:"text",
                         type:"elementText",
@@ -62,6 +70,9 @@
                             label:"默认",
                             value:""
                         },{
+                            label:"文本",
+                            value:"text"
+                        },{
                             label:"主要",
                             value:"primary"
                         },{
@@ -78,6 +89,20 @@
                             value:"danger"
                         }]
                     }, 
+                    saturation:{
+                        name:"saturation",
+                        type:"elementRadio",
+                        label:"彩度",
+                        options:[{
+                            type:'el-radio',
+                            value:"",
+                            label:"鲜艳"
+                        },{
+                            type:'el-radio',
+                            value:"true",
+                            label:"平淡"
+                        }]
+                    },
                     shape:{
                         name:"shape",
                         type:"elementSelect",
@@ -85,9 +110,6 @@
                         options:[{
                             label:"默认",
                             value:""
-                        },{
-                            label:"普通",
-                            value:"plain"
                         },{
                             label:"圆形",
                             value:"circle"
@@ -155,7 +177,7 @@
     }
 </script>
 <style>
-	.el-form-item .el-button [class*=el-icon-]+span{
-		margin-left: 0px;
+	.el-button.noText [class*=el-icon-]+span{
+		display:none;
 	}
 </style>
