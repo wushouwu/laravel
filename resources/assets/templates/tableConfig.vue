@@ -43,25 +43,30 @@
                     @change="buttonChange"
 				>				
 					<tool
-						v-for="(tool, key,index) in configs.tools" 
-						:key="index" 
+						v-for="(tool, key) in configs.tools" 
+						:key="key" 
 						:is="tool.type" 
 						:config="tool" 
 						:form="configs.form"
+                    	:class="{active:activeField===key}"
+                    	@click.native="activeField=key;activeButton='';"						
 						@buttonClick="buttonClick"
+						@config	="toConfig"
+                   		@close="del(key,'tools')"
 					></tool>
 				</draggable>
 			</el-form>
 		</div>
 		<div style="flex:1;">
 			<el-table  
+				ref="table"
 				:max-height="tableHeight"
 				:data="data.data"
 				:border="Boolean(configs.table.border)"
 				:stripe="Boolean(configs.table.stripe)"
 				:default-sort="configs.table.defaultSort"
 				:fit="true"
-				ref="table"
+				@header-click="headerClick"
 			>
 				<el-table-column 
 					v-for="(field,key) in configs.table.fields" 
@@ -80,14 +85,16 @@
 					label="操作"
 					:resizable="false"
 					:width="configs.table.operator?configs.table.operator.length*50:100"
+					style="white-space:nowrap;"
 				>
 					<template slot-scope="scope">
 						<el-button 
+							:is="operator.type"
 							v-for="(operator,key) in configs.table.operator" 
 							:key="key"
-							@click="operate(scope.row,operator)" 
-							type="text" 
-							size="small"
+							:config="operator"
+							@click.native="operate(scope.row,operator)"
+							:style="configs.table.operator.length-1!=key?'margin-right:10px;':''"
 						>{{operator.text}}</el-button>
 					</template>
 				</el-table-column>
@@ -115,9 +122,10 @@
 		props:['query'],
 		data() {
 			return {
-				multiSearch:false,
-				tableHeight:400,
-				configs:{
+				activeField:"",//激活的组件index
+				multiSearch:false,//打开启高级搜索
+				tableHeight:400,//table 的默认高度
+				configs:{	//table 配置
 					searchTools:{
 						"field":{
 							"name":"field",
@@ -171,7 +179,8 @@
 						"reset":{
 							"name":"reset",
 							"buttonType":"primary",
-							"shape":"plain",
+							"shape":"",
+                			"saturation": "plain",
 							"title":"重置",
 							"type":"elementButton",
 							"icon":"el-icon-refresh",
@@ -212,7 +221,7 @@
 						"pageSize":10
 					},
 				},
-				data:{
+				data:{	//table数据
 					data: [],
 					total:0
 				}
@@ -393,7 +402,60 @@
                     this.$delete(event.added.element,'labelWidth');
                     this.$delete(event.added.element,'label');
                 }
-            }            
+			},
+            //配置组件
+            toConfig:function(event,config,attr){        
+				console.log(event,config)    
+                this.$emit('toConfig',event,config,attr)
+			},
+			//配置表格列
+			headerClick(column, event){
+				if(column.label=="操作" && !column.property){
+					let operator=JSON.parse(JSON.stringify(this.configs.table.operator));
+					this.$emit('toConfig',event,this.configs.table,[{
+						type:"elementAddDelete",
+						name:"operator",
+						label:"按钮项",	
+						labelPositionTop:true,					
+						labels:[{label:'按钮'}],
+						itemDefault:{
+							style:"width:60%;display:inline-block;margin-right:2%;text-align:center;",
+							size:"mini"
+						},
+						options:operator.map((item,index,arr)=>{
+							item.script=`
+								this.$set(this.attrs[1].options[0],'options',attr);
+								this.$set(this.attrs[1].options[0],'name','`+index+`');
+							`;							
+							return item;
+						})
+					},{
+						type:"elementComponents",
+						name:"operator",
+						label:"按钮设置",
+						labelPositionTop:true,
+						itemDefault:{
+							size:"small"
+						},
+						options:[{
+							type:"elementComponents",
+							name:"0",
+							itemDefault:{
+								size:"small"
+							},							
+							options:[]
+						}]
+					}]);
+				}
+			},		
+			/*	删除组件
+				@key index
+				@type 组件类型
+			*/
+            del(key,type){
+                this.$delete(this.configs[type],key);
+                this.$emit('del')   
+            },
 		}
 	}
 </script>

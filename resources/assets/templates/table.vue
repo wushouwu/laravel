@@ -74,13 +74,14 @@
 					:width="configs.table.operator?configs.table.operator.length*50:100"
 				>
 					<template slot-scope="scope">
-						<el-button 
+						<operator
+							:is="operator.type"
 							v-for="(operator,key) in configs.table.operator" 
 							:key="key"
-							@click="operate(scope.row,operator)" 
-							type="text" 
-							size="small"
-						>{{operator.text}}</el-button>
+							:config="operator"
+							@click.native="operate(scope.row,operator)" 
+							:style="configs.table.operator.length-1!=key?'margin-right:10px;':''"
+						>{{operator.text}}</operator>
 					</template>
 				</el-table-column>
 			</el-table>
@@ -160,7 +161,8 @@
 						"reset":{
 							"name":"reset",
 							"buttonType":"primary",
-							"shape":"plain",
+							"shape":"",
+                			"saturation": "plain",
 							"title":"重置",
 							"type":"elementButton",
 							"icon":"el-icon-refresh",
@@ -279,7 +281,7 @@
 		methods: {
 			//请求数据
 			request(){
-				let data=Object.assign({TABLE_NAME:this.query.TABLE_NAME},this.configs.pagination);
+				let data=Object.assign({},this.query,this.configs.pagination,);
 				if(this.configs.form.search){
 					data.query=this.configs.form;
 				}
