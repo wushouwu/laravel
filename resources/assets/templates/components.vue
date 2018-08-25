@@ -188,7 +188,7 @@
             update(event){
                 this.initComponents=JSON.stringify(this.configs.components);
             },
-            e(event,config){
+            e(event,config,attr){
                 switch(config.name){
                     default:
                         eval(config.script);
@@ -213,7 +213,7 @@
                         return false;
                     }
                 });               
-            }           
+            }         
         }
     }
 </script>
