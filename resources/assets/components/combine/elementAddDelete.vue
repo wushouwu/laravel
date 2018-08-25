@@ -8,7 +8,7 @@
         class="elementAddDelete"
     >
         <div style="line-height:30px;"><label 
-                v-for="(label,key,index) in config.labels" 
+                v-for="(label,key) in config.labels" 
                 :key="key"
                 :style="(config.itemDefault&&config.itemDefault.style?config.itemDefault.style:'')+';text-align:center;font-size:13px;color: #606266;'"
             >{{label.label}}</label>
@@ -19,15 +19,17 @@
             ></elementButton>            
         </div>
         <div
-            v-for="(option,key,index) in config.options"
+            v-for="(option,key) in config.options"
             :key="key"
         >
             <component 
-                v-for="(item,k,i) in option" 
+                v-for="(item,k) in (option.length?option:config.options)" 
                 :key="k"
+                v-if="!option.length?key==k:true"
                 :config="Object.assign({},config.itemDefault,item)"
                 :is="item.type"
                 :form="form[config.name][key]"
+                @config="itemConfig"
             ></component>
             <elementButton
                 :config="Object.assign({},config.itemDefault,deleteButton)"
@@ -119,7 +121,12 @@
                         name:"placeholder"
                     }                                     
                 });
-            }
+            },
+            //子组件配置
+            itemConfig(event,config,attr){
+                this.$emit('e',event,config,attr);
+                
+            }             
         }
     }
 </script>
