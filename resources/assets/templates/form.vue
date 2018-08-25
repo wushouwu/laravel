@@ -12,7 +12,7 @@
         </div>  
         <el-footer class="footer-tools" style="height:0px;width:100%;display:flex;justify-content:center;align-items:center;position:absolute;bottom:21px;">
             <elementButton
-                v-for="(tool,key,index) in tools"
+                v-for="(tool,key) in tools"
                 :key="key"
                 :config="tool"
                 @buttonClick="buttonClick"
