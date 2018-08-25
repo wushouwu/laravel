@@ -166,7 +166,7 @@
                 this.$delete(this.configs[type],key);
                 this.$emit('del')   
             },
-            //
+            //点击draggble 事件
             draggableClick:function(event){
                 this.$emit('draggableClick',event)
             },            
@@ -187,34 +187,3 @@
         }
     }
 </script>
-<style>
-    /*激活的组件显示虚线框*/
-    .draggable .el-form-item{
-        border:1px dotted transparent;
-    }
-    .draggable .el-form-item.active{
-        border:1px dotted #409EFF;
-    }
-    /*组件删除按钮*/
-    .my-close{
-        display: none;
-    }
-    .draggable .el-form-item.active .my-close{
-        position:absolute;
-        top:0px;
-        left:0px;
-        border-radius:12px;
-        font-size:12px;
-        border:1px solid #dddddd;
-        color:red;
-        width:12px;
-        height:12px;
-        text-align:center;
-        cursor:pointer;
-        line-height: 11px;
-        display:inline-block;
-    }
-    .draggable .el-form-item.active .my-close::after{
-        content:'×'
-    }
-</style>

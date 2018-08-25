@@ -43,7 +43,7 @@
         <el-main @click.native="isFullscreen=true">
             <el-tabs v-model="activeTab" type="card" closable @tab-remove="removeTab">
             <el-tab-pane style="height:100%;"
-                v-for="(item, index) in tabs"
+                v-for="(item) in tabs"
                 :key="item.name"
                 :label="item.title"
                 :name="item.name"
@@ -164,4 +164,33 @@ export default {
     .label-position-top>.el-form-item__label{
         float:none;
     }   */ 
+    /*激活的组件显示虚线框*/
+    .draggable .el-form-item{
+        border:1px dotted transparent;
+    }
+    .draggable .el-form-item.active{
+        border:1px dotted #409EFF;
+    }
+    /*组件删除按钮*/
+    .my-close{
+        display: none;
+    }
+    .draggable .el-form-item.active .my-close{
+        position:absolute;
+        top:0px;
+        left:0px;
+        border-radius:12px;
+        font-size:12px;
+        border:1px solid #dddddd;
+        color:red;
+        width:12px;
+        height:12px;
+        text-align:center;
+        cursor:pointer;
+        line-height: 11px;
+        display:inline-block;
+    }
+    .draggable .el-form-item.active .my-close::after{
+        content:'×'
+    }    
 </style>
