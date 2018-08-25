@@ -7,7 +7,7 @@
         :style="config.style"
     >
         <component 
-            v-for="(option,key,index) in config.options"
+            v-for="(option,key) in config.options"
             :key="key"
             :is="option.type"
             :config="Object.assign({},config.itemDefault,option)"
