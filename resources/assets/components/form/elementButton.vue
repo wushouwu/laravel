@@ -99,7 +99,7 @@
                             label:"鲜艳"
                         },{
                             type:'el-radio',
-                            value:"true",
+                            value:"plain",
                             label:"平淡"
                         }]
                     },
