@@ -188,10 +188,10 @@
             update(event){
                 this.initComponents=JSON.stringify(this.configs.components);
             },
-            e(event,config,attr){
-                switch(config.name){
+            e(event,option){
+                switch(option.config.name){
                     default:
-                        eval(config.script);
+                        eval(option.config.script);
                 }
             },
             //保存配置

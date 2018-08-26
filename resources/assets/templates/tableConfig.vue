@@ -405,8 +405,7 @@
                 }
 			},
             //配置组件
-            toConfig:function(event,config,attr){        
-				console.log(event,config)    
+            toConfig:function(event,config,attr){ 
                 this.$emit('toConfig',event,config,attr)
 			},
 			//配置表格列
@@ -421,13 +420,14 @@
 						labels:[{label:'按钮'}],
 						itemDefault:{
 							style:"width:60%;display:inline-block;margin-right:2%;text-align:center;",
-							size:"mini"
+							size:"mini",
+							delScript:`this.$delete(this.$parent.$children[1].config.options[0],'options');`						
 						},
 						options:operator.map((item,index,arr)=>{
 							item.script=`
-								this.$set(this.attrs[1].options[0],'options',attr);
-								this.$set(this.attrs[1].options[0],'name','`+index+`');
-							`;							
+								this.$set(this.attrs[1].options[0],'options',option.attr);
+								this.$set(this.attrs[1].options[0],'name',String(option.index));
+							`;
 							return item;
 						})
 					},{

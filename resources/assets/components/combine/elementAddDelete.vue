@@ -17,7 +17,7 @@
                 style="width:auto;"
                 @buttonClick="add"
             ></elementButton>            
-        </div>
+        </div>      
         <div
             v-for="(option,key) in config.options"
             :key="key"
@@ -29,6 +29,7 @@
                 :config="Object.assign({},config.itemDefault,item)"
                 :is="item.type"
                 :form="form[config.name][key]"
+                :index="key"
                 @config="itemConfig"
             ></component>
             <elementButton
@@ -36,14 +37,19 @@
                 style="width:auto;"
                 @buttonClick="del($event,deleteButton,key)"
             ></elementButton>
-        </div>      
+        </div>
     </el-form-item>
 </template>
 <script>
+    import draggable from 'vuedraggable';
     export default {
+        components: {
+            draggable,
+        },
         props: ['config','form'],
         data(){
             return {
+                index:'',
                 addButton:{
                     type:"elementButton",
                     icon:"el-icon-plus",
@@ -66,6 +72,21 @@
         updated(){
            this.labelPositionTop();
         }, 
+        watch:{
+            itemForm:{
+                handler(newValue,oldValue){
+                    if(newValue &&　this.config.options[0] && !this.config.options[0][0]){
+                        this.$set(this.config.options,this.index,Object.assign({},newValue,{script:this.config.options[this.index].script}));
+                    }
+                },
+                deep:true
+            },
+        },
+        computed:{
+            itemForm(){
+                return this.form[this.config.name][this.index];
+            }
+        },
         methods:{
             labelPositionTop(){
                 //labelPositionTop样式调整
@@ -78,7 +99,7 @@
                 }
             },            
             add(event,config){
-                this.config.options.push(this.config.options[0]);
+                this.config.options.push(Object.assign([],this.config.options[0]));
                 let form=Object.assign({},this.form[this.config.name][0]);
                 if('label' in form && 'value' in form){
                     form.value='';
@@ -87,6 +108,9 @@
                 this.form[this.config.name].push(form);
             },
             del(event,config,index){
+                if(this.config.itemDefault.delScript){
+                    eval(this.config.itemDefault.delScript);
+                }                
                 if(this.config.options.length>1){
                     this.$delete(this.config.options,index);
                     this.$delete(this.form[this.config.name],index);
@@ -124,7 +148,9 @@
             },
             //子组件配置
             itemConfig(event,config,attr){
-                this.$emit('e',event,config,attr);
+                this.index=event.currentTarget.getAttribute('index');
+                let option={config:config,attr:attr,index:this.index};
+                this.$emit('e',event,option);
                 
             }             
         }
