@@ -85,7 +85,6 @@
 					label="操作"
 					:resizable="false"
 					:width="configs.table.operator?configs.table.operator.length*50:100"
-					style="white-space:nowrap;"
 				>
 					<template slot-scope="scope">
 						<el-button 
@@ -236,9 +235,11 @@
 				},
 				success:function(response,option){
 					let data=response.data.data;
-					//搜索配置
+					//搜索字段为表格的字段
 					option.vue.$set(option.vue.configs.searchTools.field,'options',data.table.fields);
-					option.vue.$set(option.vue.configs.searchTools.value,'type',option.vue.camelCase('element-'+data.table.defaultSearch.type));
+					//搜索值类型为搜索字段的类型
+					let defaultSearch=option.vue.configs.searchTools.field.options.find((item,index,arr)=>{return item.value==data.form.field});
+					option.vue.$set(option.vue.configs.searchTools.value,'type',defaultSearch?option.vue.camelCase('element-'+defaultSearch.type):'elementText');
 					//其他配置
 					option.vue.configs=Object.assign({},option.vue.configs,data);
 					//数据
