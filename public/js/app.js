@@ -78819,7 +78819,7 @@ exports = module.exports = __webpack_require__(6)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/*菜单栏*/\n.el-menu:not(.el-menu--collapse) {\n    width: 300px;\n}\n.el-tabs{\n    display:-webkit-box;\n    display:-ms-flexbox;\n    display:flex;\n    -webkit-box-orient:vertical;\n    -webkit-box-direction:normal;\n        -ms-flex-flow:column;\n            flex-flow:column;\n    height:100%;\n}\n.el-tabs__content{\n    -webkit-box-flex: 1;\n        -ms-flex: 1;\n            flex: 1;\n}  \n/*时间选择框大小*/\n.el-date-editor.el-input, .el-date-editor.el-input__inner{\n    width:100%;\n} \n/*按钮组件下边距处理*/\n.tools .el-form-item.elementButton{\n    margin:5px;\n}\n/*表单组件边距处理*/\nform .el-form-item{\n    margin-right:10px;\n    margin-bottom:20px;\n}  \n/*size为small时label字体大小处理*/\n.size-small-font [class*=\"label\"]{\n    font-size:13px;\n} \n/*可拖动组件的光标*/\n.draggable label,.footer-tools.draggable button{\n    cursor:move;\n}\n/*标签换行处理\n.label-position-top>.el-form-item__label{\n    float:none;\n}   */ \n/*激活的组件显示虚线框*/\n.draggable .el-form-item{\n    border:1px dotted transparent;\n}\n.draggable .el-form-item.active{\n    border:1px dotted #409EFF;\n}\n/*组件删除按钮*/\n.my-close{\n    display: none;\n}\n.draggable .el-form-item.active .my-close{\n    position:absolute;\n    top:0px;\n    left:0px;\n    border-radius:12px;\n    font-size:12px;\n    border:1px solid #dddddd;\n    color:red;\n    width:12px;\n    height:12px;\n    text-align:center;\n    cursor:pointer;\n    line-height: 11px;\n    display:inline-block;\n}\n.draggable .el-form-item.active .my-close::after{\n    content:'\\D7'\n}    \n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/*菜单栏*/\n.el-menu:not(.el-menu--collapse) {\n    width: 300px;\n}\n.el-tabs{\n    display:-webkit-box;\n    display:-ms-flexbox;\n    display:flex;\n    -webkit-box-orient:vertical;\n    -webkit-box-direction:normal;\n        -ms-flex-flow:column;\n            flex-flow:column;\n    height:100%;\n}\n.el-tabs__content{\n    -webkit-box-flex: 1;\n        -ms-flex: 1;\n            flex: 1;\n}  \n/*时间选择框大小*/\n.el-date-editor.el-input, .el-date-editor.el-input__inner{\n    width:100%;\n} \n/*按钮组件下边距处理*/\n.tools .el-form-item.elementButton{\n    margin:5px;\n}\n/*表单组件边距处理*/\n.fields>.el-form-item{\n    margin:0px 5px 20px 5px;\n}\nform>.el-form-item{\n    margin-right:10px;\n}       \n/*size为small时label字体大小处理*/\n.size-small-font [class*=\"label\"]{\n    font-size:13px;\n} \n/*可拖动组件的光标*/\n.draggable label,.draggable button{\n    cursor:move;\n}\n/*激活的组件显示虚线框*/\n.draggable .el-form-item{\n    border:1px dotted transparent;\n}\n.draggable .el-form-item.active{\n    border:1px dotted #409EFF;\n}\n/*组件删除按钮*/\n.my-close{\n    display: none;\n}\n.draggable .el-form-item.active .my-close{\n    position:absolute;\n    top:0px;\n    left:0px;\n    border-radius:12px;\n    font-size:12px;\n    border:1px solid #dddddd;\n    color:red;\n    width:12px;\n    height:12px;\n    text-align:center;\n    cursor:pointer;\n    line-height: 11px;\n    display:inline-block;\n}\n.draggable .el-form-item.active .my-close::after{\n    content:'\\D7'\n}    \n", ""]);
 
 // exports
 
@@ -79190,7 +79190,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 view_name: '',
                 id: ''
             },
-            activeAccordion: "表单",
+            activeAccordion: "视图",
             initComponents: '[{\n                "type": "elementText",\n                "label": "\u6587\u672C",\n                "name": "text"\n            },{\n                "type": "elementSelect",\n                "label": "\u9009\u9879",\n                "name": "select",\n                "source":"options",\n                "options": [{\n                    "value": "1",\n                    "label": "\u9009\u98791"\n                }, {\n                    "value": "2",\n                    "label": "\u9009\u98792"\n                }],\n                "tableField":{\n                    "table":"",\n                    "fieldLabel":"",\n                    "fieldValue":""\n                }\n            },{\n                "type": "elementSwitch",\n                "label": "\u5F00\u5173",\n                "name": "switch"\n            },{\n                "type": "elementTextarea",\n                "label": "\u591A\u884C\u6587\u672C",\n                "name": "textarea",\n                "autosize":{"minRows":3,"maxRows":5}\n            },{\n                "type": "elementDatetime",\n                "label": "\u65E5\u671F\u65F6\u95F4",\n                "name": "datetime"\n            },{\n                "type": "elementInputNumber",\n                "label": "\u6570\u5B57",\n                "name": "inputNumber"\n            },{\n                "type": "elementButton",\n                "labelWidth":"80px",\n                "label": "\u6309\u94AE",\n                "text": "\u6309\u94AE",\n                "shape":"plain",\n                "buttonType":"primary",\n                "name": "button"\n            }]',
             configs: {
                 components: [],
@@ -80868,7 +80868,7 @@ var render = function() {
     [
       _c(
         "el-collapse-item",
-        { attrs: { title: "表单", name: "表单" } },
+        { attrs: { title: "视图信息", name: "视图" } },
         [
           _c(
             "el-form",
@@ -80989,6 +80989,10 @@ if (false) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(318)
+}
 var normalizeComponent = __webpack_require__(0)
 /* script */
 var __vue_script__ = __webpack_require__(293)
@@ -80997,7 +81001,7 @@ var __vue_template__ = __webpack_require__(294)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
-var __vue_styles__ = null
+var __vue_styles__ = injectStyle
 /* scopeId */
 var __vue_scopeId__ = null
 /* moduleIdentifier (server only) */
@@ -81083,6 +81087,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -81094,7 +81105,20 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         return {
             activeField: '',
             activeButton: '',
-            configs: {},
+            configs: {
+                forms: {
+                    statusIcon: true,
+                    labelWidth: "80px",
+                    inline: false,
+                    labelPosition: "right",
+                    showMessage: true,
+                    size: "",
+                    disabled: false
+                },
+                fields: [],
+                tools: [],
+                form: {}
+            },
             fields: [],
             attrs: {},
             attrForm: {}
@@ -81147,13 +81171,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     data: this.query.row
                 },
                 success: function success(response, option) {
-                    if (!response.data.data.fields) {
-                        response.data.data.fields = [];
-                    }
-                    if (!response.data.data.tools) {
-                        response.data.data.tools = [];
-                    }
-                    option.vue.configs = response.data.data;
+                    option.vue.configs = Object.assign(option.vue.configs, response.data.data);
                 },
                 error: function error(response, option) {
                     option.vue.configs = configs;
@@ -81207,10 +81225,69 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.$emit('del');
         },
 
-        //点击draggble 事件
-        draggableClick: function draggableClick(event) {
-            this.$emit('draggableClick', event);
+        //点击字段框 事件
+        fieldsClick: function fieldsClick(event) {
+            this.$emit('fieldsClick', event);
         },
+        toolsClick: function toolsClick(event) {
+            if (event.target == event.currentTarget) {
+                this.activeField = '';this.activeButton = '';
+                this.$emit('toConfig', event, this.configs.forms, [{
+                    "type": "elementSwitch",
+                    "label": "只读",
+                    "name": "disabled"
+                }, {
+                    "type": "elementSelect",
+                    "label": "尺寸",
+                    "name": "size",
+                    "options": [{
+                        label: "默认",
+                        value: ""
+                    }, {
+                        label: "中等",
+                        value: "medium"
+                    }, {
+                        label: "小型",
+                        value: "small"
+                    }, {
+                        label: "超小",
+                        value: "mini"
+                    }]
+                }, {
+                    "type": "elementSwitch",
+                    "label": "单行模式",
+                    "name": "inline"
+                }, {
+                    "type": "elementSelect",
+                    "label": "标签对齐",
+                    "name": "labelPosition",
+                    "options": [{
+                        label: "右边",
+                        value: "right"
+                    }, {
+                        label: "顶部",
+                        value: "top"
+                    }, {
+                        label: "左边",
+                        value: "left"
+                    }]
+                }, {
+                    "type": "elementText",
+                    "label": "标签宽度",
+                    "name": "labelWidth",
+                    "placeholder": "例: 80px"
+                }, {
+                    "type": "elementSwitch",
+                    "label": "校验信息",
+                    "name": "showMessage"
+                }, {
+                    "type": "elementSwitch",
+                    "label": "反馈图标",
+                    "name": "statusIcon"
+                }]);
+            }
+        },
+
         //配置字段组件
         toConfig: function toConfig(event, config, attr) {
             if (attr.name) {
@@ -81242,80 +81319,67 @@ var render = function() {
       staticStyle: { width: "100%", height: "100%", position: "relative" },
       attrs: {
         model: _vm.configs.form,
-        "status-icon": "",
-        "label-width": "80px"
+        "status-icon": _vm.configs.forms.statusIcon,
+        "label-width": _vm.configs.forms.labelWidth || "80px",
+        inline: _vm.configs.forms.inline,
+        "label-position": _vm.configs.forms.labelPosition,
+        "show-message": _vm.configs.forms.showMessage,
+        size: _vm.configs.forms.size,
+        disabled: _vm.configs.forms.disabled
       }
     },
     [
       _c(
-        "div",
-        { staticStyle: { overflow: "auto", height: "100%" } },
-        [
-          _c(
-            "draggable",
-            {
-              staticClass: "fields draggable",
-              staticStyle: { width: "100%", height: "100%" },
-              attrs: {
-                options: {
-                  group: { name: "view", pull: false, put: true },
-                  preventOnFilter: true,
-                  animation: 250
-                }
-              },
-              on: { change: _vm.sort },
-              nativeOn: {
-                click: function($event) {
-                  return _vm.draggableClick($event)
-                }
-              },
-              model: {
-                value: _vm.configs.fields,
-                callback: function($$v) {
-                  _vm.$set(_vm.configs, "fields", $$v)
-                },
-                expression: "configs.fields"
+        "draggable",
+        {
+          staticClass: "fields draggable",
+          attrs: {
+            options: {
+              group: { name: "view", pull: false, put: true },
+              preventOnFilter: true,
+              animation: 250
+            }
+          },
+          on: { change: _vm.sort },
+          nativeOn: {
+            click: function($event) {
+              return _vm.fieldsClick($event)
+            }
+          },
+          model: {
+            value: _vm.configs.fields,
+            callback: function($$v) {
+              _vm.$set(_vm.configs, "fields", $$v)
+            },
+            expression: "configs.fields"
+          }
+        },
+        _vm._l(_vm.configs.fields, function(field, key, index) {
+          return _c(field.type, {
+            key: index,
+            tag: "component",
+            class: { active: _vm.activeField === key },
+            attrs: { config: field, form: _vm.configs.form },
+            on: {
+              config: _vm.toConfig,
+              close: function($event) {
+                _vm.del(key, "fields")
               }
             },
-            _vm._l(_vm.configs.fields, function(field, key, index) {
-              return _c(field.type, {
-                key: index,
-                tag: "component",
-                class: { active: _vm.activeField === key },
-                attrs: { config: field, form: _vm.configs.form },
-                on: {
-                  config: _vm.toConfig,
-                  close: function($event) {
-                    _vm.del(key, "fields")
-                  }
-                },
-                nativeOn: {
-                  click: function($event) {
-                    _vm.activeField = key
-                    _vm.activeButton = ""
-                  }
-                }
-              })
-            })
-          )
-        ],
-        1
+            nativeOn: {
+              click: function($event) {
+                _vm.activeField = key
+                _vm.activeButton = ""
+              }
+            }
+          })
+        })
       ),
       _vm._v(" "),
       _c(
         "draggable",
         {
           staticClass: "tools draggable",
-          staticStyle: {
-            width: "99%",
-            "min-height": "42px",
-            display: "flex",
-            "justify-content": "center",
-            "align-items": "center",
-            position: "absolute",
-            bottom: "21px",
-            border: "1px dashed #c0c4cc"
-          },
           attrs: {
             options: {
               group: { name: "view", pull: false, put: true },
@@ -81324,6 +81388,11 @@ var render = function() {
             }
           },
           on: { change: _vm.buttonChange },
+          nativeOn: {
+            click: function($event) {
+              return _vm.toolsClick($event)
+            }
+          },
           model: {
             value: _vm.configs.tools,
             callback: function($$v) {
@@ -81452,7 +81521,7 @@ exports = module.exports = __webpack_require__(6)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -81889,8 +81958,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		//按钮拖放后去掉标签
 		buttonChange: function buttonChange(event) {
 			if ('added' in event) {
-				this.$delete(event.added.element, 'labelWidth');
-				this.$delete(event.added.element, 'label');
+				this.$set(event.added.element, 'labelWidth', '0px');
+				this.$set(event.added.element, 'label', ' ');
 			}
 		},
 
@@ -81944,6 +82013,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		del: function del(key, type) {
 			this.$delete(this.configs[type], key);
 			this.$emit('del');
+		},
+
+		//工具框点击
+		toolsClick: function toolsClick(event) {
+			this.$emit('fieldsClick', event);
 		}
 	}
 });
@@ -82072,7 +82146,10 @@ var render = function() {
                   staticStyle: {
                     display: "inline-block",
                     height: "100%",
-                    border: "1px dashed #c0c4cc"
+                    border: "1px dashed #c0c4cc",
+                    "min-width": "60px",
+                    "min-height": "66.8px",
+                    cursor: "pointer"
                   },
                   attrs: {
                     options: {
@@ -82082,6 +82159,11 @@ var render = function() {
                     }
                   },
                   on: { change: _vm.buttonChange },
+                  nativeOn: {
+                    click: function($event) {
+                      return _vm.toolsClick($event)
+                    }
+                  },
                   model: {
                     value: _vm.configs.tools,
                     callback: function($$v) {
@@ -82097,7 +82179,6 @@ var render = function() {
                     class: { active: _vm.activeField === key },
                     attrs: { config: tool, form: _vm.configs.form },
                     on: {
-                      buttonClick: _vm.buttonClick,
                       config: _vm.toConfig,
                       close: function($event) {
                         _vm.del(key, "tools")
@@ -82267,7 +82348,7 @@ var render = function() {
               tag: "view",
               attrs: { query: _vm.query },
               on: {
-                draggableClick: _vm.accordionChange,
+                fieldsClick: _vm.accordionChange,
                 configChange: _vm.configChange,
                 toConfig: _vm.toConfig,
                 del: _vm.del
@@ -83055,7 +83136,7 @@ exports = module.exports = __webpack_require__(6)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -83088,11 +83169,30 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['query'],
     data: function data() {
         return {
+            forms: {
+                statusIcon: true,
+                labelWidth: "80px",
+                inline: false,
+                labelPosition: "right",
+                showMessage: true,
+                size: "",
+                disabled: false
+            },
             fields: [],
             form: {},
             tools: []
@@ -83195,12 +83295,24 @@ var render = function() {
     "el-form",
     {
       staticStyle: { width: "100%", height: "100%", position: "relative" },
-      attrs: { model: _vm.form, "label-width": "80px" }
+      attrs: {
+        model: _vm.form,
+        "status-icon": _vm.forms.statusIcon,
+        "label-width": _vm.forms.labelWidth || "80px",
+        inline: _vm.forms.inline,
+        "label-position": _vm.forms.labelPosition,
+        "show-message": _vm.forms.showMessage,
+        size: _vm.forms.size,
+        disabled: _vm.forms.disabled
+      }
     },
     [
       _c(
         "div",
-        { staticStyle: { overflow: "auto", height: "100%" } },
+        {
+          staticClass: "fields",
+          staticStyle: { overflow: "auto", height: "100%" }
+        },
         _vm._l(_vm.fields, function(field, key, index) {
           return _c(field.type, {
             directives: [
@@ -83221,7 +83333,7 @@ var render = function() {
       _c(
         "el-footer",
         {
-          staticClass: "footer-tools",
+          staticClass: "tools",
           staticStyle: {
             height: "0px",
             width: "100%",
@@ -86176,6 +86288,50 @@ var my = {
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 314 */,
+/* 315 */,
+/* 316 */,
+/* 317 */,
+/* 318 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(319);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(8)("794dbfb0", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-2756dd0d\",\"scoped\":false,\"hasInlineConfig\":true}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./formConfig.vue", function() {
+     var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-2756dd0d\",\"scoped\":false,\"hasInlineConfig\":true}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./formConfig.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 319 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(6)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/* 表单字段框 */\n.fields.draggable{\n    overflow: auto;\n    width:auto;\n    height:100%;       \n    border:1px dashed #c0c4cc;\n}\n/* 表单工具框 */\n.tools.draggable{\n    width:80%;\n    min-height:42px;\n    display:-webkit-box;\n    display:-ms-flexbox;\n    display:flex;\n    -webkit-box-pack:center;\n        -ms-flex-pack:center;\n            justify-content:center;\n    -webkit-box-align:center;\n        -ms-flex-align:center;\n            align-items:center;\n    position:absolute;\n    bottom:21px;\n    margin-left: 10%;\n    border:1px dashed #c0c4cc;\n    cursor:pointer;\n}\n", ""]);
+
+// exports
+
 
 /***/ })
 ],[85]);
