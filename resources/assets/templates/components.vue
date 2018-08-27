@@ -1,6 +1,6 @@
 <template>
     <el-collapse v-model="activeAccordion" accordion>
-        <el-collapse-item title="表单" name="表单">
+        <el-collapse-item title="视图信息" name="视图">
             <el-form :model="row" ref="rowForm"  label-width="80px" style="width:100%;height:100%">
                 <component 
                     v-for="(config, key,index) in configs.form.fields" 
@@ -67,7 +67,7 @@
                     view_name:'',
                     id:''
                 },
-                activeAccordion:"表单",
+                activeAccordion:"视图",
                 initComponents:`[{
                     "type": "elementText",
                     "label": "文本",
