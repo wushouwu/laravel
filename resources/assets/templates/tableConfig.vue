@@ -38,9 +38,10 @@
 				<draggable
 					v-model="configs.tools" 
 					class="draggable"
-                    style="display: inline-block;height: 100%;border:1px dashed #c0c4cc;"
+                    style="display: inline-block;height: 100%;border:1px dashed #c0c4cc;min-width: 60px;min-height:66.8px;cursor:pointer;"
 					:options="{group:{ name:'view',  pull:false, put: true},preventOnFilter: true,animation: 250}"
                     @change="buttonChange"
+					@click.native="toolsClick"
 				>				
 					<tool
 						v-for="(tool, key) in configs.tools" 
@@ -49,8 +50,7 @@
 						:config="tool" 
 						:form="configs.form"
                     	:class="{active:activeField===key}"
-                    	@click.native="activeField=key;activeButton='';"						
-						@buttonClick="buttonClick"
+                    	@click.native="activeField=key;activeButton='';"
 						@config	="toConfig"
                    		@close="del(key,'tools')"
 					></tool>
@@ -400,8 +400,8 @@
             //按钮拖放后去掉标签
             buttonChange(event){
                 if('added' in event){
-                    this.$delete(event.added.element,'labelWidth');
-                    this.$delete(event.added.element,'label');
+                    this.$set(event.added.element,'labelWidth','0px');
+                    this.$set(event.added.element,'label',' ');
                 }
 			},
             //配置组件
@@ -456,7 +456,11 @@
             del(key,type){
                 this.$delete(this.configs[type],key);
                 this.$emit('del')   
-            },
+			},
+			//工具框点击
+			toolsClick(event){
+				this.$emit('fieldsClick',event);
+			}		
 		}
 	}
 </script>
