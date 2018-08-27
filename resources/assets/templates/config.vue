@@ -14,7 +14,7 @@
                     :is="this.query.row.type+'Config'"
                     ref="view"
                     :query="query"
-                    @draggableClick="accordionChange"
+                    @fieldsClick="accordionChange"
                     @configChange="configChange"
                     @toConfig="toConfig"
                     @del="del"
@@ -66,7 +66,7 @@
                 if(event.target==event.currentTarget ){    
                     this.$refs.accordion.activeAccordion="组件";           
                 } 
-            }, 
+            },             
             //配置改变时
             configChange(configs){
                 this.configs=configs;
