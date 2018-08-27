@@ -1,6 +1,16 @@
 <template>
-    <el-form  :model="form" label-width="80px" style="width:100%;height:100%;position:relative;">            
-        <div style="overflow:auto;height:100%;">
+    <el-form  
+        :model="form"  
+        style="width:100%;height:100%;position:relative;"
+        :status-icon="forms.statusIcon"
+        :label-width="forms.labelWidth||'80px'"
+        :inline="forms.inline"
+        :label-position="forms.labelPosition"
+        :show-message="forms.showMessage"
+        :size="forms.size"
+        :disabled="forms.disabled"        
+    >            
+        <div style="overflow:auto;height:100%;" class="fields">
             <component 
                 v-for="(field, key,index) in fields" 
                 :key="index" 
@@ -10,7 +20,7 @@
                 v-field="{field:field,form:form,query:query}"
             ></component>            
         </div>  
-        <el-footer class="footer-tools" style="height:0px;width:100%;display:flex;justify-content:center;align-items:center;position:absolute;bottom:21px;">
+        <el-footer class="tools" style="height:0px;width:100%;display:flex;justify-content:center;align-items:center;position:absolute;bottom:21px;">
             <elementButton
                 v-for="(tool,key) in tools"
                 :key="key"
@@ -25,6 +35,15 @@
         props: ['query'],
         data() {
             return {
+                forms:{
+                    statusIcon:true,
+                    labelWidth:"80px",
+                    inline:false,
+                    labelPosition:"right",
+                    showMessage:true,
+                    size:"",
+                    disabled:false
+                },
                 fields: [],
                 form: {},
                 tools:[]

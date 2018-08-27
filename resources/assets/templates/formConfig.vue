@@ -1,34 +1,41 @@
 <template>
-    <el-form  :model="configs.form" status-icon label-width="80px" style="width:100%;height:100%;position:relative;">            
-        <div  style="overflow:auto;height:100%;">
-            <draggable
-                v-model="configs.fields" 
-                style="width:100%;height:100%"
-                class="fields draggable"
-                :options="{group:{ name:'view',  pull:false, put: true},preventOnFilter: true,animation: 250}"
-                @change="sort"
-                @click.native="draggableClick"
+    <el-form  
+        :model="configs.form"  
+        style="width:100%;height:100%;position:relative;"
+        :status-icon="configs.forms.statusIcon"
+        :label-width="configs.forms.labelWidth||'80px'"
+        :inline="configs.forms.inline"
+        :label-position="configs.forms.labelPosition"
+        :show-message="configs.forms.showMessage"
+        :size="configs.forms.size"
+        :disabled="configs.forms.disabled"
+    >            
+        <draggable
+            v-model="configs.fields" 
+            class="fields draggable"
+            :options="{group:{ name:'view',  pull:false, put: true},preventOnFilter: true,animation: 250}"
+            @change="sort"
+            @click.native="fieldsClick"
+        >
+            <component 
+                v-for="(field, key,index) in configs.fields" 
+                :key="index" 
+                :is="field.type" 
+                :config="field" 
+                :form="configs.form"
+                :class="{active:activeField===key}"
+                @config="toConfig"
+                @click.native="activeField=key;activeButton='';"
+                @close="del(key,'fields')"
             >
-                <component 
-                    v-for="(field, key,index) in configs.fields" 
-                    :key="index" 
-                    :is="field.type" 
-                    :config="field" 
-                    :form="configs.form"
-                    :class="{active:activeField===key}"
-                    @config="toConfig"
-                    @click.native="activeField=key;activeButton='';"
-                    @close="del(key,'fields')"
-                >
-                </component>
-            </draggable> 
-        </div>
+            </component>
+        </draggable>
         <draggable
             class="tools draggable"
-            style="width:99%;min-height:42px;display:flex;justify-content:center;align-items:center;position:absolute;bottom:21px;border:1px dashed #c0c4cc;"
             v-model="configs.tools" 
             :options="{group:{ name:'view',  pull:false, put: true},preventOnFilter: true,animation: 250}"
             @change="buttonChange"
+            @click.native="toolsClick"
         >
             <elementButton
                 v-for="(tool,key) in configs.tools"
@@ -54,6 +61,18 @@
                 activeField:'',
                 activeButton:'',
                 configs: {
+                    forms:{
+                        statusIcon:true,
+                        labelWidth:"80px",
+                        inline:false,
+                        labelPosition:"right",
+                        showMessage:true,
+                        size:"",
+                        disabled:false
+                    },
+                    fields:[],
+                    tools:[],
+                    form:{}
                 },
                 fields:[],
                 attrs:{},
@@ -106,14 +125,8 @@
                         url:'admin/table/view',
                         data:this.query.row
                     },
-                    success:function(response,option){
-                        if(!response.data.data.fields){
-                            response.data.data.fields=[];
-                        }
-                        if(!response.data.data.tools){
-                            response.data.data.tools=[];
-                        }                    
-                        option.vue.configs=response.data.data;
+                    success:function(response,option){              
+                        option.vue.configs=Object.assign(option.vue.configs,response.data.data);
                     },
                     error:function(response,option){
                         option.vue.configs=configs;
@@ -166,10 +179,68 @@
                 this.$delete(this.configs[type],key);
                 this.$emit('del')   
             },
-            //点击draggble 事件
-            draggableClick:function(event){
-                this.$emit('draggableClick',event)
-            },            
+            //点击字段框 事件
+            fieldsClick:function(event){
+                this.$emit('fieldsClick',event)
+            },
+            toolsClick(event){
+                if(event.target==event.currentTarget ){ 
+                    this.activeField='';this.activeButton=''                
+                    this.$emit('toConfig',event,this.configs.forms,[{
+                        "type":"elementSwitch",
+                        "label":"只读",
+                        "name":"disabled"
+                    },{
+                        "type":"elementSelect",
+                        "label":"尺寸",
+                        "name":"size",
+                        "options":[{
+                            label:"默认",
+                            value:""
+                        },{
+                            label:"中等",
+                            value:"medium"
+                        },{
+                            label:"小型",
+                            value:"small"
+                        },{
+                            label:"超小",
+                            value:"mini"
+                        }]
+                    },{
+                        "type":"elementSwitch",
+                        "label":"单行模式",
+                        "name":"inline"
+                    },{
+                        "type":"elementSelect",
+                        "label":"标签对齐",
+                        "name":"labelPosition",
+                        "options":[{
+                            label:"右边",
+                            value:"right"
+                        },{
+                            label:"顶部",
+                            value:"top"
+                        },{
+                            label:"左边",
+                            value:"left"
+                        }]                        
+                    },{
+                        "type":"elementText",
+                        "label":"标签宽度",
+                        "name":"labelWidth",
+                        "placeholder":"例: 80px"
+                    },{
+                        "type":"elementSwitch",
+                        "label":"校验信息",
+                        "name":"showMessage"
+                    },{
+                        "type":"elementSwitch",
+                        "label":"反馈图标",
+                        "name":"statusIcon"
+                    }])                                
+                }                 
+            },                
             //配置字段组件
             toConfig:function(event,config,attr){
                 if(attr.name){
@@ -187,3 +258,25 @@
         }
     }
 </script>
+<style>
+    /* 表单字段框 */
+    .fields.draggable{
+        overflow: auto;
+        width:auto;
+        height:100%;       
+        border:1px dashed #c0c4cc;
+    }
+    /* 表单工具框 */
+    .tools.draggable{
+        width:80%;
+        min-height:42px;
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        position:absolute;
+        bottom:21px;
+        margin-left: 10%;
+        border:1px dashed #c0c4cc;
+        cursor:pointer;
+    }
+</style>
