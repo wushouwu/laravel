@@ -148,22 +148,20 @@ export default {
         margin:5px;
     }
     /*表单组件边距处理*/
-    form .el-form-item{
+    .fields>.el-form-item{
+        margin:0px 5px 20px 5px;
+    } 
+    form>.el-form-item{
         margin-right:10px;
-        margin-bottom:20px;
-    }  
+    }       
     /*size为small时label字体大小处理*/
     .size-small-font [class*="label"]{
         font-size:13px;
     } 
     /*可拖动组件的光标*/
-    .draggable label,.footer-tools.draggable button{
+    .draggable label,.draggable button{
         cursor:move;
     }
-    /*标签换行处理
-    .label-position-top>.el-form-item__label{
-        float:none;
-    }   */ 
     /*激活的组件显示虚线框*/
     .draggable .el-form-item{
         border:1px dotted transparent;
