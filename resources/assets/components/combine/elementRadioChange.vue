@@ -13,7 +13,7 @@
             @change="change"
         >
             <item
-                v-for="(option,key,index) in config.options"
+                v-for="(option,key) in config.options"
                 :key="key"
                 :is="option.type"
                 :border="option.border"
@@ -24,7 +24,7 @@
             >{{option.label}}</item>
         </el-radio-group>
         <component 
-            v-for="(option,key,index) in config.options" 
+            v-for="(option,key) in config.options" 
             :key="key"
             :config="Object.assign({},config.itemDefault,option.config)"
             :is="option.config.type"

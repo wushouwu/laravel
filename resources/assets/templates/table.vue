@@ -221,7 +221,7 @@
 					//搜索字段为表格的字段
 					option.vue.$set(option.vue.configs.searchTools.field,'options',data.table.fields);
 					//搜索值类型为搜索字段的类型
-					let defaultSearch=option.vue.configs.searchTools.field.options.find((item,index,arr)=>{return item.value==data.form.field});
+					let defaultSearch=option.vue.configs.searchTools.field.options.find((item,index,arr)=>item.value==data.form.field);
 					option.vue.$set(option.vue.configs.searchTools.value,'type',defaultSearch?option.vue.camelCase('element-'+defaultSearch.type):'elementText');
 					//其他配置
 					option.vue.configs=Object.assign({},option.vue.configs,data);
