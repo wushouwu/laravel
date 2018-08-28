@@ -238,7 +238,7 @@
 					//搜索字段为表格的字段
 					option.vue.$set(option.vue.configs.searchTools.field,'options',data.table.fields);
 					//搜索值类型为搜索字段的类型
-					let defaultSearch=option.vue.configs.searchTools.field.options.find((item,index,arr)=>{return item.value==data.form.field});
+					let defaultSearch=option.vue.configs.searchTools.field.options.find((item,index,arr)=>item.value==data.form.field);
 					option.vue.$set(option.vue.configs.searchTools.value,'type',defaultSearch?option.vue.camelCase('element-'+defaultSearch.type):'elementText');
 					//其他配置
 					option.vue.configs=Object.assign({},option.vue.configs,data);
@@ -261,9 +261,7 @@
 		watch:{
 			//监测搜索字段变化
 			formField(newValue,oldValue){
-				let option = this.configs.searchTools.field.options.find((item)=>{
-					return item.value === this.configs.form.field;
-				});
+				let option = this.configs.searchTools.field.options.find((item)=>item.value === this.configs.form.field);
 				this.$set(this.configs.searchTools.value,'type',this.camelCase('element-'+option.type))
 				this.$set(this.configs.form,'value','');
 				switch(option.type){
@@ -415,7 +413,7 @@
 					this.$emit('toConfig',event,this.configs.table,[{
 						type:"elementAddDelete",
 						name:"operator",
-						label:"按钮项",	
+						label:"操作项",	
 						labelPositionTop:true,					
 						labels:[{label:'按钮'}],
 						itemDefault:{
@@ -447,6 +445,46 @@
 							options:[]
 						}]
 					}]);
+				}else{
+					let vue=this;
+					//字段配置
+					this.$emit('toConfig',event,this.configs.table,[{
+						type:"elementTree",
+						name:"column",
+						label:'表头',	
+						labelPositionTop:true,
+						expandOnClickNode:false,
+						itemDefault:{
+							size:"small"
+						},
+						delShow:(node,data)=>(!data.children || !data.children.length) && !data.value,
+						add:function(event,config,form){
+							config.data.push({
+								label:"点击设置"
+							});
+						},
+						nodeClick:function(data,node,vue){
+						},
+						allowDrop:(draggingNode, dropNode, type)=>dropNode.data.value&&type=='inner'?false:true,
+						draggable:true,
+						showCheckbox:true,
+						data:[{
+							"value": "TABLE_COMMENT",
+							"label": "表名",
+							"type": "text",
+							"sortable": true,
+							"fixed": true,
+							"resizable": true
+						},{
+							"value": "TABLE_NAME",
+							"label": "别名",
+							"type": "text",
+							"sortable": true,
+							"fixed": false,
+							"resizable": true
+						}]
+					}]);
+
 				}
 			},		
 			/*	删除组件
@@ -464,5 +502,3 @@
 		}
 	}
 </script>
-<style>
-</style>
