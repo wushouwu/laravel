@@ -3,7 +3,7 @@
         :label="config.label" 
         @click.native="click" 
         :label-width="config.labelWidth"
-        :class="{'label-position-top':config.labelPositionTop}"
+        :class="{'size-small-font':config.size==='small'||config.size==='mini'?true:false,'label-position-top':config.labelPositionTop}"
         style="line-height:30px;"
         class="elementAddDelete"
     >
@@ -55,14 +55,16 @@
                     icon:"el-icon-plus",
                     buttonType:"primary",
                     plain:true,
-                    circle:true
+                    circle:true,
+                    noText:true
                 },
                 deleteButton:{
                     type:"elementButton",
                     icon:"el-icon-minus",
                     buttonType:"danger",
                     plain:true,
-                    circle:true
+                    circle:true,
+                    noText:true
                 }
             }
         },
@@ -157,10 +159,6 @@
     }
 </script>
 <style>
-    /*elementAddDelete组件下的button变形处理*/
-    .elementAddDelete [class*=el-icon-]+span{
-        margin-left:0px;
-    }
     /*elementAddDelete组件下标签行高*/
     .elementAddDelete .el-form-item__content label,.elementAddDelete .el-form-item__content label+.el-form-item .el-form-item__content{
         line-height:30px;  
