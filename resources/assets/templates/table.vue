@@ -56,16 +56,30 @@
 				ref="table"
 			>
 				<el-table-column 
-					v-for="(field,key) in configs.table.fields" 
-					:key="key" 
-					:label="field.label"
-					:prop="field.value"
-					:sortable="Boolean(field.sortable)"
-					:fixed="Boolean(field.fixed)"
-					:resizable="Boolean(field.resizable)"
-					:width="field.width"
-					:show-overflow-tooltip="Boolean(field.showOverflowTooltip)"
+					v-for="(head,headkey) in configs.table.header.column"
+					v-if="configs.table.header.show"
+					:key="'1'+headkey" 
+					:label="head.label"
+					:prop="head.value"
+					:sortable="Boolean(head.sortable)"
+					:fixed="Boolean(head.fixed)"
+					:resizable="Boolean(head.resizable)"
+					:width="head.width"
+					:show-overflow-tooltip="Boolean(head.showOverflowTooltip)"
 				>
+					<el-table-column 
+						v-for="(field,key) in (head.children?head.children:[])"
+						v-if="head.children && head.children.length && configs.table.header.show"
+						:key="'2'+headkey+key" 
+						:label="field.label"
+						:prop="field.value"
+						:sortable="Boolean(field.sortable)"
+						:fixed="Boolean(field.fixed)"
+						:resizable="Boolean(field.resizable)"
+						:width="field.width"
+						:show-overflow-tooltip="Boolean(field.showOverflowTooltip)"
+					>
+					</el-table-column>				
 				</el-table-column>
 				<el-table-column
 					fixed="right"
@@ -173,6 +187,14 @@
 					form:{
 						operator: 'like'
 					},
+					"fields":[{
+						"value": "default",
+						"label":" ",
+						"type":"text",
+						"sortable": true,
+						"fixed": true,
+						"resizable": true
+					}],
 					//默认表格配置，避免首次加载表格变形
 					"table":{
 						"border":true,
@@ -181,22 +203,9 @@
 							"prop":"",
 							"order":"ascending"
 						},
-						"defaultSearch":{
-							"value": "default",
-							"label":" ",
-							"type":"text",
-							"sortable": true,
-							"fixed": true,
-							"resizable": true
-						}, 
-						"fields":[{
-							"value": "default",
-							"label":" ",
-							"type":"text",
-							"sortable": true,
-							"fixed": true,
-							"resizable": true
-						}]
+						"header":{
+							"column":[]
+						}
 					},     
 					"pagination":{
 						"currentPage":1,
@@ -218,13 +227,20 @@
 				},
 				success:function(response,option){
 					let data=response.data.data;
-					//搜索字段为表格的字段
-					option.vue.$set(option.vue.configs.searchTools.field,'options',data.table.fields);
-					//搜索值类型为搜索字段的类型
-					let defaultSearch=option.vue.configs.searchTools.field.options.find((item,index,arr)=>item.value==data.form.field);
-					option.vue.$set(option.vue.configs.searchTools.value,'type',defaultSearch?option.vue.camelCase('element-'+defaultSearch.type):'elementText');
 					//其他配置
 					option.vue.configs=Object.assign({},option.vue.configs,data);
+					//表头
+					if(!option.vue.configs.table.header||(option.vue.configs.table.header && !option.vue.configs.table.header.column)){
+						option.vue.$set(option.vue.configs.table,'header',{});
+						option.vue.$set(option.vue.configs.table.header,'column',Object.assign([],option.vue.configs.fields));
+					}
+					//处理动态字段渲染问题
+					option.vue.$set(option.vue.configs.table.header,'show',true);
+					//搜索字段
+					option.vue.$set(option.vue.configs.searchTools.field,'options',option.vue.configs.fields);
+					//搜索值类型为搜索字段的类型
+					let defaultSearch=option.vue.configs.searchTools.field.options.find((item,index,arr)=>item.value==data.form.field);
+					option.vue.$set(option.vue.configs.searchTools.value,'type',defaultSearch?option.vue.camelCase('element-'+defaultSearch.type):'elementText');					
 					//数据
 					option.vue.request();
 				}

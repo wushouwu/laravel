@@ -69,16 +69,30 @@
 				@header-click="headerClick"
 			>
 				<el-table-column 
-					v-for="(field,key) in configs.table.fields" 
-					:key="key" 
-					:label="field.label"
-					:prop="field.value"
-					:sortable="Boolean(field.sortable)"
-					:fixed="Boolean(field.fixed)"
-					:resizable="Boolean(field.resizable)"
-					:width="field.width"
-					:show-overflow-tooltip="Boolean(field.showOverflowTooltip)"
+					v-for="(head,headkey) in configs.table.header.column"
+					v-if="configs.table.header.show"
+					:key="headkey" 
+					:label="head.label"
+					:prop="head.value"
+					:sortable="Boolean(head.sortable)"
+					:fixed="Boolean(head.fixed)"
+					:resizable="Boolean(head.resizable)"
+					:width="head.width"
+					:show-overflow-tooltip="Boolean(head.showOverflowTooltip)"
 				>
+					<el-table-column 
+						v-for="(field,key) in head.children"
+						v-if="configs.table.header.show"
+						:key="key" 
+						:label="field.label"
+						:prop="field.value"
+						:sortable="Boolean(field.sortable)"
+						:fixed="Boolean(field.fixed)"
+						:resizable="Boolean(field.resizable)"
+						:width="field.width"
+						:show-overflow-tooltip="Boolean(field.showOverflowTooltip)"
+					>
+					</el-table-column>				
 				</el-table-column>
 				<el-table-column
 					fixed="right"
@@ -190,6 +204,14 @@
 					form:{
 						operator: 'like'
 					},
+					"fields":[{
+						"value": "default",
+						"label":" ",
+						"type":"text",
+						"sortable": true,
+						"fixed": true,
+						"resizable": true
+					}],
 					//默认表格配置，避免首次加载表格变形
 					"table":{
 						"border":true,
@@ -198,22 +220,9 @@
 							"prop":"",
 							"order":"ascending"
 						},
-						"defaultSearch":{
-							"value": "default",
-							"label":" ",
-							"type":"text",
-							"sortable": true,
-							"fixed": true,
-							"resizable": true
-						}, 
-						"fields":[{
-							"value": "default",
-							"label":" ",
-							"type":"text",
-							"sortable": true,
-							"fixed": true,
-							"resizable": true
-						}]
+						"header":{
+							"column":[]
+						}
 					},     
 					"pagination":{
 						"currentPage":1,
@@ -235,13 +244,20 @@
 				},
 				success:function(response,option){
 					let data=response.data.data;
-					//搜索字段为表格的字段
-					option.vue.$set(option.vue.configs.searchTools.field,'options',data.table.fields);
-					//搜索值类型为搜索字段的类型
-					let defaultSearch=option.vue.configs.searchTools.field.options.find((item,index,arr)=>item.value==data.form.field);
-					option.vue.$set(option.vue.configs.searchTools.value,'type',defaultSearch?option.vue.camelCase('element-'+defaultSearch.type):'elementText');
 					//其他配置
 					option.vue.configs=Object.assign({},option.vue.configs,data);
+					//表头
+					if(!option.vue.configs.table.header||(option.vue.configs.table.header && !option.vue.configs.table.header.column)){
+						option.vue.$set(option.vue.configs.table,'header',{});
+						option.vue.$set(option.vue.configs.table.header,'column',Object.assign([],option.vue.configs.fields));
+					}
+					//处理动态字段渲染问题
+					option.vue.$set(option.vue.configs.table.header,'show',true);
+					//搜索字段
+					option.vue.$set(option.vue.configs.searchTools.field,'options',option.vue.configs.fields);
+					//搜索值类型为搜索字段的类型
+					let defaultSearch=option.vue.configs.searchTools.field.options.find((item,index,arr)=>item.value==data.form.field);
+					option.vue.$set(option.vue.configs.searchTools.value,'type',defaultSearch?option.vue.camelCase('element-'+defaultSearch.type):'elementText');					
 					//数据
 					option.vue.request();
 				}
@@ -410,80 +426,76 @@
 			headerClick(column, event){
 				if(column.label=="操作" && !column.property){
 					let operator=JSON.parse(JSON.stringify(this.configs.table.operator));
-					this.$emit('toConfig',event,this.configs.table,[{
-						type:"elementAddDelete",
-						name:"operator",
-						label:"操作项",	
-						labelPositionTop:true,					
-						labels:[{label:'按钮'}],
-						itemDefault:{
-							style:"width:60%;display:inline-block;margin-right:2%;text-align:center;",
-							size:"mini",
-							delScript:`this.$delete(this.$parent.$children[1].config.options[0],'options');`						
+					this.$emit('toConfig',event,this.configs.table,{
+						operator:{
+							type:"elementAddDelete",
+							name:"operator",
+							label:"操作项",	
+							labelPositionTop:true,					
+							labels:[{label:'按钮'}],
+							itemDefault:{
+								style:"width:60%;display:inline-block;margin-right:2%;text-align:center;",
+								size:"mini",
+								delScript:`this.$delete(this.$parent.$children[1].config.options[0],'options');`						
+							},
+							options:operator.map((item,index,arr)=>{
+								item.script=`
+									this.$set(this.attrs[1].options[0],'options',option.attr);
+									this.$set(this.attrs[1].options[0],'name',String(option.index));
+								`;
+								return item;
+							})
 						},
-						options:operator.map((item,index,arr)=>{
-							item.script=`
-								this.$set(this.attrs[1].options[0],'options',option.attr);
-								this.$set(this.attrs[1].options[0],'name',String(option.index));
-							`;
-							return item;
-						})
-					},{
-						type:"elementComponents",
-						name:"operator",
-						label:"按钮设置",
-						labelPositionTop:true,
-						itemDefault:{
-							size:"small"
-						},
-						options:[{
+						button:{
 							type:"elementComponents",
-							name:"0",
+							name:"operator",
+							label:"按钮设置",
+							labelPositionTop:true,
 							itemDefault:{
 								size:"small"
-							},							
-							options:[]
-						}]
-					}]);
+							},
+							options:[{
+								type:"elementComponents",
+								name:"0",
+								itemDefault:{
+									size:"small"
+								},							
+								options:[]
+							}]
+						}
+					});
 				}else{
 					let vue=this;
 					//字段配置
-					this.$emit('toConfig',event,this.configs.table,[{
-						type:"elementTree",
-						name:"column",
-						label:'表头',	
-						labelPositionTop:true,
-						expandOnClickNode:false,
-						itemDefault:{
-							size:"small"
-						},
-						delShow:(node,data)=>(!data.children || !data.children.length) && !data.value,
-						add:function(event,config,form){
-							config.data.push({
-								label:"点击设置"
-							});
-						},
-						nodeClick:function(data,node,vue){
-						},
-						allowDrop:(draggingNode, dropNode, type)=>dropNode.data.value&&type=='inner'?false:true,
-						draggable:true,
-						showCheckbox:true,
-						data:[{
-							"value": "TABLE_COMMENT",
-							"label": "表名",
-							"type": "text",
-							"sortable": true,
-							"fixed": true,
-							"resizable": true
-						},{
-							"value": "TABLE_NAME",
-							"label": "别名",
-							"type": "text",
-							"sortable": true,
-							"fixed": false,
-							"resizable": true
-						}]
-					}]);
+					this.$emit('toConfig',event,this.configs.table.header,{
+						column:{
+							type:"elementTree",
+							name:"column",
+							label:'表头',	
+							labelPositionTop:true,
+							expandOnClickNode:false,
+							itemDefault:{
+								size:"small"
+							},
+							delShow:(node,data)=>(!data.children || data.children && !data.children.length) && !data.value,
+							add:function(event,config,form){
+								config.data.push({
+									label:"点击设置",
+									resizable:true	
+								});
+								form.column.push({
+									label:"点击设置",
+									resizable:true	
+								})
+							},
+							nodeClick:function(data,node,vue){
+							},
+							allowDrop:(draggingNode, dropNode, type)=>dropNode.data.value&&type=='inner'?false:true,
+							draggable:true,
+							showCheckbox:true,
+							data:Object.assign([],this.configs.table.header.column)
+						}
+					});
 
 				}
 			},		

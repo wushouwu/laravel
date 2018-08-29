@@ -26,15 +26,24 @@
             :allow-drop="config.allowDrop"
             :allow-drag="config.allowDrag"
             @node-click="config.nodeClick"
-            @node-drop="nodeDrop"
+            @node-drop="dataChange"
         >       
             <span slot-scope="{ node, data }">
-                <span class="label">{{ node.label }}</span>
+                <el-popover
+                    placement="top"
+                    width="250"
+                    v-model="node.edit"
+                >
+                    <elementText :config="value" :form="data"></elementText>
+                    <elementText :config="label" :form="data"></elementText>
+                    <elementButton :config="cancelButton" @buttonClick="node.edit=false"></elementButton>
+                    <span class="label" slot="reference">{{ node.label }}</span>
+                </el-popover>                
                 <span>
                     <elementButton
                         :config="deleteButton"
                         @buttonClick="del($event,node,data)"
-                        v-show="config.delShow(node,data)"
+                        v-show="config.delShow(node,data)&&delShow"
                     ></elementButton>
                 </span>
             </span>        
@@ -47,9 +56,10 @@
         components: {
             draggable,
         },
-        props: ['config','form'],
+        props: ['config','form','show'],
         data(){
             return {
+                delShow:true,
                 addButton:{
                     type:"elementButton",
                     icon:"el-icon-plus",
@@ -67,6 +77,31 @@
                     noText:true,
                     size:"mini",
                     wrapper:"span",
+                },
+                cancelButton:{
+                    type:"elementButton",
+                    buttonType:"primary",
+                    text:"退出",
+                    plain:true,
+                    size:"mini",
+                    wrapper:"div",
+                    style:"text-align:right;"
+                },
+                value:{
+                    type:"elementText",
+                    label:"字段",
+                    name:"value",
+                    disabled:true,
+                    size:"small",
+                    labelWidth:"60px",
+                    placeholder:"无"
+                },                
+                label:{
+                    type:"elementText",
+                    label:"标签",
+                    name:"label",
+                    size:"small",
+                    labelWidth:"60px"
                 }
             }
         },
@@ -91,14 +126,22 @@
                         item__content.style.cssText="marginLeft:0px;";//clear:both;
                     }
                 }
-            },           
+            },  
+            //数据改变后渲染
+            dataChange(){
+                this.delShow=false;
+                let vue=this;
+                vue.$set(vue.form,'show',false);
+                this.$nextTick(()=>{
+                    vue.$set(vue.form,vue.config.name,Object.assign([],vue.config.data));
+                    vue.delShow=true;
+                    vue.$set(vue.form,'show',true);
+                });
+            },  
+            //删除节点   
             del(event,node,data){
                 this.$refs.tree.remove(node);
-            },
-            nodeDrop:function(dragNode,dropNode,type,event){
-                if(type=='inner'){
-                    this.$set(dropNode.data,'value','');
-                }
+                this.dataChange();
             },  
             click: function(event){
                 this.$emit('config',event,this.config,{
