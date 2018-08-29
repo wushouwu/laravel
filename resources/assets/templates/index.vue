@@ -190,5 +190,9 @@ export default {
     }
     .draggable .el-form-item.active .my-close::after{
         content:'×'
-    }    
+    }  
+    /* table错位问题 */
+    body .el-table th.gutter{
+        display: table-cell!important;
+    }      
 </style>
