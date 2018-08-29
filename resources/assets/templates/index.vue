@@ -194,5 +194,9 @@ export default {
     /* table错位问题 */
     body .el-table th.gutter{
         display: table-cell!important;
-    }      
+    }  
+    /* 有背景分页圆形 */
+    .el-pagination.is-background .el-pager li,.el-pagination.is-background button[type="button"]{
+        border-radius:14px;
+    }        
 </style>
