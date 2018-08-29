@@ -6,10 +6,24 @@
         :class="{'size-small-font':config.size==='small'||config.size==='mini'?true:false,'label-position-top':config.labelPositionTop}"
         class="elementTree"
     >
-        <elementButton
-            :config="addButton"
-            @buttonClick="config.add($event,config,form)"
-        ></elementButton>
+        <div 
+            class="tree-head"
+            :class="{'size-small-font':config.itemDefault.size==='small'||config.itemDefault.size==='mini'?true:false,addShow:'addShow' in config?true:false}"
+        >
+            <span class="label" style="">显示</span>
+            <span class="label" slot="reference" style="display:inline-block;width: 65px;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;vertical-align: middle;">列名</span>
+            <span class="label">
+                <span 
+                    v-for="(head,key) in config.header"
+                    :key="key"
+                    :style="head.style"
+                >{{head.text}}</span>
+            </span>
+            <elementButton
+                :config="addButton"
+                @buttonClick="config.add($event,config,form)"
+            ></elementButton>            
+        </div>                
         <el-tree
             ref="tree"
             :class="{'size-small-font':config.itemDefault.size==='small'||config.itemDefault.size==='mini'?true:false,delShow:'delShow' in config?true:false}"
@@ -27,25 +41,29 @@
             :allow-drag="config.allowDrag"
             @node-click="config.nodeClick"
             @node-drop="dataChange"
-        >       
+        >
             <span slot-scope="{ node, data }">
                 <el-popover
                     placement="top"
                     width="250"
                     v-model="node.edit"
+                    :disabled="config.popoverDisabled"
                 >
                     <elementText :config="value" :form="data"></elementText>
                     <elementText :config="label" :form="data"></elementText>
                     <elementButton :config="cancelButton" @buttonClick="node.edit=false"></elementButton>
-                    <span class="label" slot="reference">{{ node.label }}</span>
-                </el-popover>                
-                <span>
-                    <elementButton
-                        :config="deleteButton"
-                        @buttonClick="del($event,node,data)"
-                        v-show="config.delShow(node,data)&&delShow"
-                    ></elementButton>
-                </span>
+                    <span style="display:inline-block;width: 65px;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;vertical-align: middle;" class="label" slot="reference">{{ node.label }}</span>
+                </el-popover>
+                <item
+                    :is="config.item.type"
+                    :config="config.item"
+                    :form="node"
+                ></item>
+                <elementButton
+                    :config="deleteButton"
+                    @buttonClick="del($event,node,data)"
+                    v-show="config.delShow(node,data)&&delShow"
+                ></elementButton>
             </span>        
         </el-tree>
     </el-form-item>
@@ -56,7 +74,7 @@
         components: {
             draggable,
         },
-        props: ['config','form','show'],
+        props: ['config','form'],
         data(){
             return {
                 delShow:true,
@@ -66,7 +84,8 @@
                     buttonType:"primary",
                     plain:true,
                     circle:true,
-                    size:"mini"
+                    size:"mini",
+                    wrapper:"span"
                 },
                 deleteButton:{
                     type:"elementButton",
@@ -88,13 +107,13 @@
                     style:"text-align:right;"
                 },
                 value:{
-                    type:"elementText",
+                    type:"elementSelect",
                     label:"字段",
                     name:"value",
-                    disabled:true,
+                   // disabled:true,
                     size:"small",
                     labelWidth:"60px",
-                    placeholder:"无"
+                    options:[]
                 },                
                 label:{
                     type:"elementText",
@@ -104,6 +123,9 @@
                     labelWidth:"60px"
                 }
             }
+        },
+        created(){
+            console.log(this.form)
         },
         mounted(){
             this.labelPositionTop(); 
@@ -123,7 +145,7 @@
                 if(this.config.labelPositionTop){
                     let item__content=this.$el.querySelector('.el-form-item__content');
                     if(item__content){
-                        item__content.style.cssText="marginLeft:0px;";//clear:both;
+                        item__content.style.cssText="marginLeft:0px;clear:both;";
                     }
                 }
             },  
@@ -173,7 +195,12 @@
     }
 </script>
 <style>
-.delShow .el-tree-node__content{
-    height:33px;
-}
+    .delShow .el-tree-node__content{
+        height:33px;
+    }
+    .tree-head::before{
+        content: "\E60E";
+        color: transparent;
+        padding:4px;
+    }
 </style>
