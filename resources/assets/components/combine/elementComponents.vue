@@ -1,5 +1,6 @@
 <template>
-    <el-form-item
+    <wrapper
+        :is="config.wrapper||'el-form-item'"
         :prop="config.name"
         :label="config.label" 
         :label-width="config.labelWidth"
@@ -7,14 +8,23 @@
         :style="config.style"
     >
         <component 
+            v-if="option.type.indexOf('element')>=0"
             v-for="(option,key) in config.options"
             :key="key"
             :is="option.type"
             :config="Object.assign({},config.itemDefault,option)"
             :form="form[config.name]"
             @e="e"
-        ></component>
-    </el-form-item>
+        >{{option.text}}</component>
+        <componen
+            v-if="option.type.indexOf('element')<0"
+            v-for="(option,key) in config.options"
+            :key="key"
+            :is="option.type"
+            v-model="form[config.name][option.name]"
+            :style="config.itemDefault&&config.itemDefault.style?config.itemDefault.style:''"            
+        >{{option.text}}</componen>
+    </wrapper>
 </template>
 <script>
     export default {
