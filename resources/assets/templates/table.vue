@@ -187,14 +187,7 @@
 					form:{
 						operator: 'like'
 					},
-					"fields":[{
-						"value": "default",
-						"label":" ",
-						"type":"text",
-						"sortable": true,
-						"fixed": true,
-						"resizable": true
-					}],
+					"fields":[],
 					//默认表格配置，避免首次加载表格变形
 					"table":{
 						"border":true,
@@ -204,8 +197,17 @@
 							"order":"ascending"
 						},
 						"header":{
-							"column":[]
-						}
+							"column":[{
+								"value": "default",
+								"label":" ",
+								"type":"text",
+								"sortable": true,
+								"fixed": true,
+								"resizable": true
+							}],
+							"show":true
+						},
+						"operator":[]
 					},     
 					"pagination":{
 						"currentPage":1,

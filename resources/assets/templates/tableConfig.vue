@@ -204,14 +204,7 @@
 					form:{
 						operator: 'like'
 					},
-					"fields":[{
-						"value": "default",
-						"label":" ",
-						"type":"text",
-						"sortable": true,
-						"fixed": true,
-						"resizable": true
-					}],
+					"fields":[],
 					//默认表格配置，避免首次加载表格变形
 					"table":{
 						"border":true,
@@ -221,8 +214,17 @@
 							"order":"ascending"
 						},
 						"header":{
-							"column":[]
-						}
+							"column":[{
+								"value": "default",
+								"label":" ",
+								"type":"text",
+								"sortable": true,
+								"fixed": true,
+								"resizable": true
+							}],
+							"show":true
+						},
+						"operator":[]
 					},     
 					"pagination":{
 						"currentPage":1,
@@ -440,8 +442,8 @@
 							},
 							options:operator.map((item,index,arr)=>{
 								item.script=`
-									this.$set(this.attrs[1].options[0],'options',option.attr);
-									this.$set(this.attrs[1].options[0],'name',String(option.index));
+									this.$set(this.attrs['button'].options[0],'options',option.attr);
+									this.$set(this.attrs['button'].options[0],'name',String(option.index));
 								`;
 								return item;
 							})
@@ -466,13 +468,12 @@
 					});
 				}else{
 					let vue=this;
-					//字段配置
+					//表头配置
 					this.$emit('toConfig',event,this.configs.table.header,{
 						column:{
 							type:"elementTree",
 							name:"column",
-							label:'表头',	
-							labelPositionTop:true,
+							labelWidth:'0px',	
 							expandOnClickNode:false,
 							itemDefault:{
 								size:"small"
@@ -481,19 +482,47 @@
 							add:function(event,config,form){
 								config.data.push({
 									label:"点击设置",
+									align:"center",
 									resizable:true	
 								});
 								form.column.push({
 									label:"点击设置",
+									align:"center",
 									resizable:true	
 								})
-							},
-							nodeClick:function(data,node,vue){
 							},
 							allowDrop:(draggingNode, dropNode, type)=>dropNode.data.value&&type=='inner'?false:true,
 							draggable:true,
 							showCheckbox:true,
-							data:Object.assign([],this.configs.table.header.column)
+							data:Object.assign([],this.configs.table.header.column),
+							header:[{
+								text:"拖动",
+								style:"padding: 4px;"
+							},{
+								text:"排序",
+								style:"padding: 4px;"
+							},{
+								text:"固定",
+								style:"padding: 4px;"
+							}],
+							item:{
+								type:"elementComponents",
+								name:"data",
+								wrapper:"span",
+								itemDefault:{
+									style:"margin-left:10px;"
+								},
+								options:[{
+									type:"el-checkbox",
+									name:"resizable"
+								},{
+									type:"el-checkbox",
+									name:"sortable"
+								},{
+									type:"el-checkbox",
+									name:"fixed"
+								}]
+							}
 						}
 					});
 
