@@ -7993,10 +7993,6 @@ module.exports = Component.exports
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
-function injectStyle (ssrContext) {
-  if (disposed) return
-  __webpack_require__(303)
-}
 var normalizeComponent = __webpack_require__(0)
 /* script */
 var __vue_script__ = __webpack_require__(305)
@@ -8005,7 +8001,7 @@ var __vue_template__ = __webpack_require__(306)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
-var __vue_styles__ = injectStyle
+var __vue_styles__ = null
 /* scopeId */
 var __vue_scopeId__ = null
 /* moduleIdentifier (server only) */
@@ -75052,7 +75048,7 @@ exports = module.exports = __webpack_require__(5)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/*elementAddDelete组件下标签行高*/\n.elementAddDelete .el-form-item__content label,.elementAddDelete .el-form-item__content label+.el-form-item .el-form-item__content{\n    line-height:30px;\n}\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/*elementAddDelete组件下标签行高*/\n.elementAddDelete .el-form-item__content label,.elementAddDelete .el-form-item__content label+.el-form-item .el-form-item__content{\n    line-height:30px;\n}\n", ""]);
 
 // exports
 
@@ -75140,6 +75136,47 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -75165,8 +75202,28 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 plain: true,
                 circle: true,
                 noText: true
+            },
+            formKey: [],
+            optionKey: {
+                type: 'elementSelect',
+                name: '',
+                allowCreate: true,
+                options: [{
+                    label: 'url',
+                    value: 'url'
+                }, {
+                    label: '表名',
+                    value: 'TABLE_NAME'
+                }]
+            },
+            optionValue: {
+                type: 'elementText',
+                name: ''
             }
         };
+    },
+    created: function created() {
+        this.formKey = Object.keys(this.form[this.config.name]);
     },
     mounted: function mounted() {
         this.labelPositionTop();
@@ -75202,27 +75259,48 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }
         },
         add: function add(event, config) {
-            this.config.options.push(Object.assign([], this.config.options[0]));
-            var form = Object.assign({}, this.form[this.config.name][0]);
-            if ('label' in form && 'value' in form) {
-                form.value = '';
-                form.label = '';
+            if (this.config.options.length) {
+                this.config.options.push(Object.assign([], this.config.options[0]));
+                var form = Object.assign({}, this.form[this.config.name][0]);
+                if ('label' in form && 'value' in form) {
+                    form.value = '';
+                    form.label = '';
+                }
+                this.form[this.config.name].push(form);
+            } else {
+                var index = String(Object.values(this.config.options).length);
+                var key = '参数' + index;
+                var option = [this.configHandle(this.optionKey, index), this.configHandle(this.optionValue, key)];
+                this.$set(this.config.options, key, option);
+                this.$set(this.form[this.config.name], key, '');
+                this.formKey = Object.keys(this.form[this.config.name]);
             }
-            this.form[this.config.name].push(form);
         },
         del: function del(event, config, index) {
             if (this.config.itemDefault.delScript) {
                 eval(this.config.itemDefault.delScript);
             }
-            if (this.config.options.length > 1) {
+            if (this.config.options.length > 1 || this.config.options.length === undefined) {
                 this.$delete(this.config.options, index);
                 this.$delete(this.form[this.config.name], index);
+                this.$delete(this.formKey, this.formKey.findIndex(function (item) {
+                    return item === index;
+                }));
             } else {
                 this.$message({
                     message: '最少须有一项',
                     type: 'warning'
                 });
             }
+        },
+
+        //处理config
+        configHandle: function configHandle(config, name) {
+            return Object.assign({}, config, { name: name }, this.config.itemDefault);
+        },
+        selectChange: function selectChange(event, key, index) {
+            this.$set(this.form[this.config.name], event, this.form[this.config.name][key]);
+            this.$delete(this.form[this.config.name], key);
         },
 
         click: function click(event) {
@@ -76839,7 +76917,7 @@ var render = function() {
     [
       _c(
         "div",
-        { staticStyle: { "line-height": "30px" } },
+        { staticStyle: { "line-height": "30px", "font-size": "0px" } },
         [
           _vm._l(_vm.config.labels, function(label, key) {
             return _c(
@@ -76867,18 +76945,13 @@ var render = function() {
       ),
       _vm._v(" "),
       _vm._l(_vm.config.options, function(option, key) {
-        return _c(
-          "div",
-          { key: key },
-          [
-            _vm._l(option.length ? option : _vm.config.options, function(
-              item,
-              k
-            ) {
-              return (!option.length
-              ? key == k
-              : true)
-                ? _c(item.type, {
+        return 0 in _vm.config.options && 0 in _vm.config.options[0]
+          ? _c(
+              "div",
+              { key: key, staticStyle: { "font-size": "0px" } },
+              [
+                _vm._l(option, function(item, k) {
+                  return _c(item.type, {
                     key: k,
                     tag: "component",
                     attrs: {
@@ -76888,27 +76961,110 @@ var render = function() {
                     },
                     on: { config: _vm.itemConfig }
                   })
-                : _vm._e()
-            }),
-            _vm._v(" "),
-            _c("elementButton", {
-              staticStyle: { width: "auto" },
-              attrs: {
-                config: Object.assign(
-                  {},
-                  _vm.config.itemDefault,
-                  _vm.deleteButton
-                )
-              },
-              on: {
-                buttonClick: function($event) {
-                  _vm.del($event, _vm.deleteButton, key)
-                }
-              }
-            })
-          ],
-          2
-        )
+                }),
+                _vm._v(" "),
+                _c("elementButton", {
+                  staticStyle: { width: "auto" },
+                  attrs: {
+                    config: Object.assign(
+                      {},
+                      _vm.config.itemDefault,
+                      _vm.deleteButton
+                    )
+                  },
+                  on: {
+                    buttonClick: function($event) {
+                      _vm.del($event, _vm.deleteButton, key)
+                    }
+                  }
+                })
+              ],
+              2
+            )
+          : _vm._e()
+      }),
+      _vm._v(" "),
+      _vm._l(_vm.config.options, function(option, key) {
+        return 0 in _vm.config.options && !(0 in _vm.config.options[0])
+          ? _c(
+              "div",
+              { key: key, staticStyle: { "font-size": "0px" } },
+              [
+                _c(option.type, {
+                  tag: "component",
+                  attrs: {
+                    config: Object.assign({}, _vm.config.itemDefault, option),
+                    form: _vm.form[_vm.config.name][key],
+                    index: key
+                  },
+                  on: { config: _vm.itemConfig }
+                }),
+                _vm._v(" "),
+                _c("elementButton", {
+                  staticStyle: { width: "auto" },
+                  attrs: {
+                    config: Object.assign(
+                      {},
+                      _vm.config.itemDefault,
+                      _vm.deleteButton
+                    )
+                  },
+                  on: {
+                    buttonClick: function($event) {
+                      _vm.del($event, _vm.deleteButton, key)
+                    }
+                  }
+                })
+              ],
+              1
+            )
+          : _vm._e()
+      }),
+      _vm._v(" "),
+      _vm._l(_vm.config.options, function(option, key, index) {
+        return !_vm.config.options.length
+          ? _c(
+              "div",
+              { key: key, staticStyle: { "font-size": "0px" } },
+              [
+                _c("elementSelect", {
+                  attrs: {
+                    config: _vm.configHandle(_vm.optionKey, String(index)),
+                    form: _vm.formKey
+                  },
+                  on: {
+                    selectChange: function($event) {
+                      _vm.selectChange($event, key, index)
+                    }
+                  }
+                }),
+                _vm._v(" "),
+                _c("elementText", {
+                  attrs: {
+                    config: _vm.configHandle(_vm.optionValue, key),
+                    form: _vm.form[_vm.config.name]
+                  }
+                }),
+                _vm._v(" "),
+                _c("elementButton", {
+                  staticStyle: { width: "auto" },
+                  attrs: {
+                    config: Object.assign(
+                      {},
+                      _vm.config.itemDefault,
+                      _vm.deleteButton
+                    )
+                  },
+                  on: {
+                    buttonClick: function($event) {
+                      _vm.del($event, _vm.deleteButton, key)
+                    }
+                  }
+                })
+              ],
+              1
+            )
+          : _vm._e()
       })
     ],
     2
@@ -77249,7 +77405,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         change: function change(value) {
             this.$emit('radioChange', value, this.config);
-            this.$emit('e', value, this.config);
+            this.$emit('e', value, { config: this.config });
         }
     }
 });
@@ -77473,7 +77629,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: ['config'],
+    props: ['config', 'form'],
     mounted: function mounted() {
         //组件添加删除按钮
         var vue = this,
@@ -77491,6 +77647,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.$emit('buttonClick', event, this.config);
         },
         click: function click(event) {
+            var query = this.form && this.form.query ? this.form.query : { "参数": "" };
             this.$emit('config', event, this.config, {
                 textShow: {
                     name: "textShow",
@@ -77620,6 +77777,22 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                             type: "elementTextarea"
                         }
                     }]
+                },
+                query: {
+                    type: "elementAddDelete",
+                    labelPositionTop: true,
+                    name: "query",
+                    label: "参数",
+                    labels: [{
+                        label: "参数名"
+                    }, {
+                        label: "参数值"
+                    }],
+                    itemDefault: {
+                        size: "mini",
+                        style: "width:40%;display:inline-block;margin-right:2%"
+                    },
+                    options: query
                 }
             });
         }
@@ -78891,7 +79064,7 @@ exports = module.exports = __webpack_require__(5)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -78902,6 +79075,7 @@ exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
 //
 //
 //
@@ -79209,11 +79383,12 @@ var render = function() {
             ? true
             : false
       },
+      style: _vm.config.style,
       attrs: {
-        label: _vm.config.label,
-        "label-width": _vm.config.labelWidth,
         prop: _vm.config.name,
-        rules: _vm.config.rules
+        rules: _vm.config.rules,
+        label: _vm.config.label,
+        "label-width": _vm.config.labelWidth
       },
       nativeOn: {
         click: function($event) {
@@ -80385,7 +80560,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 type: "elementSelect",
                 label: "字段",
                 name: "value",
-                // disabled:true,
+                allowCreate: true,
                 size: "small",
                 labelWidth: "60px",
                 options: []
@@ -80399,9 +80574,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }
         };
     },
-    created: function created() {
-        console.log(this.form);
-    },
+    created: function created() {},
     mounted: function mounted() {
         this.labelPositionTop();
     },
@@ -80419,6 +80592,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 if (item__content) {
                     item__content.style.cssText = "marginLeft:0px;clear:both;";
                 }
+            }
+        },
+
+        //点击节点
+        nodeClick: function nodeClick() {
+            if (typeof this.config.nodeClick == 'function') {
+                this.config.nodeClick();
             }
         },
 
@@ -80533,10 +80713,18 @@ var render = function() {
           _c(
             "span",
             { staticClass: "label" },
-            _vm._l(_vm.config.header, function(head, key) {
-              return _c("span", { key: key, style: head.style }, [
-                _vm._v(_vm._s(head.text))
-              ])
+            _vm._l(_vm.config.labels, function(label, key) {
+              return _c(
+                "span",
+                {
+                  key: key,
+                  style:
+                    (_vm.config.labelDefault && _vm.config.labelDefault.style
+                      ? _vm.config.labelDefault.style
+                      : "") + label.style
+                },
+                [_vm._v(_vm._s(label.label))]
+              )
             })
           ),
           _vm._v(" "),
@@ -80576,7 +80764,7 @@ var render = function() {
           "allow-drop": _vm.config.allowDrop,
           "allow-drag": _vm.config.allowDrag
         },
-        on: { "node-click": _vm.config.nodeClick, "node-drop": _vm.dataChange },
+        on: { "node-click": _vm.nodeClick, "node-drop": _vm.dataChange },
         scopedSlots: _vm._u([
           {
             key: "default",
@@ -81471,7 +81659,7 @@ exports = module.exports = __webpack_require__(5)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/* 表单字段框 */\n.fields.draggable{\n    overflow: auto;\n    width:auto;\n    height:100%;       \n    border:1px dashed #c0c4cc;\n}\n/* 表单工具框 */\n.tools.draggable{\n    width:80%;\n    min-height:42px;\n    display:-webkit-box;\n    display:-ms-flexbox;\n    display:flex;\n    -webkit-box-pack:center;\n        -ms-flex-pack:center;\n            justify-content:center;\n    -webkit-box-align:center;\n        -ms-flex-align:center;\n            align-items:center;\n    position:absolute;\n    bottom:21px;\n    margin-left: 10%;\n    border:1px dashed #c0c4cc;\n    cursor:pointer;\n}\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/* 表单字段框 */\n.fields.draggable{\n    overflow: auto;\n    width:auto;\n    height:100%;       \n    border:1px dashed #c0c4cc;\n}\n/* 表单工具框 */\n.tools.draggable{\n    width:80%;\n    min-height:42px;\n    display:-webkit-box;\n    display:-ms-flexbox;\n    display:flex;\n    -webkit-box-pack:center;\n        -ms-flex-pack:center;\n            justify-content:center;\n    -webkit-box-align:center;\n        -ms-flex-align:center;\n            align-items:center;\n    position:absolute;\n    bottom:21px;\n    margin-left: 10%;\n    border:1px dashed #c0c4cc;\n    cursor:pointer;\n}\n", ""]);
 
 // exports
 
@@ -81484,6 +81672,7 @@ exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuedraggable__ = __webpack_require__(22);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuedraggable___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vuedraggable__);
+//
 //
 //
 //
@@ -81846,7 +82035,7 @@ var render = function() {
           return _c("elementButton", {
             key: key,
             class: { active: _vm.activeButton === key },
-            attrs: { config: tool },
+            attrs: { config: tool, form: tool },
             on: {
               config: _vm.toConfig,
               close: function($event) {
@@ -82137,7 +82326,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				form: {
 					operator: 'like'
 				},
-				"fields": [],
 				//默认表格配置，避免首次加载表格变形
 				"table": {
 					"border": true,
@@ -82147,6 +82335,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 						"order": "ascending"
 					},
 					"header": {
+						"fields": [],
 						"column": [{
 							"value": "default",
 							"label": " ",
@@ -82183,14 +82372,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				//其他配置
 				option.vue.configs = Object.assign({}, option.vue.configs, data);
 				//表头
-				if (!option.vue.configs.table.header || option.vue.configs.table.header && !option.vue.configs.table.header.column) {
-					option.vue.$set(option.vue.configs.table, 'header', {});
-					option.vue.$set(option.vue.configs.table.header, 'column', Object.assign([], option.vue.configs.fields));
+				if (!option.vue.configs.table.header.column || option.vue.configs.table.header.column && !option.vue.configs.table.header.column.length) {
+					option.vue.$set(option.vue.configs.table.header, 'column', Object.assign([], option.vue.configs.table.header.fields));
 				}
 				//处理动态字段渲染问题
 				option.vue.$set(option.vue.configs.table.header, 'show', true);
 				//搜索字段
-				option.vue.$set(option.vue.configs.searchTools.field, 'options', option.vue.configs.fields);
+				option.vue.$set(option.vue.configs.searchTools.field, 'options', option.vue.configs.table.header.fields);
 				//搜索值类型为搜索字段的类型
 				var defaultSearch = option.vue.configs.searchTools.field.options.find(function (item, index, arr) {
 					return item.value == data.form.field;
@@ -82454,15 +82642,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 						draggable: true,
 						showCheckbox: true,
 						data: Object.assign([], this.configs.table.header.column),
-						header: [{
-							text: "拖动",
+						labelDefault: {
 							style: "padding: 4px;"
+						},
+						labels: [{
+							label: "拖动"
 						}, {
-							text: "排序",
-							style: "padding: 4px;"
+							label: "排序"
 						}, {
-							text: "固定",
-							style: "padding: 4px;"
+							label: "固定"
 						}],
 						item: {
 							type: "elementComponents",
@@ -82761,7 +82949,7 @@ var render = function() {
                           operator.type,
                           {
                             key: key,
-                            tag: "el-button",
+                            tag: "operator",
                             style:
                               _vm.configs.table.operator.length - 1 != key
                                 ? "margin-right:10px;"
@@ -82879,46 +83067,8 @@ if (false) {
 }
 
 /***/ }),
-/* 303 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(304);
-if(typeof content === 'string') content = [[module.i, content, '']];
-if(content.locals) module.exports = content.locals;
-// add the styles to the DOM
-var update = __webpack_require__(7)("7f82b12d", content, false, {});
-// Hot Module Replacement
-if(false) {
- // When the styles change, update the <style> tags
- if(!content.locals) {
-   module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-b0e36492\",\"scoped\":false,\"hasInlineConfig\":true}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./table.vue", function() {
-     var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-b0e36492\",\"scoped\":false,\"hasInlineConfig\":true}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./table.vue");
-     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-     update(newContent);
-   });
- }
- // When the module is disposed, remove the <style> tags
- module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 304 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(5)(false);
-// imports
-
-
-// module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
-
-// exports
-
-
-/***/ }),
+/* 303 */,
+/* 304 */,
 /* 305 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -83113,7 +83263,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				form: {
 					operator: 'like'
 				},
-				"fields": [],
 				//默认表格配置，避免首次加载表格变形
 				"table": {
 					"border": true,
@@ -83123,6 +83272,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 						"order": "ascending"
 					},
 					"header": {
+						"fields": [],
 						"column": [{
 							"value": "default",
 							"label": " ",
@@ -83159,14 +83309,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				//其他配置
 				option.vue.configs = Object.assign({}, option.vue.configs, data);
 				//表头
-				if (!option.vue.configs.table.header || option.vue.configs.table.header && !option.vue.configs.table.header.column) {
-					option.vue.$set(option.vue.configs.table, 'header', {});
-					option.vue.$set(option.vue.configs.table.header, 'column', Object.assign([], option.vue.configs.fields));
+				if (!option.vue.configs.table.header.column || option.vue.configs.table.header.column && !option.vue.configs.table.header.column.length) {
+					option.vue.$set(option.vue.configs.table.header, 'column', Object.assign([], option.vue.configs.table.header.fields));
 				}
 				//处理动态字段渲染问题
 				option.vue.$set(option.vue.configs.table.header, 'show', true);
 				//搜索字段
-				option.vue.$set(option.vue.configs.searchTools.field, 'options', option.vue.configs.fields);
+				option.vue.$set(option.vue.configs.searchTools.field, 'options', option.vue.configs.table.header.fields);
 				//搜索值类型为搜索字段的类型
 				var defaultSearch = option.vue.configs.searchTools.field.options.find(function (item, index, arr) {
 					return item.value == data.form.field;
@@ -83309,7 +83458,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		//查看数据
 		view: function view(row, operator) {
 			this.addTab({
-				name: this.query.TABLE_NAME + '-' + row.id + '-view',
+				name: this.query.TABLE_NAME + '-' + row.id + '-' + operator.text,
 				content: 'formVue',
 				query: Object.assign({}, this.query, { row: row }, operator.query)
 			});
@@ -83317,7 +83466,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 		//编辑数据
 		edit: function edit(row, operator) {
-			var title = this.query.TABLE_COMMENT + '-' + this.query.view_name + '-' + row.id + '-编辑';
+			var title = this.query.TABLE_COMMENT + '-' + this.query.view_name + '-' + row.id + '-' + operator.text;
 			this.addTab({
 				name: title,
 				content: operator.query.content || 'formVue',
@@ -83487,7 +83636,7 @@ var render = function() {
                   ? _c(
                       "el-table-column",
                       {
-                        key: "1" + headkey,
+                        key: headkey,
                         attrs: {
                           label: head.label,
                           prop: head.value,
@@ -83500,15 +83649,10 @@ var render = function() {
                           )
                         }
                       },
-                      _vm._l(head.children ? head.children : [], function(
-                        field,
-                        key
-                      ) {
-                        return head.children &&
-                          head.children.length &&
-                          _vm.configs.table.header.show
+                      _vm._l(head.children, function(field, key) {
+                        return _vm.configs.table.header.show
                           ? _c("el-table-column", {
-                              key: "2" + headkey + key,
+                              key: key,
                               attrs: {
                                 label: field.label,
                                 prop: field.value,
