@@ -14,10 +14,10 @@
             <span class="label" slot="reference" style="display:inline-block;width: 65px;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;vertical-align: middle;">列名</span>
             <span class="label">
                 <span 
-                    v-for="(head,key) in config.header"
+                    v-for="(label,key) in config.labels"
                     :key="key"
-                    :style="head.style"
-                >{{head.text}}</span>
+                    :style="(config.labelDefault&&config.labelDefault.style?config.labelDefault.style:'')+label.style"
+                >{{label.label}}</span>
             </span>
             <elementButton
                 :config="addButton"
@@ -39,7 +39,7 @@
             :check-strictly="config.checkStrictly"
             :allow-drop="config.allowDrop"
             :allow-drag="config.allowDrag"
-            @node-click="config.nodeClick"
+            @node-click="nodeClick"
             @node-drop="dataChange"
         >
             <span slot-scope="{ node, data }">
@@ -110,7 +110,7 @@
                     type:"elementSelect",
                     label:"字段",
                     name:"value",
-                   // disabled:true,
+                    allowCreate:true,
                     size:"small",
                     labelWidth:"60px",
                     options:[]
@@ -125,7 +125,6 @@
             }
         },
         created(){
-            console.log(this.form)
         },
         mounted(){
             this.labelPositionTop(); 
@@ -148,7 +147,13 @@
                         item__content.style.cssText="marginLeft:0px;clear:both;";
                     }
                 }
-            },  
+            },
+            //点击节点
+            nodeClick(){
+                if(typeof(this.config.nodeClick)=='function'){
+                    this.config.nodeClick();
+                }
+            },            
             //数据改变后渲染
             dataChange(){
                 this.delShow=false;
