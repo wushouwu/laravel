@@ -96,12 +96,23 @@ class table extends Controller{
         $type=$request->input('type','');
         $TABLE_NAME=$request->input('TABLE_NAME','');
         if($view){
-            $tables = DB::table('view')->where([
+            $json=$tables = DB::table('view')->where([
                 ['view_name','=',$view],
                 ['type','=',$type],
                 ['TABLE_NAME','=',$TABLE_NAME]
             ])->value('json');
-            $data=$tables?['data'=> json_decode($tables,true)]:['msg'=>'没有视图配置'];
+            $json=json_decode($json,true);
+            if($json){
+                if($type=='table' && $TABLE_NAME){
+                    $fields=$this->field($request)->original['data'];
+                    if(count($fields)){
+                        $json['table']['header']['fields']=$fields;
+                    }
+                }
+                $data=['data'=> $json];
+            }else{
+                $data=['msg'=>'没有视图配置'];
+            }
         }else{
             if($type=='table'){
                 $data=['data'=>$this->tableView($request)->original];
@@ -147,12 +158,60 @@ class table extends Controller{
                     ->where('TABLE_SCHEMA',$this->db)
                     ->where('TABLE_NAME',$TABLE_NAME)
                     ->get();
-            $data=['data'=>$fields,'a'=>$TABLE_NAME,'b'=>$this->db,'cout'=>count($fields)];
+            $data=['data'=>$fields];
         }else{
             $data=['msg'=>'表名不存在'];
         }
         return response()->json($data);
-    }    
+    } 
+    //字段处理
+    public function fieldOperate(Request $request){
+        $TABLE_NAME=$request->input('TABLE_NAME','');
+        $form=$request->input('form',[]);
+        $row=$request->input('row',[]);
+        if (Schema::hasTable($TABLE_NAME)) {
+            if($form){
+                Schema::table($TABLE_NAME, function (Blueprint $table) {
+                    switch($form['type']){
+                        case 'varchar':
+                            $field=$table->string($form['COLUMN_NAME'],$form['type'],$form['CHARACTER_MAXIMUM_LENGTH']);
+                            break;
+                        case 'text':
+                            $field=$table->text($form['COLUMN_NAME']);
+                            break;
+                        case 'int':
+                            $field=$table->integer($form['COLUMN_NAME']);
+                            break;
+                        case 'longtext':
+                            $field=$table->json($form['COLUMN_NAME']);
+                            break;
+                        case 'datetime':
+                            $field=$table->dateTime($form['COLUMN_NAME']);
+                            break;
+                        case 'date':
+                            $field=$table->date($form['COLUMN_NAME']);
+                            break; 
+                        case 'time':
+                            $field=$table->time($form['COLUMN_NAME']);
+                            break; 
+                        default:
+                            die();
+                    }
+                    if(!$row || $row && $form['COLUMN_COMMENT']!=$row['COLUMN_COMMENT']){
+                        $table->comment($form['COLUMN_COMMENT']);
+                    }
+                    if($row){
+                        $table->change();
+                    }                   
+                });
+            }else{
+                $data=['msg'=>_('表单信息未提交')];
+            }
+        }else{
+            $data=['msg'=>_('表名不存在')];
+        }
+
+    }   
     //获取表格模板默认配置
     public function tableView(Request $request){
         $TABLE_NAME=$request->input('TABLE_NAME','');
