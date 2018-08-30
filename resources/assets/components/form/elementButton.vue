@@ -24,7 +24,7 @@
 </template>
 <script>
     export default {
-        props: ['config'],
+        props: ['config','form'],
         mounted(){
             //组件添加删除按钮
             let vue=this,
@@ -41,6 +41,7 @@
                 this.$emit('buttonClick',event,this.config);
             },
             click(event){
+                let query=this.form&&this.form.query?this.form.query:{"参数":""};
                 this.$emit('config',event,this.config,{
                     textShow:{
                         name:"textShow",
@@ -170,7 +171,23 @@
                                 type:"elementTextarea",                          
                             }                            
                         }]
-                    }                    
+                    },
+                    query:{
+                        type:"elementAddDelete",
+                        labelPositionTop:true,
+                        name:"query",
+                        label:"参数",
+                        labels:[{
+                            label:"参数名"
+                        },{
+                            label:"参数值"
+                        }],
+                        itemDefault:{
+                            size:"mini",
+                            style:"width:40%;display:inline-block;margin-right:2%",
+                        },
+                        options:query
+                    }
                 });
             }
         }
