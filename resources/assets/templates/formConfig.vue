@@ -41,6 +41,7 @@
                 v-for="(tool,key) in configs.tools"
                 :key="key"
                 :config="tool"
+                :form="tool"
                 :class="{active:activeButton===key}"
                 @config="toConfig"
                 @click.native="activeButton=key;activeField='';"
