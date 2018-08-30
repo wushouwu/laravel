@@ -1,11 +1,12 @@
 <template>
     <el-form-item 
-        :label="config.label"
-        :label-width="config.labelWidth"
         :prop="config.name" 
         :rules="config.rules"
-        @click.native="click"
+        :label="config.label"
+        :label-width="config.labelWidth"
         :class="{'size-small-font':config.size==='small'||config.size==='mini'?true:false}"
+        :style="config.style"
+        @click.native="click"
     >
         <el-select 
             v-model="form[config.name]" 
