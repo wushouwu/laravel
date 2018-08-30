@@ -47,18 +47,18 @@
 		</div>
 		<div style="flex:1;">
 			<el-table  
+				ref="table"
 				:max-height="tableHeight"
 				:data="data.data"
 				:border="Boolean(configs.table.border)"
 				:stripe="Boolean(configs.table.stripe)"
 				:default-sort="configs.table.defaultSort"
 				:fit="true"
-				ref="table"
 			>
 				<el-table-column 
 					v-for="(head,headkey) in configs.table.header.column"
 					v-if="configs.table.header.show"
-					:key="'1'+headkey" 
+					:key="headkey" 
 					:label="head.label"
 					:prop="head.value"
 					:sortable="Boolean(head.sortable)"
@@ -68,9 +68,9 @@
 					:show-overflow-tooltip="Boolean(head.showOverflowTooltip)"
 				>
 					<el-table-column 
-						v-for="(field,key) in (head.children?head.children:[])"
-						v-if="head.children && head.children.length && configs.table.header.show"
-						:key="'2'+headkey+key" 
+						v-for="(field,key) in head.children"
+						v-if="configs.table.header.show"
+						:key="key" 
 						:label="field.label"
 						:prop="field.value"
 						:sortable="Boolean(field.sortable)"
@@ -187,7 +187,6 @@
 					form:{
 						operator: 'like'
 					},
-					"fields":[],
 					//默认表格配置，避免首次加载表格变形
 					"table":{
 						"border":true,
@@ -197,6 +196,7 @@
 							"order":"ascending"
 						},
 						"header":{
+							"fields":[],							
 							"column":[{
 								"value": "default",
 								"label":" ",
@@ -232,14 +232,13 @@
 					//其他配置
 					option.vue.configs=Object.assign({},option.vue.configs,data);
 					//表头
-					if(!option.vue.configs.table.header||(option.vue.configs.table.header && !option.vue.configs.table.header.column)){
-						option.vue.$set(option.vue.configs.table,'header',{});
-						option.vue.$set(option.vue.configs.table.header,'column',Object.assign([],option.vue.configs.fields));
+					if(!option.vue.configs.table.header.column||(option.vue.configs.table.header.column&&!option.vue.configs.table.header.column.length)){
+						option.vue.$set(option.vue.configs.table.header,'column',Object.assign([],option.vue.configs.table.header.fields));
 					}
 					//处理动态字段渲染问题
 					option.vue.$set(option.vue.configs.table.header,'show',true);
 					//搜索字段
-					option.vue.$set(option.vue.configs.searchTools.field,'options',option.vue.configs.fields);
+					option.vue.$set(option.vue.configs.searchTools.field,'options',option.vue.configs.table.header.fields);
 					//搜索值类型为搜索字段的类型
 					let defaultSearch=option.vue.configs.searchTools.field.options.find((item,index,arr)=>item.value==data.form.field);
 					option.vue.$set(option.vue.configs.searchTools.value,'type',defaultSearch?option.vue.camelCase('element-'+defaultSearch.type):'elementText');					
@@ -262,9 +261,7 @@
 		watch:{
 			//监测搜索字段变化
 			formField(newValue,oldValue){
-				let option = this.configs.searchTools.field.options.find((item)=>{
-					return item.value === this.configs.form.field;
-				});
+				let option = this.configs.searchTools.field.options.find((item)=>item.value === this.configs.form.field);
 				this.$set(this.configs.searchTools.value,'type',this.camelCase('element-'+option.type))
 				this.$set(this.configs.form,'value','');
 				switch(option.type){
@@ -366,14 +363,14 @@
 			//查看数据
 			view(row,operator){
 				this.addTab({
-					name: this.query.TABLE_NAME+'-'+row.id+'-view',
+					name: this.query.TABLE_NAME+'-'+row.id+'-'+operator.text,
 					content: 'formVue',
 					query:Object.assign({},this.query,{row:row},operator.query)
 				});
 			},
 			//编辑数据
 			edit(row,operator){
-				let title=this.query.TABLE_COMMENT+'-'+this.query.view_name+'-'+row.id+'-编辑';
+				let title=this.query.TABLE_COMMENT+'-'+this.query.view_name+'-'+row.id+'-'+operator.text;
 				this.addTab({
 					name: title,
 					content: operator.query.content||'formVue',
@@ -387,5 +384,3 @@
 		}
 	}
 </script>
-<style>
-</style>
