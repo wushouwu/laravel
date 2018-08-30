@@ -101,14 +101,14 @@
 					:width="configs.table.operator?configs.table.operator.length*50:100"
 				>
 					<template slot-scope="scope">
-						<el-button 
+						<operator 
 							:is="operator.type"
 							v-for="(operator,key) in configs.table.operator" 
 							:key="key"
 							:config="operator"
 							@click.native="operate(scope.row,operator)"
 							:style="configs.table.operator.length-1!=key?'margin-right:10px;':''"
-						>{{operator.text}}</el-button>
+						>{{operator.text}}</operator>
 					</template>
 				</el-table-column>
 			</el-table>
@@ -204,7 +204,6 @@
 					form:{
 						operator: 'like'
 					},
-					"fields":[],
 					//默认表格配置，避免首次加载表格变形
 					"table":{
 						"border":true,
@@ -214,6 +213,7 @@
 							"order":"ascending"
 						},
 						"header":{
+							"fields":[],							
 							"column":[{
 								"value": "default",
 								"label":" ",
@@ -249,14 +249,13 @@
 					//其他配置
 					option.vue.configs=Object.assign({},option.vue.configs,data);
 					//表头
-					if(!option.vue.configs.table.header||(option.vue.configs.table.header && !option.vue.configs.table.header.column)){
-						option.vue.$set(option.vue.configs.table,'header',{});
-						option.vue.$set(option.vue.configs.table.header,'column',Object.assign([],option.vue.configs.fields));
+					if(!option.vue.configs.table.header.column||(option.vue.configs.table.header.column&&!option.vue.configs.table.header.column.length)){
+						option.vue.$set(option.vue.configs.table.header,'column',Object.assign([],option.vue.configs.table.header.fields));
 					}
 					//处理动态字段渲染问题
 					option.vue.$set(option.vue.configs.table.header,'show',true);
 					//搜索字段
-					option.vue.$set(option.vue.configs.searchTools.field,'options',option.vue.configs.fields);
+					option.vue.$set(option.vue.configs.searchTools.field,'options',option.vue.configs.table.header.fields);
 					//搜索值类型为搜索字段的类型
 					let defaultSearch=option.vue.configs.searchTools.field.options.find((item,index,arr)=>item.value==data.form.field);
 					option.vue.$set(option.vue.configs.searchTools.value,'type',defaultSearch?option.vue.camelCase('element-'+defaultSearch.type):'elementText');					
@@ -495,15 +494,15 @@
 							draggable:true,
 							showCheckbox:true,
 							data:Object.assign([],this.configs.table.header.column),
-							header:[{
-								text:"拖动",
+							labelDefault:{
 								style:"padding: 4px;"
+							},
+							labels:[{
+								label:"拖动"
 							},{
-								text:"排序",
-								style:"padding: 4px;"
+								label:"排序"
 							},{
-								text:"固定",
-								style:"padding: 4px;"
+								label:"固定"
 							}],
 							item:{
 								type:"elementComponents",
