@@ -25,6 +25,11 @@
 <script>
     export default {
         props: ['config','form'],
+        created(){
+            if(!this.config.query){
+                this.$set(this.config,'query',{});
+            }
+        },
         mounted(){
             //组件添加删除按钮
             let vue=this,
@@ -40,11 +45,7 @@
             buttonClick: function(event){
                 this.$emit('buttonClick',event,this.config);
             },
-            click(event){
-                if(this.form && !this.form.query){
-                    this.$set(this.form,'query',{});
-                }
-                let query=this.form?this.form.query:{};
+            click(event){               
                 this.$emit('config',event,this.config,{
                     textShow:{
                         name:"textShow",
@@ -189,7 +190,7 @@
                             size:"mini",
                             style:"width:40%;display:inline-block;margin-right:2%",
                         },
-                        options:query
+                        options:this.config.query//Object.assign({},this.config.query)
                     }
                 });
             }
