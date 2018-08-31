@@ -73,7 +73,8 @@ class table extends Controller{
                     $request->offsetSet('query', ['field'=>'COLUMN_NAME','operator'=>'=','value'=>$row['COLUMN_NAME']]);
                  }
             }else{
-                if($request->has('id') && $id=$request->input('id')){
+                if($request->has('id')){
+                    $id=$request->input('id');
                     $request->offsetSet('where', ['field'=>'id','operator'=>'=','value'=>$id]);
                 }
             }
@@ -254,43 +255,36 @@ class table extends Controller{
                     'prop' => 'TABLE_COMMENT',
                     'order' => 'ascending',
                     ),
-                    'defaultSearch' => 
-                    array (
-                    'value' => 'TABLE_COMMENT',
-                    'label' => '表名',
-                    'type' => 'datetime',
-                    'sortable' => true,
-                    'fixed' => true,
-                    'resizable' => true,
-                    ),
-                    'fields' => 
-                    array (
-                    0 => 
-                    array (
-                        'value' => 'TABLE_COMMENT',
-                        'label' => '表名',
-                        'type' => 'datetime',
-                        'sortable' => true,
-                        'fixed' => true,
-                        'resizable' => true,
-                    ),
-                    1 => 
-                    array (
-                        'value' => 'TABLE_NAME',
-                        'label' => '别名',
-                        'type' => 'inputNumber',
-                        'sortable' => true,
-                        'fixed' => false,
-                        'resizable' => true,
-                    ),
-                    2 => 
-                    array (
-                        'value' => 'desc',
-                        'label' => '备注',
-                        'fixed' => false,
-                        'resizable' => false,
-                        'width' => '400',
-                    ),
+                    'header'=>array(
+                        'fields' => 
+                        array (
+                        0 => 
+                        array (
+                            'value' => 'TABLE_COMMENT',
+                            'label' => '表名',
+                            'type' => 'datetime',
+                            'sortable' => true,
+                            'fixed' => true,
+                            'resizable' => true,
+                        ),
+                        1 => 
+                        array (
+                            'value' => 'TABLE_NAME',
+                            'label' => '别名',
+                            'type' => 'inputNumber',
+                            'sortable' => true,
+                            'fixed' => false,
+                            'resizable' => true,
+                        ),
+                        2 => 
+                        array (
+                            'value' => 'desc',
+                            'label' => '备注',
+                            'fixed' => false,
+                            'resizable' => false,
+                            'width' => '400',
+                        ),
+                        ),
                     ),
                     'operator' => 
                     array (
@@ -327,9 +321,8 @@ class table extends Controller{
                 $fields[0]->fixed=true;
                 $fields[0]->width=60;
                 $fields[$count-1]->resizable=false;
-                $json['table']['defaultSearch']=$fields[0];
                 $json['form']['field']=$fields[0]->value;
-                $json['table']['fields']=$fields;
+                $json['table']['header']['fields']=$fields;
                 $json['table']['defaultSort']=array('prop'=>$fields[0]->value,'sort'=>'ascending');
             }
             $data=$json;
