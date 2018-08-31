@@ -15,6 +15,7 @@
             :precision="config.precision"
             :step="config.step"
             :controls-position="config.controlsPosition"
+            :disabled="config.disabled"
             @change="change"
         ></el-input-number>
     </el-form-item>
