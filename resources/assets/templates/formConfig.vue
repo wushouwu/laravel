@@ -135,7 +135,7 @@
                         url:'admin/table/view',
                         data:this.query.row
                     },
-                    success:function(response,option){              
+                    success:function(response,option){
                         option.vue.configs=Object.assign(option.vue.configs,response.data.data);
                     },
                     error:function(response,option){
@@ -193,6 +193,7 @@
             fieldsClick:function(event){
                 this.$emit('fieldsClick',event)
             },
+            //form配置
             toolsClick(event){
                 if(event.target==event.currentTarget ){ 
                     this.activeField='';this.activeButton=''                
