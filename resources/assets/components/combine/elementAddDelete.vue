@@ -20,7 +20,7 @@
         </div> 
         <!-- options 格式[[{},{}]] --> 
         <div style="font-size:0px"
-            v-if="0 in config.options && 0 in config.options[0]"
+            v-if="config.options.length && config.options[0].length"
             v-for="(option,key) in config.options"
             :key="key"
         >
@@ -41,7 +41,7 @@
         </div>
         <!-- options 格式[{},{}] -->
         <div style="font-size:0px"
-            v-if="0 in config.options && !(0 in config.options[0])"
+            v-if="config.options.length && config.options[0].length===undefined"
             v-for="(option,key) in config.options"
             :key="key"
         >
@@ -60,7 +60,7 @@
         </div> 
         <!-- options 格式{} -->  
         <div style="font-size:0px"
-            v-if="!config.options.length"
+            v-if="config.options.length===undefined"
             v-for="(option,key,index) in config.options"
             :key="key"
         >
@@ -72,7 +72,7 @@
             <elementText 
                 :config="configHandle(optionValue,key)"
                 :form="form[config.name]"
-            ></elementText>            
+            ></elementText>
             <elementButton
                 :config="Object.assign({},config.itemDefault,deleteButton)"
                 style="width:auto;"
@@ -135,22 +135,25 @@
         mounted(){
             this.labelPositionTop();
         },
-        updated(){
+        updated(){           
            this.labelPositionTop();
         }, 
         watch:{
-            itemForm:{
+            option:{
                 handler(newValue,oldValue){
-                    if(newValue &&　this.config.options[0] && !this.config.options[0][0]){
+                    if(newValue &&　this.config.options.length && this.config.options[0].length===undefined){
                         this.$set(this.config.options,this.index,Object.assign({},newValue,{script:this.config.options[this.index].script}));
+                    }
+                    if(this.config.options.length===undefined){
+                        this.formKey=Object.keys(newValue);
                     }
                 },
                 deep:true
             }          
         },
         computed:{
-            itemForm(){
-                return this.index===''?'':this.form[this.config.name][this.index];
+            option(){
+                return this.index===''?this.form[this.config.name]:this.form[this.config.name][this.index];
             }
         },
         methods:{
@@ -176,10 +179,9 @@
                 }else{
                     let index=String(Object.values(this.config.options).length);
                     let key='参数'+index;
-                    let option=[this.configHandle(this.optionKey,index),this.configHandle(this.optionValue,key)];
-                    this.$set(this.config.options,key,option);
+                    this.$set(this.config.options,key,'');
                     this.$set(this.form[this.config.name],key,'');
-                    this.formKey=Object.keys(this.form[this.config.name]);
+                    //this.formKey=Object.keys(this.form[this.config.name]);
                 }
             },
             del(event,config,index){
@@ -189,7 +191,7 @@
                 if(this.config.options.length>1||this.config.options.length===undefined){
                     this.$delete(this.config.options,index);
                     this.$delete(this.form[this.config.name],index);
-                    this.$delete(this.formKey,this.formKey.findIndex((item)=>item===index));
+                    //this.$delete(this.formKey,this.formKey.findIndex((item)=>item===index));
                 }else{
                     this.$message({
                         message: '最少须有一项',
@@ -199,7 +201,6 @@
             },
             //处理config
             configHandle(config,name){
-                //console.log(this.config.options)
                 return Object.assign({},config,{name:name},this.config.itemDefault);
             },
             selectChange(event,key,index){
