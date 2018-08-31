@@ -221,6 +221,7 @@
 			}
 		},
 		created: function(){
+			console.log('table query',this.query)
 			this.my.axios({
 				vue: this,
 				axiosOption:{
