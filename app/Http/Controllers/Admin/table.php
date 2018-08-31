@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
 class table extends Controller{
     public function __construct(){
         $this->db=config('database.connections.mysql.database');
@@ -102,12 +103,12 @@ class table extends Controller{
                 ['type','=',$type],
                 ['TABLE_NAME','=',$TABLE_NAME]
             ])->value('json');
-            $json=json_decode($json,true);
+            $json=json_decode($json);
             if($json){
                 if($type=='table' && $TABLE_NAME){
                     $fields=$this->field($request)->original['data'];
                     if(count($fields)){
-                        $json['table']['header']['fields']=$fields;
+                        $json->table->header->fields=$fields;
                     }
                 }
                 $data=['data'=> $json];
@@ -167,15 +168,18 @@ class table extends Controller{
     } 
     //字段处理
     public function fieldOperate(Request $request){
-        $TABLE_NAME=$request->input('TABLE_NAME','');
         $form=$request->input('form',[]);
-        $row=$request->input('row',[]);
-        if (Schema::hasTable($TABLE_NAME)) {
-            if($form){
-                Schema::table($TABLE_NAME, function (Blueprint $table) {
-                    switch($form['type']){
+        if($form){
+            $where=$request->input('where',['value'=>'']);
+            $table=$where['value'];
+            if (Schema::hasTable($table)) {
+                Schema::table($table, function (Blueprint $table) {
+                    $request=$GLOBALS['request'];
+                    $form=$request->input('form',[]);
+                    $row=$request->input('row',[]);
+                    switch($form['DATA_TYPE']){
                         case 'varchar':
-                            $field=$table->string($form['COLUMN_NAME'],$form['type'],$form['CHARACTER_MAXIMUM_LENGTH']);
+                            $field=$table->string($form['COLUMN_NAME'],$form['DATA_TYPE'],$form['CHARACTER_MAXIMUM_LENGTH']);
                             break;
                         case 'text':
                             $field=$table->text($form['COLUMN_NAME']);
@@ -199,18 +203,21 @@ class table extends Controller{
                             die();
                     }
                     if(!$row || $row && $form['COLUMN_COMMENT']!=$row['COLUMN_COMMENT']){
-                        $table->comment($form['COLUMN_COMMENT']);
+                        $res=$field->comment($form['COLUMN_COMMENT']);
                     }
                     if($row){
-                        $table->change();
-                    }                   
+                        $res=$field->change();
+                    }
+                    $request->offsetSet('res',$res);
                 });
+                $data=['data'=>$request->input('res')];
             }else{
-                $data=['msg'=>_('表单信息未提交')];
-            }
+                $data=['msg'=>_('表名不存在')];
+            }            
         }else{
-            $data=['msg'=>_('表名不存在')];
-        }
+            $data=['msg'=>_('表单信息未提交')];
+        }        
+        return response()->json($data);
 
     }   
     //获取表格模板默认配置
