@@ -75048,7 +75048,7 @@ exports = module.exports = __webpack_require__(6)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/*elementAddDelete组件下标签行高*/\n.elementAddDelete .el-form-item__content label,.elementAddDelete .el-form-item__content label+.el-form-item .el-form-item__content{\n    line-height:30px;\n}\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/*elementAddDelete组件下标签行高*/\n.elementAddDelete .el-form-item__content label,.elementAddDelete .el-form-item__content label+.el-form-item .el-form-item__content{\n    line-height:30px;\n}\n", ""]);
 
 // exports
 
@@ -75236,10 +75236,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
 
     watch: {
-        itemForm: {
+        option: {
             handler: function handler(newValue, oldValue) {
-                if (newValue && this.config.options[0] && !this.config.options[0][0]) {
+                if (newValue && this.config.options.length && this.config.options[0].length === undefined) {
                     this.$set(this.config.options, this.index, Object.assign({}, newValue, { script: this.config.options[this.index].script }));
+                }
+                if (this.config.options.length === undefined) {
+                    this.formKey = Object.keys(newValue);
                 }
             },
 
@@ -75247,8 +75250,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         }
     },
     computed: {
-        itemForm: function itemForm() {
-            return this.index === '' ? '' : this.form[this.config.name][this.index];
+        option: function option() {
+            return this.index === '' ? this.form[this.config.name] : this.form[this.config.name][this.index];
         }
     },
     methods: {
@@ -75273,10 +75276,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             } else {
                 var index = String(Object.values(this.config.options).length);
                 var key = '参数' + index;
-                var option = [this.configHandle(this.optionKey, index), this.configHandle(this.optionValue, key)];
-                this.$set(this.config.options, key, option);
+                this.$set(this.config.options, key, '');
                 this.$set(this.form[this.config.name], key, '');
-                this.formKey = Object.keys(this.form[this.config.name]);
+                //this.formKey=Object.keys(this.form[this.config.name]);
             }
         },
         del: function del(event, config, index) {
@@ -75286,9 +75288,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             if (this.config.options.length > 1 || this.config.options.length === undefined) {
                 this.$delete(this.config.options, index);
                 this.$delete(this.form[this.config.name], index);
-                this.$delete(this.formKey, this.formKey.findIndex(function (item) {
-                    return item === index;
-                }));
+                //this.$delete(this.formKey,this.formKey.findIndex((item)=>item===index));
             } else {
                 this.$message({
                     message: '最少须有一项',
@@ -75299,7 +75299,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
         //处理config
         configHandle: function configHandle(config, name) {
-            //console.log(this.config.options)
             return Object.assign({}, config, { name: name }, this.config.itemDefault);
         },
         selectChange: function selectChange(event, key, index) {
@@ -76949,7 +76948,7 @@ var render = function() {
       ),
       _vm._v(" "),
       _vm._l(_vm.config.options, function(option, key) {
-        return 0 in _vm.config.options && 0 in _vm.config.options[0]
+        return _vm.config.options.length && _vm.config.options[0].length
           ? _c(
               "div",
               { key: key, staticStyle: { "font-size": "0px" } },
@@ -76989,7 +76988,8 @@ var render = function() {
       }),
       _vm._v(" "),
       _vm._l(_vm.config.options, function(option, key) {
-        return 0 in _vm.config.options && !(0 in _vm.config.options[0])
+        return _vm.config.options.length &&
+          _vm.config.options[0].length === undefined
           ? _c(
               "div",
               { key: key, staticStyle: { "font-size": "0px" } },
@@ -77026,7 +77026,7 @@ var render = function() {
       }),
       _vm._v(" "),
       _vm._l(_vm.config.options, function(option, key, index) {
-        return !_vm.config.options.length
+        return _vm.config.options.length === undefined
           ? _c(
               "div",
               { key: key, staticStyle: { "font-size": "0px" } },
@@ -77634,6 +77634,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['config', 'form'],
+    created: function created() {
+        if (!this.config.query) {
+            this.$set(this.config, 'query', {});
+        }
+    },
     mounted: function mounted() {
         //组件添加删除按钮
         var vue = this,
@@ -77651,10 +77656,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.$emit('buttonClick', event, this.config);
         },
         click: function click(event) {
-            if (this.form && !this.form.query) {
-                this.$set(this.form, 'query', {});
-            }
-            var query = this.form ? this.form.query : {};
             this.$emit('config', event, this.config, {
                 textShow: {
                     name: "textShow",
@@ -77799,7 +77800,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                         size: "mini",
                         style: "width:40%;display:inline-block;margin-right:2%"
                     },
-                    options: query
+                    options: this.config.query //Object.assign({},this.config.query)
                 }
             });
         }
@@ -78447,6 +78448,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['config', 'form'],
@@ -78613,7 +78615,8 @@ var render = function() {
           size: _vm.config.size,
           precision: _vm.config.precision,
           step: _vm.config.step,
-          "controls-position": _vm.config.controlsPosition
+          "controls-position": _vm.config.controlsPosition,
+          disabled: _vm.config.disabled
         },
         on: { change: _vm.change },
         model: {
@@ -81671,7 +81674,7 @@ exports = module.exports = __webpack_require__(6)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/* 表单字段框 */\n.fields.draggable{\n    overflow: auto;\n    width:auto;\n    height:100%;       \n    border:1px dashed #c0c4cc;\n}\n/* 表单工具框 */\n.tools.draggable{\n    width:80%;\n    min-height:42px;\n    display:-webkit-box;\n    display:-ms-flexbox;\n    display:flex;\n    -webkit-box-pack:center;\n        -ms-flex-pack:center;\n            justify-content:center;\n    -webkit-box-align:center;\n        -ms-flex-align:center;\n            align-items:center;\n    position:absolute;\n    bottom:21px;\n    margin-left: 10%;\n    border:1px dashed #c0c4cc;\n    cursor:pointer;\n}\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/* 表单字段框 */\n.fields.draggable{\n    overflow: auto;\n    width:auto;\n    height:100%;       \n    border:1px dashed #c0c4cc;\n}\n/* 表单工具框 */\n.tools.draggable{\n    width:80%;\n    min-height:42px;\n    display:-webkit-box;\n    display:-ms-flexbox;\n    display:flex;\n    -webkit-box-pack:center;\n        -ms-flex-pack:center;\n            justify-content:center;\n    -webkit-box-align:center;\n        -ms-flex-align:center;\n            align-items:center;\n    position:absolute;\n    bottom:21px;\n    margin-left: 10%;\n    border:1px dashed #c0c4cc;\n    cursor:pointer;\n}\n", ""]);
 
 // exports
 
@@ -81880,6 +81883,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         fieldsClick: function fieldsClick(event) {
             this.$emit('fieldsClick', event);
         },
+        //form配置
         toolsClick: function toolsClick(event) {
             if (event.target == event.currentTarget) {
                 this.activeField = '';this.activeButton = '';
@@ -83317,6 +83321,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 	},
 
 	created: function created() {
+		console.log('table query', this.query);
 		this.my.axios({
 			vue: this,
 			axiosOption: {
@@ -83853,7 +83858,7 @@ exports = module.exports = __webpack_require__(6)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -83864,6 +83869,7 @@ exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
 //
 //
 //
@@ -83965,22 +83971,29 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         save: function save(event, config) {
             var cancel = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
 
-            var option = {
-                vue: this,
-                axiosOption: {
-                    url: config.query.url || '/admin/table/save',
-                    data: Object.assign({
-                        form: this.form
-                    }, this.query)
-                },
-                successMsg: '保存成功!'
-            };
-            if (cancel) {
-                option.success = function (response, option) {
-                    option.vue.cancel(event, config);
-                };
-            }
-            this.my.axios(option);
+            var vue = this;
+            this.$refs.form.validate(function (valid) {
+                if (valid) {
+                    var option = {
+                        vue: vue,
+                        axiosOption: {
+                            url: config.query.url || '/admin/table/save',
+                            data: Object.assign({
+                                form: vue.form
+                            }, vue.query)
+                        },
+                        successMsg: '保存成功!'
+                    };
+                    if (cancel) {
+                        option.success = function (response, option) {
+                            option.vue.cancel(event, config);
+                        };
+                    }
+                    vue.my.axios(option);
+                } else {
+                    return false;
+                }
+            });
         },
         //取消
         cancel: function cancel(event, config) {
@@ -84011,6 +84024,7 @@ var render = function() {
   return _c(
     "el-form",
     {
+      ref: "form",
       staticStyle: { width: "100%", height: "100%", position: "relative" },
       attrs: {
         model: _vm.form,
