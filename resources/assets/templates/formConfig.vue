@@ -83,6 +83,15 @@
         },
         created: function(){
             let configs={
+                forms:{
+                    statusIcon:true,
+                    labelWidth:"80px",
+                    inline:false,
+                    labelPosition:"right",
+                    showMessage:true,
+                    size:"",
+                    disabled:false
+                },                
                 fields:[{
                     type:'elementText',
                     label:'示例',
