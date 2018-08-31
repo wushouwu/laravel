@@ -118,6 +118,9 @@
                     },{
                         label:'表名',
                         value:'TABLE_NAME'
+                    },{
+                        label:'模板',
+                        value:'content'
                     }]
                 },
                 optionValue:{
@@ -147,7 +150,7 @@
         },
         computed:{
             itemForm(){
-                return this.form[this.config.name][this.index];
+                return this.index===''?'':this.form[this.config.name][this.index];
             }
         },
         methods:{
@@ -196,6 +199,7 @@
             },
             //处理config
             configHandle(config,name){
+                //console.log(this.config.options)
                 return Object.assign({},config,{name:name},this.config.itemDefault);
             },
             selectChange(event,key,index){
