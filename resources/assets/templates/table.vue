@@ -298,7 +298,7 @@
 		methods: {
 			//请求数据
 			request(){
-				let data=Object.assign({},this.query,this.configs.pagination,);
+				let data=Object.assign({},this.query,this.configs.pagination);
 				if(this.configs.form.search){
 					data.query=this.configs.form;
 				}
