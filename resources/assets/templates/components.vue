@@ -63,7 +63,7 @@
                     TABLE_NAME:'',
                     desc:'',
                     json:'',
-                    type:'',
+                    type:'form',
                     view_name:'',
                     id:''
                 },
@@ -132,7 +132,7 @@
                     url:'admin/table/view',
                     data:{
                         TABLE_NAME:'view',
-                        view_name:this.query.row?'视图-编辑':'视图-添加',
+                        view_name:this.query.row&&this.query.row.id?'视图-编辑':'视图-添加',
                         type:'form'
                     }
                 },
@@ -142,20 +142,23 @@
             }); 
             //表单数据
             if(this.query.row){
-                this.my.axios({
-                    vue: this,
-                    axiosOption:{
-                        url:'admin/table/row',
-                        data:{
-                            TABLE_NAME:'view',
-                            id: this.query.row.id,
+                if(this.query.row.id){
+                    this.my.axios({
+                        vue: this,
+                        axiosOption:{
+                            url:'admin/table/row',
+                            data:{
+                                TABLE_NAME:'view',
+                                id: this.query.row.id,
+                            }
+                        },
+                        success:function(response,option){
+                            option.vue.$set(option.vue,'row',response.data.data);
                         }
-                    },
-                    success:function(response,option){
-                        option.vue.$set(option.vue,'row',response.data.data);
-                    }
-                });                
-                
+                    });
+                }else{
+                    this.row.TABLE_NAME=this.query.row.TABLE_NAME;
+                }
             }
         },
         watch:{
