@@ -41,7 +41,10 @@
                 this.$emit('buttonClick',event,this.config);
             },
             click(event){
-                let query=this.form&&this.form.query?this.form.query:{"参数":""};
+                if(this.form && !this.form.query){
+                    this.$set(this.form,'query',{});
+                }
+                let query=this.form?this.form.query:{};
                 this.$emit('config',event,this.config,{
                     textShow:{
                         name:"textShow",
