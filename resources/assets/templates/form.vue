@@ -1,5 +1,6 @@
 <template>
     <el-form  
+        ref="form"
         :model="form"  
         style="width:100%;height:100%;position:relative;"
         :status-icon="forms.statusIcon"
@@ -97,22 +98,29 @@
             },       
             //保存 保存并关闭
             save: function(event,config,cancel=false){
-                let option={
-                    vue: this,
-                    axiosOption:{
-                        url:config.query.url||'/admin/table/save',
-                        data: Object.assign({
-                            form:this.form
-                        },this.query)
-                    },
-                    successMsg: '保存成功!'
-                };
-                if(cancel){
-                    option.success=function(response,option){
-                        option.vue.cancel(event,config);
+                let vue=this;             
+                this.$refs.form.validate((valid) => {
+                    if (valid) {
+                        let option={
+                            vue: vue,
+                            axiosOption:{
+                                url:config.query.url||'/admin/table/save',
+                                data: Object.assign({
+                                    form:vue.form
+                                },vue.query)
+                            },
+                            successMsg: '保存成功!'
+                        };
+                        if(cancel){
+                            option.success=function(response,option){
+                                option.vue.cancel(event,config);
+                            }
+                        }
+                        vue.my.axios(option); 
+                    } else {
+                        return false;
                     }
-                }
-                this.my.axios(option);               
+                });                              
             },
             //取消
             cancel:function(event,config){
