@@ -48,7 +48,7 @@
 						:key="key" 
 						:is="tool.type" 
 						:config="tool" 
-						:form="configs.form"
+						:form="tool"
                     	:class="{active:activeField===key}"
                     	@click.native="activeField=key;activeButton='';"
 						@config	="toConfig"
