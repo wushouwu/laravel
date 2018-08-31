@@ -46,7 +46,9 @@
             }
         },
         created: function(){
-            console.log(this.query)
+            if(!this.query.row){
+                this.$set(this.query,'row',{type:'form'});
+            }
         }, 
         methods: {
             //排序
