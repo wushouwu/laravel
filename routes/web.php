@@ -27,6 +27,7 @@ Route::group(['prefix' => 'admin'], function () {
             'save',//保存表单
             'tables',//所有表
             'row',//表格一行数据
+            'fieldOperate',//字段操作
         ];
         foreach($actions as $key=>$action){
             Route::any('/'.$action, 'Admin\table@'.$action);
