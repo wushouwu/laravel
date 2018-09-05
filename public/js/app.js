@@ -75048,7 +75048,7 @@ exports = module.exports = __webpack_require__(6)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/*elementAddDelete组件下标签行高*/\n.elementAddDelete .el-form-item__content label,.elementAddDelete .el-form-item__content label+.el-form-item .el-form-item__content{\n    line-height:30px;\n}\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/*elementAddDelete组件下标签行高*/\n.elementAddDelete .el-form-item__content label,.elementAddDelete .el-form-item__content label+.el-form-item .el-form-item__content{\n    line-height:30px;\n}\n", ""]);
 
 // exports
 
@@ -75301,9 +75301,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         configHandle: function configHandle(config, name) {
             return Object.assign({}, config, { name: name }, this.config.itemDefault);
         },
+
+        //更改key
         selectChange: function selectChange(event, key, index) {
-            this.$set(this.form[this.config.name], event, this.form[this.config.name][key]);
+            var oldValue = this.form[this.config.name][key];
             this.$delete(this.form[this.config.name], key);
+            this.$delete(this.config.options, key);
+            this.$set(this.form[this.config.name], event, oldValue);
+            this.$set(this.config.options, event, oldValue);
         },
 
         click: function click(event) {
@@ -83500,7 +83505,26 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 		//删除数据
 		delete: function _delete(row, operator) {
-			console.log(row, operator);
+			var _this2 = this;
+
+			var vue = this;
+			this.$confirm("\u786E\u5B9A\u5220\u9664id\u4E3A" + row.id + "\u7684\u6570\u636E?", '操作确认', {
+				//confirmButtonText: '确定',
+				//cancelButtonText: '取消',
+				type: 'warning'
+			}).then(function () {
+				vue.my.axios({
+					vue: vue,
+					axiosOption: {
+						url: operator.query.url || 'admin/table/delete',
+						data: Object.assign({}, _this2.query, { row: row }, operator.query)
+					},
+					success: function success(response, option) {
+						option.vue.search('event', { name: "search" });
+					},
+					successMsg: "删除成功"
+				});
+			}).catch(function () {});
 		}
 	}
 });
@@ -83974,22 +83998,22 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             var vue = this;
             this.$refs.form.validate(function (valid) {
                 if (valid) {
-                    var option = {
+                    vue.my.axios({
                         vue: vue,
                         axiosOption: {
                             url: config.query.url || '/admin/table/save',
-                            data: Object.assign({
-                                form: vue.form
-                            }, vue.query)
+                            data: Object.assign({ form: vue.form }, vue.query)
+                        },
+                        success: function success(response, option) {
+                            if (option.vue.query.row) {
+                                option.vue.$set(option.vue.query, 'row', Object.assign({}, option.vue.query.row, option.vue.form));
+                            }
+                            if (cancel) {
+                                option.vue.cancel(event, config);
+                            }
                         },
                         successMsg: '保存成功!'
-                    };
-                    if (cancel) {
-                        option.success = function (response, option) {
-                            option.vue.cancel(event, config);
-                        };
-                    }
-                    vue.my.axios(option);
+                    });
                 } else {
                     return false;
                 }
@@ -84245,13 +84269,9 @@ var render = function() {
                     "el-menu-item",
                     {
                       ref: "3-3",
-                      attrs: {
-                        index: "3-3",
-                        content: "formConfigVue",
-                        query: {}
-                      }
+                      attrs: { index: "3-3", content: "configVue", query: {} }
                     },
-                    [_vm._v("表单")]
+                    [_vm._v("视图配置")]
                   )
                 ],
                 2
