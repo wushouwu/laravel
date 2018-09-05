@@ -101,22 +101,22 @@
                 let vue=this;             
                 this.$refs.form.validate((valid) => {
                     if (valid) {
-                        let option={
+                        vue.my.axios({
                             vue: vue,
                             axiosOption:{
                                 url:config.query.url||'/admin/table/save',
-                                data: Object.assign({
-                                    form:vue.form
-                                },vue.query)
+                                data: Object.assign({form:vue.form},vue.query)
                             },
+                            success:function(response,option){
+                                if(option.vue.query.row){
+                                    option.vue.$set(option.vue.query,'row',Object.assign({},option.vue.query.row,option.vue.form));
+                                }
+                                if(cancel){
+                                    option.vue.cancel(event,config);
+                                }
+                            },                            
                             successMsg: '保存成功!'
-                        };
-                        if(cancel){
-                            option.success=function(response,option){
-                                option.vue.cancel(event,config);
-                            }
-                        }
-                        vue.my.axios(option); 
+                        }); 
                     } else {
                         return false;
                     }
