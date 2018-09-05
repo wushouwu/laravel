@@ -380,7 +380,26 @@
 			},
 			//删除数据
 			delete(row,operator){
-				console.log(row,operator)
+				let vue=this;
+				this.$confirm(`确定删除id为${row.id}的数据?`, '操作确认', {
+					//confirmButtonText: '确定',
+					//cancelButtonText: '取消',
+					type: 'warning'
+				}).then(() => {
+					vue.my.axios({
+						vue: vue,
+						axiosOption:{
+							url:operator.query.url||'admin/table/delete',
+							data:Object.assign({},this.query,{row:row},operator.query)
+						},
+						success:function(response,option){
+							option.vue.search('event',{name:"search"});
+						},
+						successMsg:"删除成功"
+					});
+				}).catch(() => {
+					          
+				});				
 			}
 		}
 	}
