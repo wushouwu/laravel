@@ -10,7 +10,46 @@ window.Popper = require('popper.js').default;
 
 try {
     window.$ = window.jQuery = require('jquery');
-
+	//调整子元素margin
+	$.fn.extend({
+        children_margin:function(option){
+            var default_option={
+                toSide: '.elementCard',
+                children: '*',
+                margin: 1
+            }
+            var option=$.extend(default_option,option);
+            if($(this).hasClass(option.toSide)){
+                var w_percent2px=$(this).width()*option.margin/100;
+                var h_percent2px=$(this).height()*option.margin/100;	
+                option.margin=option.margin+'%';
+                $(this).children(option.children).each(function(index,dom){  
+                    var position=$(dom).position();
+                    var left=position.left>w_percent2px?option.margin:'0px';
+                    var top=position.top>h_percent2px?option.margin:'0px';
+                    $(dom).css({margin:top+' 0px 0px '+left});
+                });	
+            }else{                
+                option.margin=option.margin+'%';
+                $(this).children(option.children).each(function(index,dom){
+                    $(dom).css({margin:option.margin+' 0px 0px '+option.margin});
+                });	
+            }
+            return this;	
+        },
+        size_px2percent:function(parent,size){
+            var obj=$(this);
+            var parent=parent||obj.parent();
+            var p_width=parent.width();
+            var p_height=parent.height();
+            var size=size||{width:obj.width(),height:obj.height()};
+            var width=size.width/p_width*100+'%';
+            var height=size.height/p_height*100+'%';
+            var res={width:width,height:height};
+            obj.css(res);
+            return res;
+        }        
+    })
     require('bootstrap');
 } catch (e) {}
 
