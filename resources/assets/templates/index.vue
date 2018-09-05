@@ -36,7 +36,7 @@
                     </template>
                     <el-menu-item index="3-1" ref="3-1" content="tableVue" :query="{}">表格</el-menu-item>
                     <el-menu-item index="3-2" ref="3-2" content="viewVue" :query="{}">视图</el-menu-item>
-                    <el-menu-item index="3-3" ref="3-3" content="formConfigVue" :query="{}">表单</el-menu-item>
+                    <el-menu-item index="3-3" ref="3-3" content="configVue" :query="{}">视图配置</el-menu-item>
                 </el-submenu>
             </el-menu>
         </el-aside>
