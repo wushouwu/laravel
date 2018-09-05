@@ -203,9 +203,13 @@
             configHandle(config,name){
                 return Object.assign({},config,{name:name},this.config.itemDefault);
             },
+            //更改key
             selectChange(event,key,index){
-                this.$set(this.form[this.config.name],event,this.form[this.config.name][key]);
+                let oldValue=this.form[this.config.name][key];
                 this.$delete(this.form[this.config.name],key);
+                this.$delete(this.config.options,key);
+                this.$set(this.form[this.config.name],event,oldValue);
+                this.$set(this.config.options,event,oldValue);
             },
             click: function(event){
                 this.$emit('config',event,this.config,{
