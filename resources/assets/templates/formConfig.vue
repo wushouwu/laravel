@@ -99,16 +99,16 @@
                 }],
                 tools:[{
                     "type":"elementButton",
-                    "text":"保存并关闭",
-                    "buttonType":"primary",
+                    "text":"取消",
+                    "buttonType":"",
                     "name":"button",
-                    "title":"保存并关闭",
+                    "title":"取消",
                     "operator":"elementSelect",
-                    "script":"this.save(event,config,true);"
+                    "script":"this.cancel(event,config);"
                 },{
                     "type":"elementButton",
                     "text":"保存",
-                    "shape":"plain",
+                    "saturation": "plain",
                     "buttonType":"primary",
                     "name":"button",
                     "title":"保存",
@@ -116,12 +116,12 @@
                     "script":"this.save(event,config);"
                 },{
                     "type":"elementButton",
-                    "text":"取消",
-                    "buttonType":"",
+                    "text":"保存并关闭",
+                    "buttonType":"primary",
                     "name":"button",
-                    "title":"取消",
+                    "title":"保存并关闭",
                     "operator":"elementSelect",
-                    "script":"this.cancel(event,config);"
+                    "script":"this.save(event,config,true);"
                 }],
                 form:{
                     text:'将组件拖放到此区域进行配置'
@@ -143,18 +143,20 @@
                     }
                 });
                 //表单字段
-                this.my.axios({
-                    vue: this,
-                    axiosOption:{
-                        url:'admin/table/field',
-                        data:{
-                            TABLE_NAME:this.query.row.TABLE_NAME
+                if(this.query.row.TABLE_NAME){
+                    this.my.axios({
+                        vue: this,
+                        axiosOption:{
+                            url:'admin/table/field',
+                            data:{
+                                TABLE_NAME:this.query.row.TABLE_NAME
+                            }
+                        },
+                        success:function(response,option){
+                            option.vue.fields=response.data.data;
                         }
-                    },
-                    success:function(response,option){
-                        option.vue.fields=response.data.data;
-                    }
-                });                
+                    }); 
+                }               
             }else{
                 this.configs=configs;
             }
