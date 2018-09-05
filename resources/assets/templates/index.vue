@@ -35,8 +35,7 @@
                         <span slot="title">配置</span>
                     </template>
                     <el-menu-item index="3-1" ref="3-1" content="tableVue" :query="{}">表格</el-menu-item>
-                    <el-menu-item index="3-2" ref="3-2" content="viewVue" :query="{}">视图</el-menu-item>
-                    <el-menu-item index="3-3" ref="3-3" content="configVue" :query="{}">视图配置</el-menu-item>
+                    <el-menu-item index="3-2" ref="3-2" content="configVue" :query="{row:{type:'view'}}">视图配置</el-menu-item>
                 </el-submenu>
             </el-menu>
         </el-aside>
@@ -143,7 +142,7 @@ export default {
     .el-date-editor.el-input, .el-date-editor.el-input__inner{
         width:100%;
     } 
-    /*按钮组件下边距处理*/ 
+    /*按钮组件边距处理*/ 
     .tools .el-form-item.elementButton{
         margin:5px;
     }
@@ -163,17 +162,17 @@ export default {
         cursor:move;
     }
     /*激活的组件显示虚线框*/
-    .draggable .el-form-item{
+    .draggable .el-form-item,draggable .elementCard{
         border:1px dotted transparent;
     }
-    .draggable .el-form-item.active{
+    .draggable .el-form-item.active,.draggable .elementCard.active{
         border:1px dotted #409EFF;
     }
     /*组件删除按钮*/
     .my-close{
         display: none;
     }
-    .draggable .el-form-item.active .my-close{
+    .draggable .active .my-close{
         position:absolute;
         top:0px;
         left:0px;
@@ -188,7 +187,7 @@ export default {
         line-height: 11px;
         display:inline-block;
     }
-    .draggable .el-form-item.active .my-close::after{
+    .draggable .active .my-close::after{
         content:'×'
     }  
     /* table错位问题 */
@@ -198,5 +197,15 @@ export default {
     /* 有背景分页圆形 */
     .el-pagination.is-background .el-pager li,.el-pagination.is-background button[type="button"]{
         border-radius:14px;
-    }        
+    } 
+    /* 卡片上边距处理 */       
+    /* .elementCard+.elementCard{
+        margin-top:20px;
+    } */
+    /* 卡片处理 */       
+    .elementCard{
+        display:inline-block;
+        vertical-align: top;
+        /* margin: 0px 1% 0px 1%;  */
+    }    
 </style>

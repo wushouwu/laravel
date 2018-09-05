@@ -27,10 +27,12 @@
     import components from './components.vue';
     import formConfig from './formConfig.vue';
     import tableConfig from './tableConfig.vue';
+    import viewConfig from './viewConfig.vue';    
     export default {
         components: {
             formConfig,
             tableConfig,
+            viewConfig,
             components
         },
         props: ['query'],
