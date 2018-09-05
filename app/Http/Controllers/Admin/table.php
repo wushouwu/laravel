@@ -168,55 +168,77 @@ class table extends Controller{
     } 
     //字段处理
     public function fieldOperate(Request $request){
-        $form=$request->input('form',[]);
-        if($form){
-            $where=$request->input('where',['value'=>'']);
-            $table=$where['value'];
-            if (Schema::hasTable($table)) {
-                Schema::table($table, function (Blueprint $table) {
-                    $request=$GLOBALS['request'];
-                    $form=$request->input('form',[]);
-                    $row=$request->input('row',[]);
+        $where=$request->input('where',['value'=>'']);
+        $table=$where['value'];
+        if (Schema::hasTable($table)) {
+            Schema::table($table, function (Blueprint $table) {
+                $request=$GLOBALS['request'];
+                $form=$request->input('form',[]);
+                $row=$request->input('row',[]);
+                if($form){
+                    $COLUMN_NAME=$form['COLUMN_NAME'];
+                    //重命名
+                    if($row && $form['COLUMN_NAME']!=$row['COLUMN_NAME']){
+                        $where=$request->input('where',['value'=>'']);
+                        Schema::table($where['value'], function (Blueprint $table) {
+                            $request=$GLOBALS['request'];
+                            $form=$request->input('form',[]);
+                            $row=$request->input('row',[]);
+                            $table->renameColumn($row['COLUMN_NAME'], $form['COLUMN_NAME']);
+                        });                        
+                    }
+                    //字段类型
                     switch($form['DATA_TYPE']){
                         case 'varchar':
-                            $field=$table->string($form['COLUMN_NAME'],$form['DATA_TYPE'],$form['CHARACTER_MAXIMUM_LENGTH']);
+                            $field=$table->string($COLUMN_NAME,$form['DATA_TYPE'],$form['CHARACTER_MAXIMUM_LENGTH']);
                             break;
                         case 'text':
-                            $field=$table->text($form['COLUMN_NAME']);
+                            $field=$table->text($COLUMN_NAME);
                             break;
                         case 'int':
-                            $field=$table->integer($form['COLUMN_NAME']);
+                            $field=$table->integer($COLUMN_NAME);
                             break;
                         case 'longtext':
-                            $field=$table->json($form['COLUMN_NAME']);
+                            $field=$table->json($COLUMN_NAME);
                             break;
                         case 'datetime':
-                            $field=$table->dateTime($form['COLUMN_NAME']);
+                            $field=$table->dateTime($COLUMN_NAME);
                             break;
                         case 'date':
-                            $field=$table->date($form['COLUMN_NAME']);
+                            $field=$table->date($COLUMN_NAME);
                             break; 
                         case 'time':
-                            $field=$table->time($form['COLUMN_NAME']);
+                            $field=$table->time($COLUMN_NAME);
                             break; 
                         default:
+                            $request->offsetSet('res',['msg'=>_('字段类型未处理')]);
                             die();
                     }
+                    //字段名--注释
                     if(!$row || $row && $form['COLUMN_COMMENT']!=$row['COLUMN_COMMENT']){
                         $res=$field->comment($form['COLUMN_COMMENT']);
                     }
                     if($row){
                         $res=$field->change();
+                    }                    
+                }else{
+                    if($row){
+                        //删除字段
+                        $res=$table->dropColumn($row['COLUMN_NAME']);
+                    }else{
+                        $res=['msg'=>_('表单信息未提交')];
                     }
-                    $request->offsetSet('res',$res);
-                });
-                $data=['data'=>$request->input('res')];
-            }else{
-                $data=['msg'=>_('表名不存在')];
-            }            
+                } 
+                $request->offsetSet('res',$res);
+            });
+            $res=$request->input('res');
+            $data=['data'=>$res];
+            if(isset($res['msg'])){
+                $data['msg']=$res['msg'];
+            }
         }else{
-            $data=['msg'=>_('表单信息未提交')];
-        }        
+            $data=['msg'=>_('表名不存在')];
+        }       
         return response()->json($data);
 
     }   
