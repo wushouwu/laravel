@@ -23,8 +23,8 @@
                     :options="{group:{ name:'view',  pull:'clone', put: false },preventOnFilter: true,handle: 'label',animation: 250}" 
                     style="width:100%;height:100%"
                     class="draggable"
-                    @remove="remove"
-                    @update="update"
+                    @remove="remove('components')"
+                    @update="update('components')"
                 >
                     <component 
                         v-for="(config, key,index) in configs.components" 
@@ -35,7 +35,27 @@
                     ></component>
                 </draggable>
             </el-form>
-        </el-collapse-item>        
+        </el-collapse-item>  
+        <el-collapse-item title="模块" name="模块">
+            <el-form :model="form" label-width="80px" style="width:100%;height:100%">
+                <draggable 
+                    v-model="configs.containers" 
+                    :options="{group:{ name:'view',  pull:'clone', put: false },preventOnFilter: true,handle: '.el-card',animation: 250}" 
+                    style="width:auto;height:100%;padding:10px;"
+                    class="draggable"
+                    @remove="remove('containers')"
+                    @update="update('containers')"
+                >
+                    <component 
+                        v-for="(config, key,index) in configs.containers" 
+                        :key="index" 
+                        :is="config.type" 
+                        :config="config" 
+                        :form="form"
+                    ></component>
+                </draggable>
+            </el-form>
+        </el-collapse-item>               
         <el-collapse-item title="属性" name="属性">
             <el-form :model="attrForm" label-width="80px" style="width:100%;height:100%">
                 <component 
@@ -115,8 +135,15 @@
                     "buttonType":"primary",
                     "name": "button"
                 }]`,
+                initContainers:`[{
+                    "type":"elementCard",
+                    "header":"列表",
+                    "shadow":"always",
+                    "width":"98%"
+                }]`,
                 configs: {
                     components:[],
+                    containers:[],
                     form:[]
                 },
                 "form": {
@@ -125,6 +152,7 @@
         },
         created(){
             this.configs.components=JSON.parse(this.initComponents);
+            this.configs.containers=JSON.parse(this.initContainers);
             //表单配置
             this.my.axios({
                 vue: this,
@@ -157,6 +185,9 @@
                         }
                     });
                 }else{
+                    if(this.query.row.type){
+                        this.row.type=this.query.row.type;
+                    }
                     this.row.TABLE_NAME=this.query.row.TABLE_NAME;
                 }
             }
@@ -185,11 +216,11 @@
         },
         methods:{  
             //处理源组件被修改的问题
-            remove(event){
-                this.configs.components=JSON.parse(this.initComponents);
+            remove(type){
+                this.configs[type]=JSON.parse(this[this.camelCase('init-'+type)]);
             }, 
-            update(event){
-                this.initComponents=JSON.stringify(this.configs.components);
+            update(type){
+               this[this.camelCase('init-'+type)]=JSON.stringify(this.configs[type]);
             },
             e(event,option){
                 switch(option.config.name){
