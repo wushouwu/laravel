@@ -1,10 +1,10 @@
 <template>
     <draggable
         v-model="configs.containers" 
-        class="containers draggable"
+        class="containers draggable"    
         :options="{group:{ name:'view',  pull:false, put: true},preventOnFilter: true,animation: 250}"
         @change="sort"
-        @click.native="fieldsClick"
+        @click.native="containersClick"
     >
         <component 
             v-for="(container, key) in configs.containers" 
@@ -38,9 +38,13 @@
             let configs={
                 containers:[{
                     "type":"elementCard",
-                    "header":"列表",
+                    "header":{
+                        "title":"列表",
+                        height:"67px"
+                    },
                     "shadow":"always",
-                    "width":"98%"
+                    "width":"98%",
+                    "height":"auto"
                 }]
             };
             if(this.query.row){
@@ -92,69 +96,10 @@
                 this.$delete(this.configs[type],key);
                 this.$emit('del')   
             },
-            //点击字段框 事件
-            fieldsClick:function(event){
-                this.$emit('fieldsClick',event)
-            },
-            //form配置
-            toolsClick(event){
-                if(event.target==event.currentTarget ){ 
-                    this.activeField='';this.activeButton=''                
-                    this.$emit('toConfig',event,this.configs.forms,[{
-                        "type":"elementSwitch",
-                        "label":"只读",
-                        "name":"disabled"
-                    },{
-                        "type":"elementSelect",
-                        "label":"尺寸",
-                        "name":"size",
-                        "options":[{
-                            label:"默认",
-                            value:""
-                        },{
-                            label:"中等",
-                            value:"medium"
-                        },{
-                            label:"小型",
-                            value:"small"
-                        },{
-                            label:"超小",
-                            value:"mini"
-                        }]
-                    },{
-                        "type":"elementSwitch",
-                        "label":"单行模式",
-                        "name":"inline"
-                    },{
-                        "type":"elementSelect",
-                        "label":"标签对齐",
-                        "name":"labelPosition",
-                        "options":[{
-                            label:"右边",
-                            value:"right"
-                        },{
-                            label:"顶部",
-                            value:"top"
-                        },{
-                            label:"左边",
-                            value:"left"
-                        }]                        
-                    },{
-                        "type":"elementText",
-                        "label":"标签宽度",
-                        "name":"labelWidth",
-                        "placeholder":"例: 80px"
-                    },{
-                        "type":"elementSwitch",
-                        "label":"校验信息",
-                        "name":"showMessage"
-                    },{
-                        "type":"elementSwitch",
-                        "label":"反馈图标",
-                        "name":"statusIcon"
-                    }])                                
-                }                 
-            },                
+            //模块框点击
+            containersClick:function(event){
+                this.$emit('accordionChange',event,'模块')
+            },               
             //配置字段组件
             toConfig:function(event,config,attr){            
                 this.$emit('toConfig',event,config,attr)
@@ -169,6 +114,7 @@
         width:auto;
         height:100%;       
         border:1px dashed #c0c4cc;
+        position: relative;
     }
 
 </style>
