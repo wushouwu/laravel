@@ -190,7 +190,7 @@ class table extends Controller{
                     //字段类型
                     switch($form['DATA_TYPE']){
                         case 'varchar':
-                            $field=$table->string($COLUMN_NAME,$form['DATA_TYPE'],$form['CHARACTER_MAXIMUM_LENGTH']);
+                            $field=$table->string($COLUMN_NAME,$form['CHARACTER_MAXIMUM_LENGTH']);
                             break;
                         case 'text':
                             $field=$table->text($COLUMN_NAME);
