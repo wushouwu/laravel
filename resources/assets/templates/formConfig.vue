@@ -193,7 +193,7 @@
             },
             //点击字段框 事件
             fieldsClick:function(event){
-                this.$emit('fieldsClick',event)
+                this.$emit('accordionChange',event,'组件')
             },
             //form配置
             toolsClick(event){
