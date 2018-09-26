@@ -198,14 +198,21 @@ export default {
     .el-pagination.is-background .el-pager li,.el-pagination.is-background button[type="button"]{
         border-radius:14px;
     } 
-    /* 卡片上边距处理 */       
-    /* .elementCard+.elementCard{
-        margin-top:20px;
-    } */
     /* 卡片处理 */       
     .elementCard{
         display:inline-block;
         vertical-align: top;
-        /* margin: 0px 1% 0px 1%;  */
-    }    
+        margin: 1% 0px 0px 1%; 
+    }
+    /* 卡片头处理 */    
+    .elementCard .el-card__header{
+        display:flex;
+        align-items:center;
+        text-indent: 18px;
+        height:57.8px;
+        padding:0px;
+    }
+    .containers .elementCard{
+        cursor:move;
+    }
 </style>
