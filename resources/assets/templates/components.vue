@@ -137,9 +137,13 @@
                 }]`,
                 initContainers:`[{
                     "type":"elementCard",
-                    "header":"列表",
+                    "header":{
+                        "title":"列表",
+                        "height":"57.8px"
+                    },
                     "shadow":"always",
-                    "width":"98%"
+                    "width":"98%",
+                    "height":"auto"
                 }]`,
                 configs: {
                     components:[],
