@@ -14,7 +14,8 @@
                     :is="this.query.row.type+'Config'"
                     ref="view"
                     :query="query"
-                    @fieldsClick="accordionChange"
+                    @accordionChange="accordionChange"
+                    @containersClick="accordionChange"
                     @configChange="configChange"
                     @toConfig="toConfig"
                     @del="del"
@@ -66,9 +67,9 @@
                 this.attrs={};    
             },
             //切换边栏为所有组件
-            accordionChange:function(event){
+            accordionChange:function(event,type){
                 if(event.target==event.currentTarget ){    
-                    this.$refs.accordion.activeAccordion="组件";           
+                    this.$refs.accordion.activeAccordion=type;           
                 } 
             },             
             //配置改变时
