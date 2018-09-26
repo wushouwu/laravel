@@ -340,11 +340,13 @@
 			},
 			//添加
 			add(event,config){
-				let title=this.query.TABLE_COMMENT+'-'+this.query.view_name+'-添加';
+				let query=Object.assign({},this.query,config.query);
+				let title=query.TABLE_COMMENT+'-'+this.query.view_name+'-添加';
+				console.log(query);
 				this.addTab({
 					name: title,
-					content: config.query.content||'formVue',
-					query:Object.assign({},this.query,config.query)
+					content: query.content||'formVue',
+					query: query
 				})
 			},			
 			//高级搜索弹窗
