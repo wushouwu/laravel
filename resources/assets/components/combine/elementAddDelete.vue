@@ -121,6 +121,9 @@
                     },{
                         label:'模板',
                         value:'content'
+                    },{
+                        label:'视图',
+                        value:'view_name'
                     }]
                 },
                 optionValue:{
