@@ -10,11 +10,16 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+Auth::routes();
 
 Route::get('/', function () {
+    if (!Auth::check()) {
+        return redirect('/login');
+    }    
     return view('index');
 });
-// Auth::routes();
+
+Route::get('/home', 'HomeController@index');
 
 Route::group(['prefix' => 'admin'], function () {
     //Route::post('/form/save', 'Admin\IndexController@save');
