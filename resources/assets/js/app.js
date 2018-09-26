@@ -44,8 +44,8 @@ requireComponent.keys().forEach(fileName => {
 })
 //路由
 import index from '../templates/index.vue';
-import table from '../templates/table.vue';
-import components from '../templates/components.vue';
+//import table from '../templates/table.vue';
+//import components from '../templates/components.vue';
 import VueRouter from 'vue-router'; 
 Vue.use(VueRouter);
 const router = new VueRouter({
