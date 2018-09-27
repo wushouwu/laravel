@@ -241,7 +241,28 @@ class table extends Controller{
         }       
         return response()->json($data);
 
-    }   
+    }  
+    //保存表单
+    public function tableSave(Request $request){
+        $form=$request->input('form',['TABLE_COMMENT'=>'','TABLE_NAME'=>'']);
+        $table = DB::table('INFORMATION_SCHEMA.TABLES')
+            ->where('TABLE_SCHEMA',$this->db)
+            ->where('TABLE_COMMENT',$form['TABLE_COMMENT'])
+            ->get();
+        if(count($table)){
+            return response()->json(['msg'=>'表名已存在','data'=>$table]);
+        }
+        if (Schema::hasTable($form['TABLE_NAME'])) {
+            $data=['msg'=>'别名已存在'];
+        }else{
+            $name=Schema::create($form['TABLE_NAME'], function (Blueprint $table) {
+                $table->increments('id')->comment('id');
+            });
+            $comment=DB::statement("ALTER TABLE `{$form['TABLE_NAME']}` comment '{$form['TABLE_COMMENT']}' "); 
+            $data=['name'=>$name,'comment'=>$comment];
+        }
+        return response()->json($data);        
+    } 
     //获取表格模板默认配置
     public function tableView(Request $request){
         $TABLE_NAME=$request->input('TABLE_NAME','');
@@ -255,6 +276,14 @@ class table extends Controller{
                     'buttonType' => 'primary',
                     'type' => 'elementButton',
                     'icon' => 'el-icon-plus',
+                    "query"=> [
+                        "url"=> "admin/table/addView",
+                        "TABLE_NAME"=> $TABLE_NAME,
+                        'view_name'=>'数据'
+                    ],
+                    "operator"=> "elementTextarea",
+                    "script"=> "this.add(event,config)",
+                    "text"=> "添加"                    
                     ),
                     1 => 
                     array (
@@ -285,35 +314,7 @@ class table extends Controller{
                     'order' => 'ascending',
                     ),
                     'header'=>array(
-                        'fields' => 
-                        array (
-                        0 => 
-                        array (
-                            'value' => 'TABLE_COMMENT',
-                            'label' => '表名',
-                            'type' => 'datetime',
-                            'sortable' => true,
-                            'fixed' => true,
-                            'resizable' => true,
-                        ),
-                        1 => 
-                        array (
-                            'value' => 'TABLE_NAME',
-                            'label' => '别名',
-                            'type' => 'inputNumber',
-                            'sortable' => true,
-                            'fixed' => false,
-                            'resizable' => true,
-                        ),
-                        2 => 
-                        array (
-                            'value' => 'desc',
-                            'label' => '备注',
-                            'fixed' => false,
-                            'resizable' => false,
-                            'width' => '400',
-                        ),
-                        ),
+                        'show'=> true,                       
                     ),
                     'operator' => 
                     array (
@@ -352,6 +353,7 @@ class table extends Controller{
                 $fields[$count-1]->resizable=false;
                 $json['form']['field']=$fields[0]->value;
                 $json['table']['header']['fields']=$fields;
+                $json['table']['header']['column']=$fields;
                 $json['table']['defaultSort']=array('prop'=>$fields[0]->value,'sort'=>'ascending');
             }
             $data=$json;
@@ -360,6 +362,69 @@ class table extends Controller{
         }
         return response()->json($data);
     }
+    //添加视图的默认配置
+    public function addView(Request $request){
+        $TABLE_NAME=$request->input('TABLE_NAME','');
+        if($TABLE_NAME){
+            $fields=$this->field($request)->original['data'];
+            $data=['data'=>[
+                'fields'=>[],
+                "tools"=> [[
+                    "type"=> "elementButton",
+                    "text"=> "取消",
+                    "buttonType"=> "",
+                    "name"=> "button",
+                    "title"=> "取消",
+                    "operator"=> "elementSelect",
+                    "query"=> [],
+                    "script"=> "this.cancel(event,config);"
+                ],[
+                    "type"=> "elementButton",
+                    "text"=> "保存并关闭",
+                    "buttonType"=> "primary",
+                    "name"=> "button",
+                    "title"=> "保存并关闭",
+                    "operator"=> "elementSelect",
+                    "query"=> [
+                        "url"=> "admin/table/save"
+                    ],
+                    "script"=> "this.save(event,config,true);"
+                ]]
+            ]];
+            foreach($fields as $key=>$val){
+                if($val->name=='id'){
+                    continue;
+                }
+                $data['data']['fields'][$key]=[
+                    "type"=> "elementText",
+                    "label"=> $val->label,
+                    "name"=> $val->name,
+                    "rules"=> [
+                        [
+                            "required"=> false,
+                            "trigger"=> [
+                                "blur"
+                            ],
+                            "message"=> "字段不能为空"
+                        ],
+                        [
+                            "type"=> "",
+                            "trigger"=> [],
+                            "message"=> ""
+                        ],
+                        [
+                            "custom"=> "pattern",
+                            "trigger"=> [],
+                            "message"=> ""
+                        ]
+                    ]                    
+                ];
+            }
+        }else{
+            $data=['msg'=>'表名不存在'];
+        }
+        return response()->json($data);
+    }    
     //保存表单
     public function save(Request $request){
         $TABLE_NAME=$request->input('TABLE_NAME','');
@@ -389,19 +454,4 @@ class table extends Controller{
         return response()->json($data);
 
     }
-    //添加视图的默认配置
-    /*public function addView(Request $request){
-        $TABLE_NAME=$request->input('TABLE_NAME','');
-        if($TABLE_NAME){
-            $fields=$this->field($request)->original['fields'];
-            $data=['data'=>[
-                'fields'=>$fields,
-                'tools'=>[
-                ]
-            ]];
-        }else{
-            $data=['msg'=>'表名不存在'];
-        }
-        return response()->json($data);
-    }*/
 }
