@@ -27,12 +27,14 @@ Route::group(['prefix' => 'admin'], function () {
         $actions=[
             'table',//表单数据
             'tableView',//默认表格配置
+            'addView',//默认添加配置
             'field',//字段信息
             'view',//获取视图
             'save',//保存表单
             'tables',//所有表
             'row',//表格一行数据
             'fieldOperate',//字段操作
+            'tableSave'//保存表格
         ];
         foreach($actions as $key=>$action){
             Route::any('/'.$action, 'Admin\table@'.$action);
