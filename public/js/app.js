@@ -4693,9 +4693,8 @@ try {
  */
 
 window.axios = __webpack_require__(93);
-
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
-window.axios.defaults.withCredentials = true;
+//window.axios.defaults.withCredentials = true;
 window.axios.defaults.timeout = 30000;
 /**
  * Next we will register the CSRF Token as a common header with Axios so that
@@ -4706,6 +4705,7 @@ window.axios.defaults.timeout = 30000;
 var token = document.head.querySelector('meta[name="csrf-token"]');
 
 if (token) {
+    window.axios.defaults.headers.common['X-XSRF-TOKEN'] = token.content;
     window.axios.defaults.headers.common['X-CSRF-TOKEN'] = token.content;
 } else {
     console.error('CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token');
@@ -38800,8 +38800,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		//添加
 		add: function add(event, config) {
 			var query = Object.assign({}, this.query, config.query);
-			var title = query.TABLE_COMMENT + '-' + this.query.view_name + '-添加';
-			console.log(query);
+			var title = query.TABLE_COMMENT + '-' + query.view_name + '-添加';
 			this.addTab({
 				name: title,
 				content: query.content || 'formVue',
@@ -39224,7 +39223,7 @@ exports = module.exports = __webpack_require__(5)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -39289,11 +39288,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
 
     created: function created() {
+        console.log(this.query);
         //表单配置
         this.my.axios({
             vue: this,
             axiosOption: {
-                url: 'admin/table/view',
+                url: this.query.url || 'admin/table/view',
                 data: Object.assign({ type: "form" }, this.query)
             },
             success: function success(response, option) {
