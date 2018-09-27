@@ -51,11 +51,12 @@
             }
         },
         created: function(){
+            console.log(this.query);
             //表单配置
             this.my.axios({
                 vue: this,
                 axiosOption:{
-                    url:'admin/table/view',
+                    url:this.query.url||'admin/table/view',
                     data:Object.assign({type:"form"},this.query)
                 },
                 success:function(response,option){
