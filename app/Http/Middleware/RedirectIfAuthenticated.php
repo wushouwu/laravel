@@ -20,7 +20,8 @@ class RedirectIfAuthenticated
     {
         if (Auth::guard($guard)->check()) {
             //父级角色session信息
-            $row=$request->user()->role()->first()->ToArray();
+            $row=$request->user()->role()->first();
+            $row=$row?$row->ToArray():['id'=>0];
             $role=new Role();
             $parents=array_column($role->parents($row,true),'id');
             $request->session()->put('role_parents',$parents);
