@@ -341,7 +341,7 @@
 			//添加
 			add(event,config){
 				let query=Object.assign({},this.query,config.query);
-				let title=query.TABLE_COMMENT+'-'+query.view_name+'-添加';
+				let title=query.TABLE_COMMENT+'-'+query.view_name;
 				this.addTab({
 					name: title,
 					content: query.content||'formVue',
