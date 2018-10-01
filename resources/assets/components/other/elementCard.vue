@@ -66,7 +66,6 @@
         },
         computed:{
             headerHeight(){
-                console.log('a');
                 return this.config.header.height;
             }
         },
