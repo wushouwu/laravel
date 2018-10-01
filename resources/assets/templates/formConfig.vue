@@ -141,22 +141,7 @@
                     error:function(response,option){
                         option.vue.configs=configs;
                     }
-                });
-                //表单字段
-                if(this.query.row.TABLE_NAME){
-                    this.my.axios({
-                        vue: this,
-                        axiosOption:{
-                            url:'admin/table/field',
-                            data:{
-                                TABLE_NAME:this.query.row.TABLE_NAME
-                            }
-                        },
-                        success:function(response,option){
-                            option.vue.fields=response.data.data;
-                        }
-                    }); 
-                }               
+                });              
             }else{
                 this.configs=configs;
             }
@@ -256,8 +241,27 @@
             },                
             //配置字段组件
             toConfig:function(event,config,attr){
+                //表单字段              
                 if(attr.name){
-                    this.$set(attr.name,'options',this.fields);
+                    if(this.query.row.TABLE_NAME){
+                        if(this.fields.length){
+                            this.$set(attr.name,'options',this.fields);
+                        }else{
+                            this.my.axios({
+                                vue: this,
+                                axiosOption:{
+                                    url:'admin/table/field',
+                                    data:{
+                                        TABLE_NAME:this.query.row.TABLE_NAME
+                                    }
+                                },
+                                success:function(response,option){
+                                    option.vue.fields=response.data.data;
+                                    option.vue.$set(attr.name,'options',option.vue.fields);
+                                }
+                            });                            
+                        }
+                    }
                 }            
                 this.$emit('toConfig',event,config,attr)
             },
