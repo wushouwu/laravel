@@ -25,10 +25,20 @@
 <script>
     export default {
         props: ['config','form'],
+        data(){
+            return {
+                role:[],
+                dept:[],
+                user:[]
+            }
+        },
         created(){
             if(!this.config.query){
                 this.$set(this.config,'query',{});
             }
+            if(!this.config.priv){
+                this.$set(this.config,'priv',{role:[],dept:[],user:[]});
+            }            
         },
         mounted(){
             //组件添加删除按钮
@@ -45,7 +55,34 @@
             buttonClick: function(event){
                 this.$emit('buttonClick',event,this.config);
             },
-            click(event){               
+            click(event){
+                if(!this.role.length||!this.user.length){
+                    this.my.axiosAll({
+                        vue:this,
+                        axiosOption:[{
+                            url: 'admin/table/table',
+                            data:{
+                                TABLE_NAME:'roles',
+                                fields:'`name` as label,`id` as value',
+                            }
+                        },{
+                            url: 'admin/table/table',
+                            data:{
+                                TABLE_NAME:'users',
+                                fields:'`name` as label,`id` as value',
+                            }
+                        }],
+                        success:function (response,option) {
+                            option.vue.$set(option.vue,'role',response[0].data.data);
+                            option.vue.$set(option.vue,'user',response[1].data.data);
+                            option.vue.emit(event);
+                        }
+                    });                    
+                }else{
+                    this.emit(event);
+                }
+            },
+            emit(event){
                 this.$emit('config',event,this.config,{
                     textShow:{
                         name:"textShow",
@@ -191,7 +228,76 @@
                             style:"width:40%;display:inline-block;margin-right:2%",
                         },
                         options:this.config.query//Object.assign({},this.config.query)
-                    }
+                    },
+                    priv:{
+                        type:"elementComponents",
+                        name:"priv",
+                        label:"权限",
+                        labelPositionTop:true,
+                        itemDefault:{
+                            size:"small"
+                        },                        
+                        options:[{
+                            type:"elementSelect",
+                            name:"role",
+                            label:"角色",
+                            transfer:true,
+                            multiple:true,
+                            source:"options",                        
+                            options:this.role,
+                            config:{
+                                type:"elementTransfer",
+                                wrapper:"div",
+                                name:"role",
+                                data:this.role,
+                                titles:['未选','已选'],
+                                filterable:true 
+                            }
+                        },{ 
+                            type:"elementSelect",
+                            name:"dept",
+                            label:"部门",
+                            transfer:true,
+                            multiple:true, 
+                            source:"tableField",
+                            tableField:{
+                                table:"roles",
+                                fieldLabel:"name",
+                                fieldValue:"id"
+                            },
+                            options:[{label: "a", value: 1}],
+                            config:{
+                                type:"elementTransfer",
+                                wrapper:"div",
+                                name:"dept",
+                                data:[{
+                                    value: "1",
+                                    label: "aa"
+                                },{
+                                    key: "2",
+                                    value: "bb"
+                                }],
+                                titles:['未选','已选'],
+                                filterable:true 
+                            }
+                        },{
+                            type:"elementSelect",
+                            name:"user",
+                            label:"用户",
+                            transfer:true,
+                            multiple:true,
+                            source:"options",                        
+                            options:this.user,
+                            config:{
+                                type:"elementTransfer",
+                                wrapper:"div",
+                                name:"user",
+                                data:this.user,
+                                titles:['未选','已选'],
+                                filterable:true 
+                            }
+                        }]
+                    }                   
                 });
             }
         }

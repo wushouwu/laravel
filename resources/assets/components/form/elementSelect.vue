@@ -16,6 +16,8 @@
             :placeholder="config.placeholder||'请选择'"
             :size="config.size"
             @change="change"
+            @click.native="selectClick"
+            ref="elementSelect"
         >
             <el-option 
                 v-for="opiton in options" 
@@ -25,6 +27,21 @@
                 :value="opiton.value"
             ></el-option>
         </el-select>
+		<el-dialog 
+            :title="config.label" 
+			:visible.sync="transfer" 
+			:modal-append-to-body="false" 
+			:modal="true"
+			:fullscreen="false" 
+			:close-on-click-modal="true"
+            :showClose="false"
+		>
+			<elementTransfer :config="config.config" :form="form"></elementTransfer>
+			<div slot="footer" class="dialog-footer">
+				<!-- <el-button @click="transfer = false">取 消</el-button> -->
+				<el-button type="primary" @click="transfer = false">完成</el-button>
+			</div>
+		</el-dialog>        
     </el-form-item>
 </template>
 <script>
@@ -33,11 +50,13 @@
         data(){
             return {
                 tables:[],
-                fields:[]
+                fields:[],
+                transfer:false,
+                options:[]               
             }
         },
         created(){
-            //this.source(this.config.tableField);
+            this.source(this.config.tableField);
             if(this.config.allowCreate){
                 this.$set(this.config,'filterable',true);
             }
@@ -68,19 +87,14 @@
             },
             sourceChange(newValue,oldValue){
                 this.source(this.config.tableField);
-            }            
+            },
+            options(newValue,oldValue){
+                this.$set(this.config,'options',newValue);
+            }           
         },
         computed:{
             tableField(){
                 return this.config.tableField;
-            },
-            options:{
-                get(){
-                    return this.config.options;
-                },
-                set(newValue){
-                    this.config.options=newValue;
-                }
             },
             sourceChange(){
                 return this.config.source;
@@ -100,47 +114,36 @@
                             }
                         },
                         success:function(response,option){
-                            option.vue.options=response.data.data;
+                            option.vue.$set(option.vue,'options',response.data.data);
+
                         }
                     });
                 }else{
                     this.options=this.config.options;
                 }               
             },                 
-            click: function(event){
+            click: function(event){             
                 //配置
                 if(this.config.source=='tableField' && this.config.tableField){
-                    if(this.tables.length){ 
-                        //所属表所有字段
-                        if(this.config.tableField.table){
-                            this.my.axios({
-                                vue: this,
-                                axiosOption:{
-                                    url: 'admin/table/field',
-                                    data:{
-                                        TABLE_NAME:this.config.tableField.table
-                                    }
-                                },
-                                success:function(response,option){
-                                    option.vue.fields=response.data.data;
-                                    option.vue.emit(event);
-                                }
-                            });
-                        }else{
-                            this.emit(event);
-                        }                                         
-                    }else{
-                        //所有表
-                        this.my.axios({
-                            vue: this,
-                            axiosOption:{
+                    if(!this.tables.length || !this.fields.length){
+                        this.my.axiosAll({
+                            vue:this,
+                            axiosOption:[{
                                 url: 'admin/table/tables'
-                            },
-                            success:function(response,option){
-                                option.vue.tables=response.data.data;
+                            },{
+                                url: 'admin/table/field',
+                                data: {
+                                    TABLE_NAME: this.config.tableField.table
+                                }
+                            }],
+                            success:function (response,option) {
+                                option.vue.tables=response[0].data.data;
+                                option.vue.fields=response[1].data.data;
                                 option.vue.emit(event);
                             }
                         });
+                    }else{
+                        this.emit(event);
                     }
                 }else{
                     this.emit(event);
@@ -307,7 +310,13 @@
             change(value){
                 this.$emit('selectChange',value,this.config);
                 this.$emit('e',value,this.config);
-            }
+            },
+            selectClick(event){
+                if(this.config.transfer){
+                    this.$refs.elementSelect.blur();
+                    this.transfer=true;
+                }
+            }            
         }   
     }
 </script>

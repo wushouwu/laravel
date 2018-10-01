@@ -4,7 +4,8 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Support\Facades\Auth;
-
+use Illuminate\Support\Facades\DB;
+use \App\Role;
 class RedirectIfAuthenticated
 {
     /**
@@ -18,7 +19,12 @@ class RedirectIfAuthenticated
     public function handle($request, Closure $next, $guard = null)
     {
         if (Auth::guard($guard)->check()) {
-            //return redirect('/');
+            //父级角色session信息
+            $row=$request->user()->role()->first()->ToArray();
+            $role=new Role();
+            $parents=array_column($role->parents($row,true),'id');
+            $request->session()->put('role_parents',$parents);
+            return redirect('/');
         }
 
         return $next($request);

@@ -12,16 +12,35 @@
             v-model="form[config.name]"
             :size="config.size"
             :clearable="true" 
-            @keyup.enter.native="enter"
             :placeholder="config.placeholder||'请输入'"
             :readonly="config.readonly"
             :disabled="config.disabled"
+            @click.native="inputClick"          
         ></el-input>
+		<el-dialog 
+            title="选择" 
+			:visible.sync="transfer" 
+			:modal-append-to-body="false" 
+			:modal="true"
+			:fullscreen="false" 
+			:close-on-click-modal="false"
+		>
+			<elementTransfer :config="config.config" :form="form"></elementTransfer>
+			<div slot="footer" class="dialog-footer">
+				<!-- <el-button @click="transfer = false">取 消</el-button> -->
+				<el-button type="primary" @click="transfer = false">完成</el-button>
+			</div>
+		</el-dialog>        
     </el-form-item>
 </template>
 <script>
     export default {
         props: ['config','form'], 
+        data(){
+            return {
+                transfer:false
+            }
+        },
         created(){
             //默认验证
             this.$set(this.config,'rules',Object.assign([{
@@ -247,6 +266,11 @@
             },
             enter(event){
                 this.$emit('enter',event,this.config);
+            },
+            inputClick(event){
+                if(this.config.transfer){
+                    this.transfer=true;
+                }
             }
         }
     }

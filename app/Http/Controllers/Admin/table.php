@@ -93,10 +93,11 @@ class table extends Controller{
     //DB::connection()->enableQueryLog();
     //dd(DB::getQueryLog());
     //获取视图配置
-    public function view(Request $request){  
+    public function view(Request $request){ 
         $view=$request->input('view_name','');
         $type=$request->input('type','');
         $TABLE_NAME=$request->input('TABLE_NAME','');
+        $priv=$request->input('priv',true);
         if($view){
             $json=$tables = DB::table('view')->where([
                 ['view_name','=',$view],
@@ -109,6 +110,26 @@ class table extends Controller{
                     $fields=$this->field($request)->original['data'];
                     if(count($fields)){
                         $json->table->header->fields=$fields;
+                    }
+                    //非超管权限控制
+                    if($request->user()->role!=0 && $priv){
+                        $role_parents=$request->session()->get('role_parents');
+                        $button=['tools'=>$json->tools,'operator'=>$json->table->operator];
+                        foreach($button as $key=>$val){
+                            foreach($val as $k=>$v){
+                                if(isset($v->priv)){
+                                    $role=array_intersect($v->priv->role,$role_parents);
+                                    $user=in_array($request->user()->id,$v->priv->user);
+                                    if(!$role && !$user){
+                                        unset($button[$key][$k]);
+                                    }
+                                }else{   
+                                    unset($button[$key][$k]); 
+                                }                                
+                            }
+                        }
+                        $json->tools=$button['tools'];
+                        $json->table->operator=$button['operator'];
                     }
                 }
                 $data=['data'=> $json];
@@ -279,7 +300,7 @@ class table extends Controller{
                     "query"=> [
                         "url"=> "admin/table/addView",
                         "TABLE_NAME"=> $TABLE_NAME,
-                        'view_name'=>'数据'
+                        'view_name'=>'数据-添加'
                     ],
                     "operator"=> "elementTextarea",
                     "script"=> "this.add(event,config)",

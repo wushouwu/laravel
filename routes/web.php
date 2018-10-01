@@ -11,18 +11,13 @@
 |
 */
 Auth::routes();
-
-Route::get('/', function () {
-    if (!Auth::check()) {
-        return redirect('/login');
-    }    
+Route::get('/', function () {       
     return view('index');
-});
+})->middleware('auth');
 
 Route::get('/home', 'HomeController@index');
 
 Route::group(['prefix' => 'admin'], function () {
-    //Route::post('/form/save', 'Admin\IndexController@save');
     Route::group(['prefix' => '/table'], function () {
         $actions=[
             'table',//表单数据

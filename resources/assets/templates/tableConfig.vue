@@ -242,7 +242,7 @@
 				vue: this,
 				axiosOption:{
 					url:'admin/table/view',
-					data: this.query.row
+					data: Object.assign({},this.query.row,{priv:false})
 				},
 				success:function(response,option){
 					let data=response.data.data;
