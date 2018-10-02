@@ -4,7 +4,6 @@
         :label="config.label"
         :label-width="config.labelWidth||'0px'"
         @click="click"
-        @click.native="click"
         class="elementButton"
         :style="config.style"
     >
@@ -56,6 +55,7 @@
                 this.$emit('buttonClick',event,this.config);
             },
             click(event){
+                let target=event.currentTarget;//处理currentTarget丢失的问题
                 if(!this.role.length||!this.user.length){
                     this.my.axiosAll({
                         vue:this,
@@ -75,6 +75,7 @@
                         success:function (response,option) {
                             option.vue.$set(option.vue,'role',response[0].data.data);
                             option.vue.$set(option.vue,'user',response[1].data.data);
+                            event.myTarget=target;
                             option.vue.emit(event);
                         }
                     });                    
