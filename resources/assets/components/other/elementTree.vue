@@ -25,7 +25,7 @@
             ></elementButton>            
         </div>                
         <el-tree
-            ref="tree"
+            ref="elementTree"
             :class="{'size-small-font':config.itemDefault.size==='small'||config.itemDefault.size==='mini'?true:false,delShow:'delShow' in config?true:false}"
             :data="config.data"
             :node-key="config.nodeKey"
@@ -40,6 +40,8 @@
             :allow-drop="config.allowDrop"
             :allow-drag="config.allowDrag"
             @node-click="nodeClick"
+            @check="check"
+            @check-change="checkChange"
             @node-drop="dataChange"
         >
             <span slot-scope="{ node, data }">
@@ -127,7 +129,8 @@
         created(){
         },
         mounted(){
-            this.labelPositionTop(); 
+            this.labelPositionTop();  
+
         },
         updated(){
            this.labelPositionTop();
@@ -146,14 +149,28 @@
                     if(item__content){
                         item__content.style.cssText="marginLeft:0px;clear:both;";
                     }
-                }
+                } 
+                //选择
+                /* for(var i in this.config.data){
+                    this.$refs.elementTree.setChecked(this.config.data[i],!this.config.data[i].hide);
+                }  */               
             },
             //点击节点
             nodeClick(){
                 if(typeof(this.config.nodeClick)=='function'){
                     this.config.nodeClick();
                 }
-            },            
+            }, 
+            //当复选框被点击的时候触发
+            check(data,node){
+                //console.log(data,node);
+                //data.width="0";
+            },
+            checkChange(data, checked, indeterminate){
+                if(typeof(this.config.checkChange)=='function'){
+                    this.config.checkChange(this,data, checked, indeterminate);
+                }
+            },
             //数据改变后渲染
             dataChange(){
                 this.delShow=false;
@@ -167,7 +184,7 @@
             },  
             //删除节点   
             del(event,node,data){
-                this.$refs.tree.remove(node);
+                this.$refs.elementTree.remove(node);
                 this.dataChange();
             },  
             click: function(event){
