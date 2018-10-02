@@ -143,7 +143,7 @@ class table extends Controller{
                 $data=['msg'=>'没有视图配置'];
             }
         }
-        return response()->json($data);
+        return response()->json($data);//->setEncodingOptions(JSON_FORCE_OBJECT);
     }  
     //所有表
     public function tables(Request $request){
@@ -337,28 +337,72 @@ class table extends Controller{
                     'header'=>array(
                         'show'=> true,                       
                     ),
-                    'operator' => 
-                    array (
-                    0 => 
-                    array (
-                        'text' => '查看',
-                        'query' => 
-                        array (
-                        'view_name' => 'hello',
-                        ),
-                        'script' => 'this.view(row,operator)',
-                    ),
-                    1 => 
-                    array (
-                        'text' => '编辑',
-                        'script' => 'this.edit(row,operator)',
-                    ),
-                    2 => 
-                    array (
-                        'text' => '删除',
-                        'script' => 'this.delete(row,operator)',
-                    ),
-                    ),
+                    "operator"=> [[
+                        "text"=> "查看",
+                        "type"=> "elementButton",
+                        "wrapper"=> "span",
+                        "script"=> "this.view(row,operator)",
+                        "icon"=> "el-icon-view",
+                        "title"=> "查看",
+                        "buttonType"=> "primary",
+                        "saturation"=> "plain",
+                        "shape"=> "circle",
+                        "size"=> "medium",
+                        "operator"=> "elementTextarea",
+                        "query"=> [
+                            "TABLE_NAME"=> $TABLE_NAME,
+                            "url"=> "admin/table/viewView",                              
+                            "view_name"=> "数据-查看"
+                        ],
+                        "priv"=> [
+                            "role"=> [],
+                            "dept"=> [],
+                            "user"=> []
+                        ]
+                    ],[
+                        "text"=> "编辑",
+                        "type"=> "elementButton",
+                        "wrapper"=> "span",
+                        "script"=> "this.edit(row,operator)",
+                        "title"=> "编辑",
+                        "icon"=> " el-icon-edit-outline",
+                        "buttonType"=> "success",
+                        "saturation"=> "plain",
+                        "shape"=> "circle",
+                        "size"=> "medium",
+                        "operator"=> "elementTextarea",
+                        "query"=> [
+                            "TABLE_NAME"=> $TABLE_NAME,
+                            "url"=> "admin/table/addView",                              
+                            "view_name"=> "数据-编辑"
+                        ],
+                        "priv"=> [
+                            "role"=> [],
+                            "dept"=> [],
+                            "user"=> []
+                        ]
+                    ],[
+                        "text"=> "删除",
+                        "type"=> "elementButton",
+                        "wrapper"=> "span",
+                        "script"=> "this.delete(row,operator)",
+                        "title"=> "删除",
+                        "icon"=> "el-icon-delete",
+                        "buttonType"=> "danger",
+                        "saturation"=> "plain",
+                        "shape"=> "circle",
+                        "size"=> "medium",
+                        "operator"=> "elementTextarea",
+                        "query"=> [
+                            "TABLE_NAME"=> $TABLE_NAME,
+                            "url"=> "admin/table/delete"                               
+                        ],
+                        "priv"=> [
+                            "role"=> [],
+                            "dept"=> [],
+                            "user"=> []
+                        ]
+                    ]]
                 ),
                 'pagination' => 
                 array (
@@ -383,7 +427,7 @@ class table extends Controller{
         }
         return response()->json($data);
     }
-    //添加视图的默认配置
+    //添加编辑视图的默认配置
     public function addView(Request $request){
         $TABLE_NAME=$request->input('TABLE_NAME','');
         if($TABLE_NAME){
@@ -445,7 +489,42 @@ class table extends Controller{
             $data=['msg'=>'表名不存在'];
         }
         return response()->json($data);
-    }    
+    } 
+    //查看视图的默认配置 
+    public function viewView(Request $request){
+        $TABLE_NAME=$request->input('TABLE_NAME','');
+        if($TABLE_NAME){
+            $fields=$this->field($request)->original['data'];
+            $data=['data'=>[
+                'fields'=>[],
+                "tools"=> [[
+                    "type"=> "elementButton",
+                    "text"=> "编辑",
+                    "buttonType"=> "primary",
+                    "name"=> "button",
+                    "title"=> "编辑",
+                    "operator"=> "elementSelect",                    
+                    "query"=> [
+                        "url"=> "admin/table/addView",
+                        "TABLE_NAME"=>$TABLE_NAME,
+                        "view_name"=>"数据-编辑"
+                    ],
+                    "script"=> "this.edit(event,config);"
+                ]]
+            ]];
+            foreach($fields as $key=>$val){
+                $data['data']['fields'][$key]=[
+                    "type"=> "elementText",
+                    "label"=> $val->label,
+                    "name"=> $val->name,
+                    "readonly"=>true                    
+                ];
+            }
+        }else{
+            $data=['msg'=>'表名不存在'];
+        }
+        return response()->json($data);
+    }       
     //保存表单
     public function save(Request $request){
         $TABLE_NAME=$request->input('TABLE_NAME','');
