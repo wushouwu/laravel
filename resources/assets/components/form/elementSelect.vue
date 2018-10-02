@@ -20,7 +20,7 @@
             ref="elementSelect"
         >
             <el-option 
-                v-for="opiton in options" 
+                v-for="opiton in config.options" 
                 value-key="value"
                 :key="opiton.value" 
                 :label="opiton.label" 
@@ -88,7 +88,7 @@
             sourceChange(newValue,oldValue){
                 this.source(this.config.tableField);
             },
-            options(newValue,oldValue){
+            options(newValue,oldValue){ 
                 this.$set(this.config,'options',newValue);
             }           
         },
@@ -114,7 +114,7 @@
                             }
                         },
                         success:function(response,option){
-                            option.vue.$set(option.vue,'options',response.data.data);
+                            option.vue.$set(option.vue.config,'options',response.data.data);
 
                         }
                     });
