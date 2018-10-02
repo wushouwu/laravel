@@ -47,7 +47,7 @@
             configForm(){
                 return this.form[this.config.name];
             }
-        },
+        },       
         methods:{
             e(event,config){
                 switch(config.name){
@@ -55,6 +55,12 @@
                         eval(config.script);
                 }
                 this.$emit('componentEvent',event,config);
+            },
+            //类型转换
+            transfer(option){
+                if(option.type.indexOf('element')<0){
+                    this.$set(this.form[this.config.name],option.name,Boolean(this.form[this.config.name][option.name]));
+                }
             },
             labelPositionTop(){
                 //labelPositionTop样式调整
