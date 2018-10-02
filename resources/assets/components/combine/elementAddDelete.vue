@@ -144,7 +144,7 @@
         watch:{
             option:{
                 handler(newValue,oldValue){
-                    if(newValue &&　this.config.options.length && this.config.options[0].length===undefined){
+                    if(newValue &&　this.config.options.length && this.config.options[0].length===undefined&&this.index!==''){
                         this.$set(this.config.options,this.index,Object.assign({},newValue,{script:this.config.options[this.index].script}));
                     }
                     if(this.config.options.length===undefined){
@@ -241,7 +241,8 @@
             },
             //子组件配置
             itemConfig(event,config,attr){
-                this.index=event.currentTarget.getAttribute('index');
+                let target=event.currentTarget || event.myTarget;
+                this.index=target.getAttribute('index');
                 let option={config:config,attr:attr,index:this.index};
                 this.$emit('e',event,option);
                 
