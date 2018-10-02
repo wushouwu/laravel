@@ -15,14 +15,15 @@ Route::get('/', function () {
     return view('index');
 })->middleware('auth');
 
-Route::get('/home', 'HomeController@index');
+//Route::get('/home', 'HomeController@index');
 
 Route::group(['prefix' => 'admin'], function () {
     Route::group(['prefix' => '/table'], function () {
         $actions=[
             'table',//表单数据
             'tableView',//默认表格配置
-            'addView',//默认添加配置
+            'addView',//默认添加、编辑配置
+            'viewView',//默认查看配置
             'field',//字段信息
             'view',//获取视图
             'save',//保存表单
@@ -36,11 +37,4 @@ Route::group(['prefix' => 'admin'], function () {
         }
     });
 });
-// Route::get('/{module?}/{view?}', function ($module='',$view = 'index') {
-//     $view_route="$module.$view";
-//     if(!view()->exists($view_route)){
-//         $view_route='index';
-//     }
-//     return view($view_route);
-// }); 
     
