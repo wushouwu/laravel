@@ -57,7 +57,7 @@
 			>
 				<el-table-column 
 					v-for="(head,headkey) in configs.table.header.column"
-					v-if="configs.table.header.show"
+					v-if="configs.table.header.show&&!head.hide"
 					:key="headkey" 
 					:label="head.label"
 					:prop="head.value"
@@ -69,7 +69,7 @@
 				>
 					<el-table-column 
 						v-for="(field,key) in head.children"
-						v-if="configs.table.header.show"
+						v-if="configs.table.header.show&&!head.hide"
 						:key="key" 
 						:label="field.label"
 						:prop="field.value"

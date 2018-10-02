@@ -70,7 +70,7 @@
 			>
 				<el-table-column 
 					v-for="(head,headkey) in configs.table.header.column"
-					v-if="configs.table.header.show"
+					v-if="configs.table.header.show&&!head.hide"
 					:key="headkey" 
 					:label="head.label"
 					:prop="head.value"
@@ -82,7 +82,7 @@
 				>
 					<el-table-column 
 						v-for="(field,key) in head.children"
-						v-if="configs.table.header.show"
+						v-if="configs.table.header.show&&!head.hide"
 						:key="key" 
 						:label="field.label"
 						:prop="field.value"
@@ -466,7 +466,17 @@
 						}
 					});
 				}else{
-					let vue=this;
+					let vue=this,
+						defaultCheckedKeys=[];
+					this.configs.table.header.column.map((item,index,arr)=>{ 
+						item.fixed=Boolean(item.fixed);
+						item.resizable=Boolean(item.resizable);
+						item.sortable=Boolean(item.sortable);
+						item.showOverflowTooltip=Boolean(item.showOverflowTooltip);
+						defaultCheckedKeys.push(item.value);
+						return item;
+					});
+					console.log(this.configs.table.header.column);
 					//表头配置
 					this.$emit('toConfig',event,this.configs.table.header,{
 						column:{
@@ -477,6 +487,7 @@
 							itemDefault:{
 								size:"small"
 							},
+							nodeKey:"value",
 							delShow:(node,data)=>(!data.children || data.children && !data.children.length) && !data.value,
 							add:function(event,config,form){
 								config.data.push({
@@ -489,6 +500,10 @@
 									align:"center",
 									resizable:true	
 								})
+							},
+							defaultCheckedKeys:defaultCheckedKeys,
+							checkChange:function(vue,data, checked, indeterminate){
+								vue.$set(data,'hide',!checked);
 							},
 							allowDrop:(draggingNode, dropNode, type)=>dropNode.data.value&&type=='inner'?false:true,
 							draggable:true,
