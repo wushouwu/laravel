@@ -28032,7 +28032,7 @@ exports = module.exports = __webpack_require__(5)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/*elementAddDelete组件下标签行高*/\n.elementAddDelete .el-form-item__content label,.elementAddDelete .el-form-item__content label+.el-form-item .el-form-item__content{\n    line-height:30px;\n}\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/*elementAddDelete组件下标签行高*/\n.elementAddDelete .el-form-item__content label,.elementAddDelete .el-form-item__content label+.el-form-item .el-form-item__content{\n    line-height:30px;\n}\n", ""]);
 
 // exports
 
@@ -28225,7 +28225,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     watch: {
         option: {
             handler: function handler(newValue, oldValue) {
-                if (newValue && this.config.options.length && this.config.options[0].length === undefined) {
+                if (newValue && this.config.options.length && this.config.options[0].length === undefined && this.index !== '') {
                     this.$set(this.config.options, this.index, Object.assign({}, newValue, { script: this.config.options[this.index].script }));
                 }
                 if (this.config.options.length === undefined) {
@@ -28325,7 +28325,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         //子组件配置
         itemConfig: function itemConfig(event, config, attr) {
-            this.index = event.currentTarget.getAttribute('index');
+            var target = event.currentTarget || event.myTarget;
+            this.index = target.getAttribute('index');
             var option = { config: config, attr: attr, index: this.index };
             this.$emit('e', event, option);
         }
@@ -30189,6 +30190,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }
             this.$emit('componentEvent', event, config);
         },
+
+        //类型转换
+        transfer: function transfer(option) {
+            if (option.type.indexOf('element') < 0) {
+                this.$set(this.form[this.config.name], option.name, Boolean(this.form[this.config.name][option.name]));
+            }
+        },
         labelPositionTop: function labelPositionTop() {
             //labelPositionTop样式调整
             if (this.config.labelPositionTop) {
@@ -30622,7 +30630,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['config', 'form'],
@@ -30658,6 +30665,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.$emit('buttonClick', event, this.config);
         },
         click: function click(event) {
+            var target = event.currentTarget; //处理currentTarget丢失的问题
             if (!this.role.length || !this.user.length) {
                 this.my.axiosAll({
                     vue: this,
@@ -30677,6 +30685,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     success: function success(response, option) {
                         option.vue.$set(option.vue, 'role', response[0].data.data);
                         option.vue.$set(option.vue, 'user', response[1].data.data);
+                        event.myTarget = target;
                         option.vue.emit(event);
                     }
                 });
@@ -30923,12 +30932,7 @@ var render = function() {
         label: _vm.config.label,
         "label-width": _vm.config.labelWidth || "0px"
       },
-      on: { click: _vm.click },
-      nativeOn: {
-        click: function($event) {
-          return _vm.click($event)
-        }
-      }
+      on: { click: _vm.click }
     },
     [
       _c(
@@ -32301,7 +32305,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                         }
                     },
                     success: function success(response, option) {
-                        option.vue.$set(option.vue, 'options', response.data.data);
+                        option.vue.$set(option.vue.config, 'options', response.data.data);
                     }
                 });
             } else {
@@ -32537,7 +32541,7 @@ var render = function() {
             expression: "form[config.name]"
           }
         },
-        _vm._l(_vm.options, function(opiton) {
+        _vm._l(_vm.config.options, function(opiton) {
           return _c("el-option", {
             key: opiton.value,
             attrs: {
@@ -35832,6 +35836,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -35907,12 +35913,27 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     item__content.style.cssText = "marginLeft:0px;clear:both;";
                 }
             }
+            //选择
+            /* for(var i in this.config.data){
+                this.$refs.elementTree.setChecked(this.config.data[i],!this.config.data[i].hide);
+            }  */
         },
 
         //点击节点
         nodeClick: function nodeClick() {
             if (typeof this.config.nodeClick == 'function') {
                 this.config.nodeClick();
+            }
+        },
+
+        //当复选框被点击的时候触发
+        check: function check(data, node) {
+            //console.log(data,node);
+            //data.width="0";
+        },
+        checkChange: function checkChange(data, checked, indeterminate) {
+            if (typeof this.config.checkChange == 'function') {
+                this.config.checkChange(this, data, checked, indeterminate);
             }
         },
 
@@ -35930,7 +35951,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
         //删除节点   
         del: function del(event, node, data) {
-            this.$refs.tree.remove(node);
+            this.$refs.elementTree.remove(node);
             this.dataChange();
         },
 
@@ -36055,7 +36076,7 @@ var render = function() {
       ),
       _vm._v(" "),
       _c("el-tree", {
-        ref: "tree",
+        ref: "elementTree",
         class: {
           "size-small-font":
             _vm.config.itemDefault.size === "small" ||
@@ -36078,7 +36099,12 @@ var render = function() {
           "allow-drop": _vm.config.allowDrop,
           "allow-drag": _vm.config.allowDrag
         },
-        on: { "node-click": _vm.nodeClick, "node-drop": _vm.dataChange },
+        on: {
+          "node-click": _vm.nodeClick,
+          check: _vm.check,
+          "check-change": _vm.checkChange,
+          "node-drop": _vm.dataChange
+        },
         scopedSlots: _vm._u([
           {
             key: "default",
@@ -38089,7 +38115,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 					}
 				});
 			} else {
-				var vue = this;
+				var vue = this,
+				    defaultCheckedKeys = [];
+				this.configs.table.header.column.map(function (item, index, arr) {
+					item.fixed = Boolean(item.fixed);
+					item.resizable = Boolean(item.resizable);
+					item.sortable = Boolean(item.sortable);
+					item.showOverflowTooltip = Boolean(item.showOverflowTooltip);
+					defaultCheckedKeys.push(item.value);
+					return item;
+				});
+				console.log(this.configs.table.header.column);
 				//表头配置
 				this.$emit('toConfig', event, this.configs.table.header, {
 					column: {
@@ -38100,6 +38136,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 						itemDefault: {
 							size: "small"
 						},
+						nodeKey: "value",
 						delShow: function delShow(node, data) {
 							return (!data.children || data.children && !data.children.length) && !data.value;
 						},
@@ -38114,6 +38151,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 								align: "center",
 								resizable: true
 							});
+						},
+						defaultCheckedKeys: defaultCheckedKeys,
+						checkChange: function checkChange(vue, data, checked, indeterminate) {
+							vue.$set(data, 'hide', !checked);
 						},
 						allowDrop: function allowDrop(draggingNode, dropNode, type) {
 							return dropNode.data.value && type == 'inner' ? false : true;
@@ -38368,7 +38409,7 @@ var render = function() {
             },
             [
               _vm._l(_vm.configs.table.header.column, function(head, headkey) {
-                return _vm.configs.table.header.show
+                return _vm.configs.table.header.show && !head.hide
                   ? _c(
                       "el-table-column",
                       {
@@ -38386,7 +38427,7 @@ var render = function() {
                         }
                       },
                       _vm._l(head.children, function(field, key) {
-                        return _vm.configs.table.header.show
+                        return _vm.configs.table.header.show && !head.hide
                           ? _c("el-table-column", {
                               key: key,
                               attrs: {
@@ -39452,7 +39493,7 @@ var render = function() {
             },
             [
               _vm._l(_vm.configs.table.header.column, function(head, headkey) {
-                return _vm.configs.table.header.show
+                return _vm.configs.table.header.show && !head.hide
                   ? _c(
                       "el-table-column",
                       {
@@ -39470,7 +39511,7 @@ var render = function() {
                         }
                       },
                       _vm._l(head.children, function(field, key) {
-                        return _vm.configs.table.header.show
+                        return _vm.configs.table.header.show && !head.hide
                           ? _c("el-table-column", {
                               key: key,
                               attrs: {
