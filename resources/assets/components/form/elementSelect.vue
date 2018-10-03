@@ -57,6 +57,10 @@
         },
         created(){
             this.source(this.config.tableField);
+            if(!this.config.config){
+                this.$set(this.config,'config',{name:this.config.name});
+            }
+            this.$set(this.config.config,'data',this.config.options);
             if(this.config.allowCreate){
                 this.$set(this.config,'filterable',true);
             }
@@ -256,6 +260,16 @@
                             }
                         }]
                     },
+                    transfer:{
+                        type:"elementSwitch",
+                        label:"穿梭框",
+                        name:"transfer"
+                    }, 
+                    multiple:{
+                        type:"elementSwitch",
+                        label:"多选",
+                        name:"multiple"
+                    },                                      
                     filterable:{
                         type:"elementSwitch",
                         label:"允许搜索",
