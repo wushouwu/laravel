@@ -4,6 +4,7 @@
         :label="config.label"
         :label-width="config.labelWidth||'0px'"
         @click="click"
+        @click.native="click"        
         class="elementButton"
         :style="config.style"
     >
