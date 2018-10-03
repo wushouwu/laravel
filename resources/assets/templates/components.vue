@@ -8,6 +8,7 @@
                     :is="config.type" 
                     :config="config" 
                     :form="row"
+                    @selectChange="selectChange"
                 ></component> 
                 <elementButton
                     :config="{name:'save',text:'保存',buttonType:'primary'}"
@@ -202,20 +203,11 @@
                     this.$set(this.row,'json',JSON.stringify(newValue,null,4));
                 },
                 deep:true
-            },
-            type:{
-                handler(newValue,oldValue){
-                    this.$set(this.query.row,'type',newValue);
-                },
-                deep:true
             }
         },
         computed:{
             json(){
                 return this.$parent.$parent.$parent.configs;
-            },
-            type(){
-                return this.row.type;
             }
         },
         methods:{  
@@ -226,6 +218,9 @@
             update(type){
                this[this.camelCase('init-'+type)]=JSON.stringify(this.configs[type]);
             },
+            selectChange(value,option){
+                this.$emit('selectChange',value,option);
+            },         
             e(event,option){
                 switch(option.config.name){
                     default:
