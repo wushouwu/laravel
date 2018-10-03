@@ -1,6 +1,6 @@
 <template>
     <wrapper  
-        :is="config.wrapper||'el-form-item'"    
+        :is="config.wrapper||'div'"    
         :label="config.label"
         :label-width="config.labelWidth"
         :prop="config.name"
@@ -12,10 +12,10 @@
             v-model="transferForm" 
             :data="config.data"
             :props="config.props||{key:'value'}" 
-            :filterable="config.filterable"
+            :filterable="'filterable' in config?config.filterable:true"
             :filter-placeholder="config.filterPlaceholder"
             :target-order="config.targetOrder"
-            :titles="config.titles"
+            :titles="config.titles||['未选','已选']"
             :left-default-checked="config.leftDefaultChecked"
             :right-default-checked="config.rightDefaultChecked"
             style="text-align: left;display: inline-block"
