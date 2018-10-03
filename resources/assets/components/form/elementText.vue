@@ -12,6 +12,7 @@
             v-model="form[config.name]"
             :size="config.size"
             :clearable="true" 
+            :type="config.password?'password':config.inputType"
             :placeholder="config.placeholder||'请输入'"
             :readonly="config.readonly"
             :disabled="config.disabled"
@@ -119,6 +120,11 @@
                         type:"elementText",
                         label:"空白提示",
                         name:"placeholder"
+                    },
+                    password:{
+                        type:"elementSwitch",
+                        label:"密码",
+                        name:"password"
                     },
                     rules:{
                         type:"elementComponents",
