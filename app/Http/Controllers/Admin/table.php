@@ -263,7 +263,7 @@ class table extends Controller{
         return response()->json($data);
 
     }  
-    //保存表单
+    //保存表
     public function tableSave(Request $request){
         $form=$request->input('form',['TABLE_COMMENT'=>'','TABLE_NAME'=>'']);
         $table = DB::table('INFORMATION_SCHEMA.TABLES')
@@ -554,4 +554,23 @@ class table extends Controller{
         return response()->json($data);
 
     }
+    //删除记录
+    public function delete(Request $request){
+        $TABLE_NAME=$request->input('TABLE_NAME','');
+        $form=$request->input('row',[]);
+        if($TABLE_NAME&&$form){
+            if(isset($form['id']) && $form['id']){
+                //更新
+                $id=$form['id'];
+                $table=DB::table($TABLE_NAME)->where('id',$id)->delete();
+                $data=['data'=>$table];
+            }else{
+                $data=['msg'=>_('id不存在')];
+            }
+             $data=['data'=>$table];
+        }else{
+            $data=['msg'=>$TABLE_NAME?_('表单信息未提交'):_('表名不存在')];
+        }
+        return response()->json($data);
+    }    
 }

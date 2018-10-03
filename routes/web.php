@@ -24,6 +24,7 @@ Route::group(['prefix' => 'admin'], function () {
             'tableView',//默认表格配置
             'addView',//默认添加、编辑配置
             'viewView',//默认查看配置
+            'delete',//删除记录
             'field',//字段信息
             'view',//获取视图
             'save',//保存表单
