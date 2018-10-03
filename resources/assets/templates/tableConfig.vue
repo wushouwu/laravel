@@ -394,7 +394,7 @@
 			//查看数据
 			view(row,operator){
 				this.addTab({
-					name: this.query.TABLE_NAME+'-'+row.id+'-view',
+					name: this.query.TABLE_NAME+'-'+row.id+'-'+operator.text,
 					content: 'formVue',
 					query:Object.assign({},this.query,{row:row},operator.query)
 				});
@@ -476,7 +476,6 @@
 						defaultCheckedKeys.push(item.value);
 						return item;
 					});
-					console.log(this.configs.table.header.column);
 					//表头配置
 					this.$emit('toConfig',event,this.configs.table.header,{
 						column:{
