@@ -30630,6 +30630,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['config', 'form'],
@@ -30932,7 +30933,12 @@ var render = function() {
         label: _vm.config.label,
         "label-width": _vm.config.labelWidth || "0px"
       },
-      on: { click: _vm.click }
+      on: { click: _vm.click },
+      nativeOn: {
+        click: function($event) {
+          return _vm.click($event)
+        }
+      }
     },
     [
       _c(
@@ -32176,7 +32182,7 @@ exports = module.exports = __webpack_require__(5)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -32246,6 +32252,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
     created: function created() {
         this.source(this.config.tableField);
+        if (!this.config.config) {
+            this.$set(this.config, 'config', { name: this.config.name });
+        }
+        this.$set(this.config.config, 'data', this.config.options);
         if (this.config.allowCreate) {
             this.$set(this.config, 'filterable', true);
         }
@@ -32420,6 +32430,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                             }]
                         }
                     }]
+                },
+                transfer: {
+                    type: "elementSwitch",
+                    label: "穿梭框",
+                    name: "transfer"
+                },
+                multiple: {
+                    type: "elementSwitch",
+                    label: "多选",
+                    name: "multiple"
                 },
                 filterable: {
                     type: "elementSwitch",
@@ -32825,6 +32845,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['config', 'form'],
@@ -32912,6 +32933,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     type: "elementText",
                     label: "空白提示",
                     name: "placeholder"
+                },
+                password: {
+                    type: "elementSwitch",
+                    label: "密码",
+                    name: "password"
                 },
                 rules: {
                     type: "elementComponents",
@@ -33103,6 +33129,7 @@ var render = function() {
         attrs: {
           size: _vm.config.size,
           clearable: true,
+          type: _vm.config.password ? "password" : _vm.config.inputType,
           placeholder: _vm.config.placeholder || "请输入",
           readonly: _vm.config.readonly,
           disabled: _vm.config.disabled
@@ -35611,7 +35638,7 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c(
-    _vm.config.wrapper || "el-form-item",
+    _vm.config.wrapper || "div",
     {
       tag: "wrapper",
       class: {
@@ -35638,10 +35665,10 @@ var render = function() {
         attrs: {
           data: _vm.config.data,
           props: _vm.config.props || { key: "value" },
-          filterable: _vm.config.filterable,
+          filterable: "filterable" in _vm.config ? _vm.config.filterable : true,
           "filter-placeholder": _vm.config.filterPlaceholder,
           "target-order": _vm.config.targetOrder,
-          titles: _vm.config.titles,
+          titles: _vm.config.titles || ["未选", "已选"],
           "left-default-checked": _vm.config.leftDefaultChecked,
           "right-default-checked": _vm.config.rightDefaultChecked
         },
@@ -36536,6 +36563,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 
 
@@ -36556,7 +36584,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             configs: [],
             fields: [],
             attrs: {},
-            attrForm: {}
+            attrForm: {},
+            type: ''
         };
     },
 
@@ -36564,8 +36593,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         if (!this.query.row) {
             this.$set(this.query, 'row', { type: 'form' });
         }
+        this.type = this.query.row.type;
     },
     methods: {
+        selectChange: function selectChange(value, option) {
+            if (option.name == 'type' || option.name == 'TABLE_NAME') {
+                this.$set(this.query.row, option.name, value);
+            }
+            if (option.name == 'type') {
+                this.type = value;
+            }
+        },
+
         //排序
         sort: function sort(event) {
             //添加字段时设置字段属性
@@ -36725,6 +36764,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -36803,21 +36843,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             },
 
             deep: true
-        },
-        type: {
-            handler: function handler(newValue, oldValue) {
-                this.$set(this.query.row, 'type', newValue);
-            },
-
-            deep: true
         }
     },
     computed: {
         json: function json() {
             return this.$parent.$parent.$parent.configs;
-        },
-        type: function type() {
-            return this.row.type;
         }
     },
     methods: {
@@ -36827,6 +36857,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         update: function update(type) {
             this[this.camelCase('init-' + type)] = JSON.stringify(this.configs[type]);
+        },
+        selectChange: function selectChange(value, option) {
+            this.$emit('selectChange', value, option);
         },
         e: function e(event, option) {
             switch (option.config.name) {
@@ -36894,7 +36927,8 @@ var render = function() {
                 return _c(config.type, {
                   key: index,
                   tag: "component",
-                  attrs: { config: config, form: _vm.row }
+                  attrs: { config: config, form: _vm.row },
+                  on: { selectChange: _vm.selectChange }
                 })
               }),
               _vm._v(" "),
@@ -38042,7 +38076,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		//查看数据
 		view: function view(row, operator) {
 			this.addTab({
-				name: this.query.TABLE_NAME + '-' + row.id + '-view',
+				name: this.query.TABLE_NAME + '-' + row.id + '-' + operator.text,
 				content: 'formVue',
 				query: Object.assign({}, this.query, { row: row }, operator.query)
 			});
@@ -38125,7 +38159,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 					defaultCheckedKeys.push(item.value);
 					return item;
 				});
-				console.log(this.configs.table.header.column);
 				//表头配置
 				this.$emit('toConfig', event, this.configs.table.header, {
 					column: {
@@ -38821,7 +38854,8 @@ var render = function() {
               attrs: _vm.attrs,
               attrForm: _vm.attrForm,
               query: _vm.query
-            }
+            },
+            on: { selectChange: _vm.selectChange }
           })
         ],
         1
@@ -38831,7 +38865,7 @@ var render = function() {
         "el-main",
         [
           _c("keep-alive", [
-            _c(this.query.row.type + "Config", {
+            _c(this.type + "Config", {
               ref: "view",
               tag: "view",
               attrs: { query: _vm.query },
@@ -39272,6 +39306,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		//添加
 		add: function add(event, config) {
 			var query = Object.assign({}, this.query, config.query);
+			console.log(query);
 			var title = query.TABLE_COMMENT + '-' + query.view_name;
 			this.addTab({
 				name: title,
