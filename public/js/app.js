@@ -27927,6 +27927,7 @@ var map = {
 	"./form/elementText.vue": 275,
 	"./form/elementTextarea.vue": 278,
 	"./other/elementCard.vue": 281,
+	"./other/elementMenu.vue": 336,
 	"./other/elementTransfer.vue": 291,
 	"./other/elementTree.vue": 294
 };
@@ -35791,8 +35792,6 @@ exports.push([module.i, "\n.delShow .el-tree-node__content{\n    height:33px;\n}
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuedraggable__ = __webpack_require__(19);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuedraggable___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vuedraggable__);
 //
 //
 //
@@ -35865,12 +35864,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    components: {
-        draggable: __WEBPACK_IMPORTED_MODULE_0_vuedraggable___default.a
-    },
     props: ['config', 'form'],
     data: function data() {
         return {
@@ -36114,7 +36109,7 @@ var render = function() {
         },
         attrs: {
           data: _vm.config.data,
-          "node-key": _vm.config.nodeKey,
+          "node-key": _vm.config.nodeKey || "value",
           indent: _vm.config.indent,
           "default-expand-all": _vm.config.defaultExpandAll,
           "show-checkbox": _vm.config.showCheckbox,
@@ -36325,7 +36320,7 @@ exports = module.exports = __webpack_require__(5)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/*菜单栏*/\n.el-menu:not(.el-menu--collapse) {\n    width: 300px;\n}\n.el-tabs{\n    display:-webkit-box;\n    display:-ms-flexbox;\n    display:flex;\n    -webkit-box-orient:vertical;\n    -webkit-box-direction:normal;\n        -ms-flex-flow:column;\n            flex-flow:column;\n    height:100%;\n}\n.el-tabs__content{\n    -webkit-box-flex: 1;\n        -ms-flex: 1;\n            flex: 1;\n}  \n/*时间选择框大小*/\n.el-date-editor.el-input, .el-date-editor.el-input__inner{\n    width:100%;\n} \n/*按钮组件边距处理*/\n.tools .el-form-item.elementButton{\n    margin:5px;\n}\n/*表单组件边距处理*/\n.fields>.el-form-item{\n    margin:0px 5px 20px 5px;\n}\nform>.el-form-item{\n    margin-right:10px;\n}       \n/*size为small时label字体大小处理*/\n.size-small-font [class*=\"label\"]{\n    font-size:13px;\n} \n/*可拖动组件的光标*/\n.draggable label,.draggable button{\n    cursor:move;\n}\n/*激活的组件显示虚线框*/\n.draggable .el-form-item,draggable .elementCard{\n    border:1px dotted transparent;\n}\n.draggable .el-form-item.active,.draggable .elementCard.active{\n    border:1px dotted #409EFF;\n}\n/*组件删除按钮*/\n.my-close{\n    display: none;\n}\n.draggable .active .my-close{\n    position:absolute;\n    top:0px;\n    left:0px;\n    border-radius:12px;\n    font-size:12px;\n    border:1px solid #dddddd;\n    color:red;\n    width:12px;\n    height:12px;\n    text-align:center;\n    cursor:pointer;\n    line-height: 11px;\n    display:inline-block;\n}\n.draggable .active .my-close::after{\n    content:'\\D7'\n}  \n/* table错位问题 */\nbody .el-table th.gutter{\n    display: table-cell!important;\n}  \n/* 有背景分页圆形 */\n.el-pagination.is-background .el-pager li,.el-pagination.is-background button[type=\"button\"]{\n    border-radius:14px;\n} \n/* 卡片处理 */\n.elementCard{\n    display:inline-block;\n    vertical-align: top;\n    margin: 1% 0px 0px 1%;\n}\n/* 卡片头处理 */\n.elementCard .el-card__header{\n    display:-webkit-box;\n    display:-ms-flexbox;\n    display:flex;\n    -webkit-box-align:center;\n        -ms-flex-align:center;\n            align-items:center;\n    text-indent: 18px;\n    height:57.8px;\n    padding:0px;\n}\n.containers .elementCard{\n    cursor:move;\n}\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/*菜单栏*/\n.el-menu:not(.el-menu--collapse) {\n    width: 300px;\n}\n.el-tabs{\n    display:-webkit-box;\n    display:-ms-flexbox;\n    display:flex;\n    -webkit-box-orient:vertical;\n    -webkit-box-direction:normal;\n        -ms-flex-flow:column;\n            flex-flow:column;\n    height:100%;\n}\n.el-tabs__content{\n    -webkit-box-flex: 1;\n        -ms-flex: 1;\n            flex: 1;\n}  \n/*时间选择框大小*/\n.el-date-editor.el-input, .el-date-editor.el-input__inner{\n    width:100%;\n} \n/*按钮组件边距处理*/\n.tools .el-form-item.elementButton{\n    margin:5px;\n}\n/*表单组件边距处理*/\n.fields>.el-form-item{\n    margin:0px 5px 20px 5px;\n}\nform>.el-form-item{\n    margin-right:10px;\n}       \n/*size为small时label字体大小处理*/\n.size-small-font [class*=\"label\"]{\n    font-size:13px;\n} \n/*可拖动组件的光标*/\n.draggable label,.draggable button{\n    cursor:move;\n}\n/*激活的组件显示虚线框*/\n.draggable .el-form-item,draggable .elementCard{\n    border:1px dotted transparent;\n}\n.draggable .el-form-item.active,.draggable .elementCard.active{\n    border:1px dotted #409EFF;\n}\n/*组件删除按钮*/\n.my-close{\n    display: none;\n}\n.draggable .active .my-close{\n    position:absolute;\n    top:0px;\n    left:0px;\n    border-radius:12px;\n    font-size:12px;\n    border:1px solid #dddddd;\n    color:red;\n    width:12px;\n    height:12px;\n    text-align:center;\n    cursor:pointer;\n    line-height: 11px;\n    display:inline-block;\n}\n.draggable .active .my-close::after{\n    content:'\\D7'\n}  \n/* table错位问题 */\nbody .el-table th.gutter{\n    display: table-cell!important;\n}  \n/* 有背景分页圆形 */\n.el-pagination.is-background .el-pager li,.el-pagination.is-background button[type=\"button\"]{\n    border-radius:14px;\n} \n/* 卡片处理 */\n.elementCard{\n    display:inline-block;\n    vertical-align: top;\n    margin: 1% 0px 0px 1%;\n}\n/* 卡片头处理 */\n.elementCard .el-card__header{\n    display:-webkit-box;\n    display:-ms-flexbox;\n    display:flex;\n    -webkit-box-align:center;\n        -ms-flex-align:center;\n            align-items:center;\n    text-indent: 18px;\n    height:57.8px;\n    padding:0px;\n}\n.containers .elementCard{\n    cursor:move;\n}\n", ""]);
 
 // exports
 
@@ -36361,42 +36356,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 
@@ -36408,14 +36367,70 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     data: function data() {
         return {
             isFullscreen: false,
-            activeTab: '3-1',
-            activeTabs: ['3-1'],
-            tabs: { '3-1': {
-                    title: '表格',
-                    name: '3-1',
+            //activeTab: 'menu3-1',
+            activeTabs: ['menu3-1'],
+            tabs: { 'menu3-1': {
+                    label: '表格',
+                    value: 'menu3-1',
                     content: 'tableVue',
                     query: { TABLE_NAME: 'INFORMATION_SCHEMA.TABLES', view_name: 'table', fields: 'TABLE_COMMENT,TABLE_NAME' }
-                } }
+                } },
+            configs: {
+                isFullscreen: false,
+                activeTab: 'menu3-1',
+                activeTabs: ['menu3-1'],
+                tabs: { 'menu3-1': {
+                        label: '表格',
+                        value: 'menu3-1',
+                        content: 'tableVue',
+                        query: { TABLE_NAME: 'INFORMATION_SCHEMA.TABLES', view_name: 'table', fields: 'TABLE_COMMENT,TABLE_NAME' }
+                    } },
+                menus: [{
+                    value: "menu1",
+                    label: "配置",
+                    icon: "el-icon-setting",
+                    children: [{
+                        icon: "el-icon-setting",
+                        label: '表格',
+                        value: 'menu1-1',
+                        content: 'tableVue',
+                        query: { TABLE_NAME: 'INFORMATION_SCHEMA.TABLES', view_name: 'table', fields: 'TABLE_COMMENT,TABLE_NAME' }
+                    }, {
+                        label: '视图配置',
+                        value: 'menu1-2',
+                        content: 'configVue',
+                        query: { row: { type: 'view' } }
+                    }]
+                }, {
+                    value: "menu2",
+                    label: "导航二",
+                    icon: "el-icon-menu",
+                    children: [{
+                        icon: "el-icon-menu",
+                        label: '表格',
+                        value: 'menu2-1',
+                        content: 'tableVue',
+                        query: { TABLE_NAME: 'INFORMATION_SCHEMA.TABLES', view_name: 'table', fields: 'TABLE_COMMENT,TABLE_NAME' },
+                        children: [{
+                            label: '表格',
+                            value: 'menu3-1',
+                            content: 'tableVue',
+                            query: { TABLE_NAME: 'INFORMATION_SCHEMA.TABLES', view_name: 'table', fields: 'TABLE_COMMENT,TABLE_NAME' }
+
+                        }, {
+                            label: '视图配置',
+                            value: 'menu3-2',
+                            content: 'configVue',
+                            query: { row: { type: 'view' } }
+                        }]
+                    }, {
+                        label: '视图配置',
+                        value: 'menu2-2',
+                        content: 'configVue',
+                        query: { row: { type: 'view' } }
+                    }]
+                }]
+            }
         };
     },
 
@@ -36423,54 +36438,60 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         //活动tab排序
         activeTab: function activeTab(newValue, oldValue) {
             if (newValue) {
-                this.activeTabs = this.activeTabs.filter(function (currentValue, index, arr) {
+                this.configs.activeTabs = this.configs.activeTabs.filter(function (currentValue, index, arr) {
                     return currentValue != newValue;
                 });
-                this.activeTabs.push(newValue);
+                this.configs.activeTabs.push(newValue);
             }
+        }
+    },
+    computed: {
+        activeTab: function activeTab() {
+            return this.configs.activeTab;
         }
     },
     methods: {
         //点击菜单
-        menuSelect: function menuSelect(key, keyPath) {
-            var refs = this.$refs[key];
+        menuSelect: function menuSelect(key, keyPath, event) {
+            var query = JSON.parse(event.currentTarget.getAttribute('query'));
             this.addTab({
-                name: key,
-                title: refs.$el.innerText,
-                content: refs.$attrs.content,
-                query: refs.$attrs.query
+                value: key,
+                label: event.currentTarget.innerText,
+                content: event.currentTarget.getAttribute('content'),
+                query: query
             });
         },
 
         //添加tab
         addTab: function addTab(option) {
-            if (!(option.name in this.tabs)) {
-                if (!option.title) {
-                    option.title = option.name;
+            if (!(option.value in this.tabs)) {
+                if (!option.label) {
+                    option.label = option.value;
                 }
-                this.tabs[option.name] = option;
-                this.activeTabs.push(option.name);
+                this.tabs[option.value] = option;
+                this.configs.activeTabs.push(option.value);
             }
-            this.activeTab = option.name;
+            this.configs.activeTab = option.value;
         },
 
         //移除tab,激活新tab
         removeTab: function removeTab(name) {
             var tabs = this.tabs;
-            var activeTab = this.activeTab;
-            this.activeTabs = this.activeTabs.filter(function (currentValue, index, arr) {
+            var activeTab = this.configs.activeTab;
+            this.configs.activeTabs = this.configs.activeTabs.filter(function (currentValue, index, arr) {
                 return currentValue != name;
             });
             if (activeTab === name) {
-                var lastActiveTab = this.activeTabs[this.activeTabs.length - 1];
+                var lastActiveTab = this.configs.activeTabs[this.configs.activeTabs.length - 1];
                 activeTab = name == lastActiveTab ? '' : lastActiveTab;
                 //激活菜单
-                if (activeTab in this.$refs) {
-                    this.$refs.menu.open(this.$refs[activeTab].$parent.index);
-                    this.$refs[activeTab].$el.click();
+                var $activeTab = this.$el.querySelector('#' + activeTab);
+                if ($activeTab) {
+                    this.$refs.elementMenu.$refs.elementMenu.open(activeTab.substring(0, activeTab.lastIndexOf('-')));
+                    $activeTab.click();
                 }
             }
-            this.activeTab = activeTab;
+            this.configs.activeTab = activeTab;
             Vue.delete(this.tabs, name);
         }
     }
@@ -38050,7 +38071,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		add: function add(event, config) {
 			var title = this.query.TABLE_COMMENT + '-' + this.query.view_name + '-添加';
 			this.addTab({
-				name: title,
+				value: title,
 				content: config.query.content || 'formVue',
 				query: Object.assign({}, this.query, config.query)
 			});
@@ -38076,7 +38097,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		//查看数据
 		view: function view(row, operator) {
 			this.addTab({
-				name: this.query.TABLE_NAME + '-' + row.id + '-' + operator.text,
+				value: this.query.TABLE_NAME + '-' + row.id + '-' + operator.text,
 				content: 'formVue',
 				query: Object.assign({}, this.query, { row: row }, operator.query)
 			});
@@ -38086,7 +38107,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		edit: function edit(row, operator) {
 			var title = this.query.TABLE_COMMENT + '-' + this.query.view_name + '-' + row.id + '-编辑';
 			this.addTab({
-				name: title,
+				value: title,
 				content: operator.query.content || 'formVue',
 				query: Object.assign({}, this.query, { row: row }, operator.query)
 			});
@@ -38169,7 +38190,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 						itemDefault: {
 							size: "small"
 						},
-						nodeKey: "value",
 						delShow: function delShow(node, data) {
 							return (!data.children || data.children && !data.children.length) && !data.value;
 						},
@@ -39306,10 +39326,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		//添加
 		add: function add(event, config) {
 			var query = Object.assign({}, this.query, config.query);
-			console.log(query);
 			var title = query.TABLE_COMMENT + '-' + query.view_name;
 			this.addTab({
-				name: title,
+				value: title,
 				content: query.content || 'formVue',
 				query: query
 			});
@@ -39335,7 +39354,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		//查看数据
 		view: function view(row, operator) {
 			this.addTab({
-				name: this.query.TABLE_NAME + '-' + row.id + '-' + operator.text,
+				value: this.query.TABLE_NAME + '-' + row.id + '-' + operator.text,
 				content: 'formVue',
 				query: Object.assign({}, this.query, { row: row }, operator.query)
 			});
@@ -39345,7 +39364,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		edit: function edit(row, operator) {
 			var title = this.query.TABLE_COMMENT + '-' + this.query.view_name + '-' + row.id + '-' + operator.text;
 			this.addTab({
-				name: title,
+				value: title,
 				content: operator.query.content || 'formVue',
 				query: Object.assign({}, this.query, { row: row }, operator.query)
 			});
@@ -39877,8 +39896,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.save(event, _config);
             this.cancel(event, _config);
             this.$root.$children[0].addTab({
-                name: this.query.TABLE_NAME + '-config',
-                title: this.query.TABLE_COMMENT + '表-配置',
+                value: this.query.TABLE_NAME + '-config',
+                label: this.query.TABLE_COMMENT + '表-配置',
                 content: this.form.type + 'ConfigVue',
                 query: Object.assign({}, this.form, this.query, _config.query)
             });
@@ -39988,141 +40007,16 @@ var render = function() {
           staticStyle: { width: "auto" },
           nativeOn: {
             mouseover: function($event) {
-              _vm.isFullscreen = false
+              _vm.configs.isFullscreen = false
             }
           }
         },
         [
-          _c(
-            "el-menu",
-            {
-              ref: "menu",
-              staticStyle: { height: "100%" },
-              attrs: {
-                "default-active": _vm.activeTab,
-                collapse: _vm.isFullscreen,
-                "unique-opened": true
-              },
-              on: { select: _vm.menuSelect }
-            },
-            [
-              _c(
-                "el-submenu",
-                { attrs: { index: "1" } },
-                [
-                  _c("template", { slot: "title" }, [
-                    _c("i", { staticClass: "el-icon-menu" }),
-                    _vm._v(" "),
-                    _c("span", { attrs: { slot: "title" }, slot: "title" }, [
-                      _vm._v("导航一")
-                    ])
-                  ]),
-                  _vm._v(" "),
-                  _c(
-                    "el-submenu",
-                    { attrs: { index: "1-1" } },
-                    [
-                      _c("span", { attrs: { slot: "title" }, slot: "title" }, [
-                        _vm._v("选项1")
-                      ]),
-                      _vm._v(" "),
-                      _c(
-                        "el-menu-item",
-                        {
-                          ref: "1-1-1",
-                          attrs: {
-                            index: "1-1-1",
-                            content: "viewVue",
-                            query: { tableName: "hello" }
-                          }
-                        },
-                        [_vm._v("选项1")]
-                      )
-                    ],
-                    1
-                  )
-                ],
-                2
-              ),
-              _vm._v(" "),
-              _c(
-                "el-submenu",
-                { attrs: { index: "2" } },
-                [
-                  _c("template", { slot: "title" }, [
-                    _c("i", { staticClass: "el-icon-document" }),
-                    _vm._v(" "),
-                    _c("span", { attrs: { slot: "title" }, slot: "title" }, [
-                      _vm._v("导航二")
-                    ])
-                  ]),
-                  _vm._v(" "),
-                  _c(
-                    "el-submenu",
-                    { attrs: { index: "2-1" } },
-                    [
-                      _c("span", { attrs: { slot: "title" }, slot: "title" }, [
-                        _vm._v("导航二选项1")
-                      ]),
-                      _vm._v(" "),
-                      _c(
-                        "el-menu-item",
-                        {
-                          ref: "2-1-1",
-                          attrs: {
-                            index: "2-1-1",
-                            content: "tableVue",
-                            query: { table: "../table" }
-                          }
-                        },
-                        [_vm._v("导航二选项1")]
-                      )
-                    ],
-                    1
-                  )
-                ],
-                2
-              ),
-              _vm._v(" "),
-              _c(
-                "el-submenu",
-                { attrs: { index: "3" } },
-                [
-                  _c("template", { slot: "title" }, [
-                    _c("i", { staticClass: "el-icon-setting" }),
-                    _vm._v(" "),
-                    _c("span", { attrs: { slot: "title" }, slot: "title" }, [
-                      _vm._v("配置")
-                    ])
-                  ]),
-                  _vm._v(" "),
-                  _c(
-                    "el-menu-item",
-                    {
-                      ref: "3-1",
-                      attrs: { index: "3-1", content: "tableVue", query: {} }
-                    },
-                    [_vm._v("表格")]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "el-menu-item",
-                    {
-                      ref: "3-2",
-                      attrs: {
-                        index: "3-2",
-                        content: "configVue",
-                        query: { row: { type: "view" } }
-                      }
-                    },
-                    [_vm._v("视图配置")]
-                  )
-                ],
-                2
-              )
-            ],
-            1
-          )
+          _c("elementMenu", {
+            ref: "elementMenu",
+            attrs: { config: _vm.configs },
+            on: { menuSelect: _vm.menuSelect }
+          })
         ],
         1
       ),
@@ -40132,7 +40026,7 @@ var render = function() {
         {
           nativeOn: {
             click: function($event) {
-              _vm.isFullscreen = true
+              _vm.configs.isFullscreen = true
             }
           }
         },
@@ -40143,20 +40037,20 @@ var render = function() {
               attrs: { type: "card", closable: "" },
               on: { "tab-remove": _vm.removeTab },
               model: {
-                value: _vm.activeTab,
+                value: _vm.configs.activeTab,
                 callback: function($$v) {
-                  _vm.activeTab = $$v
+                  _vm.$set(_vm.configs, "activeTab", $$v)
                 },
-                expression: "activeTab"
+                expression: "configs.activeTab"
               }
             },
             _vm._l(_vm.tabs, function(item) {
               return _c(
                 "el-tab-pane",
                 {
-                  key: item.name,
+                  key: item.value,
                   staticStyle: { height: "100%" },
-                  attrs: { label: item.title, name: item.name }
+                  attrs: { label: item.label, name: item.value }
                 },
                 [
                   _c(item.content, {
@@ -42923,6 +42817,234 @@ var my = {
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 334 */,
+/* 335 */,
+/* 336 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(337)
+}
+var normalizeComponent = __webpack_require__(0)
+/* script */
+var __vue_script__ = __webpack_require__(339)
+/* template */
+var __vue_template__ = __webpack_require__(340)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\components\\other\\elementMenu.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-69379066", Component.options)
+  } else {
+    hotAPI.reload("data-v-69379066", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 337 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(338);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(8)("1327a68c", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-69379066\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./elementMenu.vue", function() {
+     var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-69379066\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./elementMenu.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 338 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(5)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 339 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    components: {
+        elementSubmenu: {
+            name: "elementSubmenu",
+            template: '\n                <el-submenu\n                    v-if="config.children&&config.children.length"\n                    :index="id"\n                    :id="id" \n                >\n                    <template slot="title">\n                        <i :class="config.icon"></i>\n                        <span slot="title">{{config.label}}</span>\n                    </template>\n                    <template \n                        v-for="(menu,key) in config.children"\n                    >\n                        <elementSubmenu\n                            v-if="menu.children&&menu.children.length"\n                            :config="menu"\n                            :key="key"\n                            :id="id+\'-\'+key"\n                        >\n                        </elementSubmenu>\n                        <el-menu-item\n                            v-else\n                            :index="id+\'-\'+key"\n                            :id="id+\'-\'+key"                       \n                            :content="menu.content" \n                            :query="JSON.stringify(menu.query)"                    \n                        >\n                            <i :class="menu.icon"></i>\n                            <span slot="title">{{menu.label}}</span>\n                        </el-menu-item>\n                    </template>\n                </el-submenu>                \n            ',
+            props: ['config', 'id']
+        }
+    },
+    props: ['config'],
+    data: function data() {
+        return {};
+    },
+    created: function created() {},
+    mounted: function mounted() {},
+    updated: function updated() {},
+
+    watch: {},
+    computed: {},
+    methods: {
+        select: function select(key, keyPath) {
+            if (this.config.menuSelect) {
+                this.config.menuSelect(key, keyPath, event);
+            } else {
+                this.$emit('menuSelect', key, keyPath, event);
+            }
+        }
+    }
+});
+
+/***/ }),
+/* 340 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "el-menu",
+    {
+      ref: "elementMenu",
+      staticStyle: { height: "100%" },
+      attrs: {
+        "default-active": _vm.config.activeTab,
+        collapse: _vm.config.isFullscreen,
+        "unique-opened":
+          "uniqueOpened" in _vm.config ? _vm.config.uniqueOpened : true
+      },
+      on: { select: _vm.select }
+    },
+    [
+      _vm._l(_vm.config.menus, function(menu, key) {
+        return [
+          menu.children && menu.children.length
+            ? _c("elementSubmenu", {
+                key: key,
+                attrs: { config: menu, id: "menu" + key }
+              })
+            : _c(
+                "el-menu-item",
+                {
+                  key: key,
+                  attrs: {
+                    index: String(key),
+                    id: "menu" + key,
+                    content: menu.content,
+                    query: JSON.stringify(menu.query)
+                  }
+                },
+                [
+                  _c("i", { class: menu.icon }),
+                  _vm._v(" "),
+                  _c("span", { attrs: { slot: "title" }, slot: "title" }, [
+                    _vm._v(_vm._s(menu.label))
+                  ])
+                ]
+              )
+        ]
+      })
+    ],
+    2
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-69379066", module.exports)
+  }
+}
 
 /***/ })
 ],[87]);
