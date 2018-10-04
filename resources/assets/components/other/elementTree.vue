@@ -28,7 +28,7 @@
             ref="elementTree"
             :class="{'size-small-font':config.itemDefault.size==='small'||config.itemDefault.size==='mini'?true:false,delShow:'delShow' in config?true:false}"
             :data="config.data"
-            :node-key="config.nodeKey"
+            :node-key="config.nodeKey||'value'"
             :indent="config.indent"
             :default-expand-all="config.defaultExpandAll"
             :show-checkbox="config.showCheckbox"
@@ -71,11 +71,7 @@
     </el-form-item>
 </template>
 <script>
-    import draggable from 'vuedraggable';
     export default {
-        components: {
-            draggable,
-        },
         props: ['config','form'],
         data(){
             return {
