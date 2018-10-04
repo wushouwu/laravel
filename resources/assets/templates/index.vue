@@ -1,51 +1,15 @@
 <template>
     <el-container  style="height:100%;">
-        <el-aside style="width:auto;"  @mouseover.native="isFullscreen=false">
-            <el-menu    
-                ref="menu"
-                :default-active="activeTab" 
-                :collapse="isFullscreen"             
-                :unique-opened="true"
-                @select="menuSelect"
-                style="height:100%;"
-            >
-                <el-submenu index="1" >
-                    <template slot="title">
-                        <i class="el-icon-menu"></i>
-                        <span slot="title">导航一</span>
-                    </template>
-                    <el-submenu index="1-1">
-                        <span slot="title">选项1</span>
-                        <el-menu-item index="1-1-1" ref="1-1-1" content="viewVue" :query="{tableName:'hello'}">选项1</el-menu-item>
-                    </el-submenu>
-                </el-submenu>
-                <el-submenu index="2">
-                    <template slot="title">
-                        <i class="el-icon-document"></i>
-                        <span slot="title">导航二</span>
-                    </template>
-                    <el-submenu index="2-1">
-                        <span slot="title">导航二选项1</span>
-                        <el-menu-item index="2-1-1" ref="2-1-1" content="tableVue" :query="{table:'../table'}">导航二选项1</el-menu-item>
-                    </el-submenu>
-                </el-submenu>
-                <el-submenu index="3">
-                    <template slot="title">
-                        <i class="el-icon-setting"></i>
-                        <span slot="title">配置</span>
-                    </template>
-                    <el-menu-item index="3-1" ref="3-1" content="tableVue" :query="{}">表格</el-menu-item>
-                    <el-menu-item index="3-2" ref="3-2" content="configVue" :query="{row:{type:'view'}}">视图配置</el-menu-item>
-                </el-submenu>
-            </el-menu>
+        <el-aside style="width:auto;"  @mouseover.native="configs.isFullscreen=false">
+            <elementMenu :config="configs" @menuSelect="menuSelect" ref="elementMenu"></elementMenu>
         </el-aside>
-        <el-main @click.native="isFullscreen=true">
-            <el-tabs v-model="activeTab" type="card" closable @tab-remove="removeTab">
+        <el-main @click.native="configs.isFullscreen=true">
+            <el-tabs v-model="configs.activeTab" type="card" closable @tab-remove="removeTab">
             <el-tab-pane style="height:100%;"
                 v-for="(item) in tabs"
-                :key="item.name"
-                :label="item.title"
-                :name="item.name"
+                :key="item.value"
+                :label="item.label"
+                :name="item.value"
             >
                 <content :is="item.content" :query="item.query"></content>
             </el-tab-pane>
@@ -64,62 +28,126 @@ export default {
     data() {
         return {
             isFullscreen:false,
-            activeTab: '3-1',
-            activeTabs:['3-1'],
-            tabs: {'3-1': {
-                title: '表格',
-                name: '3-1',
+            //activeTab: 'menu3-1',
+            activeTabs:['menu3-1'],
+            tabs: {'menu3-1': {
+                label: '表格',
+                value: 'menu3-1',
                 content: 'tableVue',
                 query:{TABLE_NAME:'INFORMATION_SCHEMA.TABLES',view_name:'table',fields:'TABLE_COMMENT,TABLE_NAME'}
             }},
+            configs:{
+                isFullscreen:false,
+                activeTab: 'menu3-1',
+                activeTabs:['menu3-1'],                
+                tabs: {'menu3-1': {
+                    label: '表格',
+                    value: 'menu3-1',
+                    content: 'tableVue',
+                    query:{TABLE_NAME:'INFORMATION_SCHEMA.TABLES',view_name:'table',fields:'TABLE_COMMENT,TABLE_NAME'}
+                }},
+                menus:[{
+                    value:"menu1",
+                    label:"配置",
+                    icon:"el-icon-setting",
+                    children:[{
+                        icon:"el-icon-setting",
+                        label: '表格',
+                        value: 'menu1-1',
+                        content: 'tableVue',
+                        query:{TABLE_NAME:'INFORMATION_SCHEMA.TABLES',view_name:'table',fields:'TABLE_COMMENT,TABLE_NAME'}
+                    },{
+                        label: '视图配置',
+                        value: 'menu1-2',
+                        content: 'configVue',
+                        query:{row:{type:'view'}}
+                    }]
+                },{
+                    value:"menu2",
+                    label:"导航二",
+                    icon:"el-icon-menu",
+                    children:[{
+                        icon:"el-icon-menu",
+                        label: '表格',
+                        value: 'menu2-1',
+                        content: 'tableVue',
+                        query:{TABLE_NAME:'INFORMATION_SCHEMA.TABLES',view_name:'table',fields:'TABLE_COMMENT,TABLE_NAME'},
+                        children:[{
+                            label: '表格',
+                            value: 'menu3-1',
+                            content: 'tableVue',
+                            query:{TABLE_NAME:'INFORMATION_SCHEMA.TABLES',view_name:'table',fields:'TABLE_COMMENT,TABLE_NAME'},
+                            
+                        },{
+                            label: '视图配置',
+                            value: 'menu3-2',
+                            content: 'configVue',
+                            query:{row:{type:'view'}}
+                        }]
+                    },{
+                        label: '视图配置',
+                        value: 'menu2-2',
+                        content: 'configVue',
+                        query:{row:{type:'view'}}
+                    }]                    
+                }]
+            }
         }
     },
     watch:{
         //活动tab排序
         activeTab(newValue,oldValue){
             if(newValue){
-                this.activeTabs=this.activeTabs.filter((currentValue,index,arr)=>currentValue!=newValue);
-                this.activeTabs.push(newValue);
+                this.configs.activeTabs=this.configs.activeTabs.filter((currentValue,index,arr)=>currentValue!=newValue);
+                this.configs.activeTabs.push(newValue);
             }
+        }
+    },
+    computed:{
+        activeTab(){
+            return this.configs.activeTab;
         }
     },
     methods: {
         //点击菜单
-        menuSelect(key, keyPath){
-            let refs=this.$refs[key];
+        menuSelect(key, keyPath,event){
+            let query=JSON.parse(event.currentTarget.getAttribute('query'));
             this.addTab({
-                name:key,
-                title:refs.$el.innerText,
-                content:refs.$attrs.content,
-                query:refs.$attrs.query
+                value:key,
+                label:event.currentTarget.innerText,
+                content:event.currentTarget.getAttribute('content'),
+                query:query
             });
         },
         //添加tab
         addTab(option) {
-            if(!(option.name in this.tabs)){
-                if(!option.title){
-                    option.title=option.name;
+            if(!(option.value in this.tabs)){
+                if(!option.label){
+                    option.label=option.value;
                 }
-                this.tabs[option.name]=option;  
-                this.activeTabs.push(option.name);
+                this.tabs[option.value]=option;  
+                this.configs.activeTabs.push(option.value);
             }
-            this.activeTab = option.name; 
+            this.configs.activeTab = option.value; 
         },
         //移除tab,激活新tab
         removeTab(name) {
             let tabs = this.tabs;
-            let activeTab = this.activeTab;
-            this.activeTabs=this.activeTabs.filter((currentValue,index,arr)=>currentValue!=name);            
+            let activeTab = this.configs.activeTab;
+            this.configs.activeTabs=this.configs.activeTabs.filter((currentValue,index,arr)=>currentValue!=name);            
             if (activeTab === name) {
-                let lastActiveTab=this.activeTabs[ this.activeTabs.length-1];
+                let lastActiveTab=this.configs.activeTabs[ this.configs.activeTabs.length-1];
                 activeTab =name==lastActiveTab?'':lastActiveTab;
                 //激活菜单
-                if(activeTab in this.$refs){
-                    this.$refs.menu.open(this.$refs[activeTab].$parent.index);
-                    this.$refs[activeTab].$el.click();
-                }           
+                let $activeTab=this.$el.querySelector('#'+activeTab);
+                if($activeTab){
+                    this.$refs.elementMenu.$refs.elementMenu.open(activeTab.substring(0,activeTab.lastIndexOf('-')));
+                    $activeTab.click();
+                }
+                
+
             }
-            this.activeTab = activeTab;
+            this.configs.activeTab = activeTab;
             Vue.delete( this.tabs, name )
         }
     }
