@@ -372,7 +372,7 @@
 			add(event,config){
 				let title=this.query.TABLE_COMMENT+'-'+this.query.view_name+'-添加';
 				this.addTab({
-					name: title,
+					value: title,
 					content: config.query.content||'formVue',
 					query:Object.assign({},this.query,config.query)
 				})
@@ -394,7 +394,7 @@
 			//查看数据
 			view(row,operator){
 				this.addTab({
-					name: this.query.TABLE_NAME+'-'+row.id+'-'+operator.text,
+					value: this.query.TABLE_NAME+'-'+row.id+'-'+operator.text,
 					content: 'formVue',
 					query:Object.assign({},this.query,{row:row},operator.query)
 				});
@@ -403,7 +403,7 @@
 			edit(row,operator){
 				let title=this.query.TABLE_COMMENT+'-'+this.query.view_name+'-'+row.id+'-编辑';
 				this.addTab({
-					name: title,
+					value: title,
 					content: operator.query.content||'formVue',
 					query:Object.assign({},this.query,{row:row},operator.query)
 				})
@@ -486,7 +486,6 @@
 							itemDefault:{
 								size:"small"
 							},
-							nodeKey:"value",
 							delShow:(node,data)=>(!data.children || data.children && !data.children.length) && !data.value,
 							add:function(event,config,form){
 								config.data.push({

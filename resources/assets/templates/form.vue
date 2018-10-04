@@ -132,8 +132,8 @@
                 this.save(event,config);
                 this.cancel(event,config);
                 this.$root.$children[0].addTab({
-                    name:this.query.TABLE_NAME+'-config',
-                    title:this.query.TABLE_COMMENT+'表-配置',
+                    value:this.query.TABLE_NAME+'-config',
+                    label:this.query.TABLE_COMMENT+'表-配置',
                     content: this.form.type+'ConfigVue',
                     query:Object.assign({},this.form,this.query,config.query)
                 });

@@ -343,7 +343,7 @@
 				let query=Object.assign({},this.query,config.query);
 				let title=query.TABLE_COMMENT+'-'+query.view_name;
 				this.addTab({
-					name: title,
+					value: title,
 					content: query.content||'formVue',
 					query: query
 				})
@@ -365,7 +365,7 @@
 			//查看数据
 			view(row,operator){
 				this.addTab({
-					name: this.query.TABLE_NAME+'-'+row.id+'-'+operator.text,
+					value: this.query.TABLE_NAME+'-'+row.id+'-'+operator.text,
 					content: 'formVue',
 					query:Object.assign({},this.query,{row:row},operator.query)
 				});
@@ -374,7 +374,7 @@
 			edit(row,operator){
 				let title=this.query.TABLE_COMMENT+'-'+this.query.view_name+'-'+row.id+'-'+operator.text;
 				this.addTab({
-					name: title,
+					value: title,
 					content: operator.query.content||'formVue',
 					query:Object.assign({},this.query,{row:row},operator.query)
 				})
