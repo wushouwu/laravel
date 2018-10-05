@@ -96,7 +96,7 @@ class table extends Controller{
     public function view(Request $request){ 
         $view=$request->input('view_name','');
         $type=$request->input('type','');
-        $TABLE_NAME=$request->input('TABLE_NAME','');
+        $TABLE_NAME=$request->input('TABLE_NAME');
         $priv=$request->input('priv',true);
         if($view){
             $json=$tables = DB::table('view')->where([
