@@ -10,7 +10,7 @@
             ></components>
         </el-aside>
         <el-main>
-            <keep-alive>
+            <!-- <keep-alive> -->
                 <view  
                     :is="this.type+'Config'"
                     ref="view"
@@ -21,7 +21,7 @@
                     @toConfig="toConfig"
                     @del="del"
                 ></view>
-            </keep-alive>
+            <!-- </keep-alive> -->
         </el-main>
     </el-container>
 </template>  
@@ -29,12 +29,14 @@
     import components from './components.vue';
     import formConfig from './formConfig.vue';
     import tableConfig from './tableConfig.vue';
-    import viewConfig from './viewConfig.vue';    
+    import viewConfig from './viewConfig.vue';
+    import menuConfig from './menuConfig.vue';
     export default {
         components: {
             formConfig,
             tableConfig,
             viewConfig,
+            menuConfig,
             components
         },
         props: ['query'],
