@@ -6,7 +6,7 @@
         <el-main @click.native="configs.isFullscreen=true">
             <el-tabs v-model="configs.activeTab" type="card" closable @tab-remove="removeTab">
             <el-tab-pane style="height:100%;"
-                v-for="(item) in tabs"
+                v-for="(item) in configs.tabs"
                 :key="item.value"
                 :label="item.label"
                 :name="item.value"
@@ -25,74 +25,31 @@ export default {
     components:{
         configVue,tableVue,formVue
     },
+    props:['query'],
     data() {
         return {
-            isFullscreen:false,
-            //activeTab: 'menu3-1',
-            activeTabs:['menu3-1'],
-            tabs: {'menu3-1': {
-                label: '表格',
-                value: 'menu3-1',
-                content: 'tableVue',
-                query:{TABLE_NAME:'INFORMATION_SCHEMA.TABLES',view_name:'table',fields:'TABLE_COMMENT,TABLE_NAME'}
-            }},
             configs:{
+                show:true,
                 isFullscreen:false,
-                activeTab: 'menu3-1',
-                activeTabs:['menu3-1'],                
-                tabs: {'menu3-1': {
-                    label: '表格',
-                    value: 'menu3-1',
-                    content: 'tableVue',
-                    query:{TABLE_NAME:'INFORMATION_SCHEMA.TABLES',view_name:'table',fields:'TABLE_COMMENT,TABLE_NAME'}
-                }},
-                menus:[{
-                    value:"menu1",
-                    label:"配置",
-                    icon:"el-icon-setting",
-                    children:[{
-                        icon:"el-icon-setting",
-                        label: '表格',
-                        value: 'menu1-1',
-                        content: 'tableVue',
-                        query:{TABLE_NAME:'INFORMATION_SCHEMA.TABLES',view_name:'table',fields:'TABLE_COMMENT,TABLE_NAME'}
-                    },{
-                        label: '视图配置',
-                        value: 'menu1-2',
-                        content: 'configVue',
-                        query:{row:{type:'view'}}
-                    }]
-                },{
-                    value:"menu2",
-                    label:"导航二",
-                    icon:"el-icon-menu",
-                    children:[{
-                        icon:"el-icon-menu",
-                        label: '表格',
-                        value: 'menu2-1',
-                        content: 'tableVue',
-                        query:{TABLE_NAME:'INFORMATION_SCHEMA.TABLES',view_name:'table',fields:'TABLE_COMMENT,TABLE_NAME'},
-                        children:[{
-                            label: '表格',
-                            value: 'menu3-1',
-                            content: 'tableVue',
-                            query:{TABLE_NAME:'INFORMATION_SCHEMA.TABLES',view_name:'table',fields:'TABLE_COMMENT,TABLE_NAME'},
-                            
-                        },{
-                            label: '视图配置',
-                            value: 'menu3-2',
-                            content: 'configVue',
-                            query:{row:{type:'view'}}
-                        }]
-                    },{
-                        label: '视图配置',
-                        value: 'menu2-2',
-                        content: 'configVue',
-                        query:{row:{type:'view'}}
-                    }]                    
-                }]
+                activeTab: '',
+                activeTabs:[],                
+                tabs: {},
+                menus:[]
             }
         }
+    },
+    created(){
+        this.my.axios({
+            vue: this,
+            axiosOption:{
+                url:this.query.url||'admin/table/view',
+                data:Object.assign({type:"menu",view_name:"菜单"},this.query)
+            },
+            success:function(response,option){
+                option.vue.configs=response.data.data;
+                option.vue.$set(option.vue.configs,'show',true);                
+            }
+        });
     },
     watch:{
         //活动tab排序
@@ -121,18 +78,18 @@ export default {
         },
         //添加tab
         addTab(option) {
-            if(!(option.value in this.tabs)){
+            if(!(option.value in this.configs.tabs)){
                 if(!option.label){
                     option.label=option.value;
                 }
-                this.tabs[option.value]=option;  
+                this.configs.tabs[option.value]=option;  
                 this.configs.activeTabs.push(option.value);
             }
             this.configs.activeTab = option.value; 
         },
         //移除tab,激活新tab
         removeTab(name) {
-            let tabs = this.tabs;
+            let tabs = this.configs.tabs;
             let activeTab = this.configs.activeTab;
             this.configs.activeTabs=this.configs.activeTabs.filter((currentValue,index,arr)=>currentValue!=name);            
             if (activeTab === name) {
@@ -148,7 +105,7 @@ export default {
 
             }
             this.configs.activeTab = activeTab;
-            Vue.delete( this.tabs, name )
+            Vue.delete( this.configs.tabs, name )
         }
     }
 }
