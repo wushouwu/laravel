@@ -305,19 +305,11 @@
                     this.$emit('configChange',newValue);
                 },
                 deep:true
-            },
-            type(newValue,oldValue){
-                if(newValue=='table'){
-                    this.$emit('configChange',this.configs);
-                }
             }                        
 		},
 		computed:{
 			formField(){
 				return this.configs.form.field+'-'+this.configs.form.operator;
-            },
-            type(){
-                return this.query.row.type;
             }            			
 		},
 		updated(){

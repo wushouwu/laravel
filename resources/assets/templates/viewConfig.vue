@@ -72,17 +72,9 @@
                     this.$emit('configChange',newValue);
                 },
                 deep:true
-            },
-            type(newValue,oldValue){
-                if(newValue=='form'){
-                    this.$emit('configChange',this.configs);
-                }
             }
         },
         computed:{
-            type(){
-                return this.query.row.type;
-            } 
         },
         methods: {
             //排序
