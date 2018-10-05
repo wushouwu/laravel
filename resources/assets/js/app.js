@@ -52,7 +52,7 @@ const router = new VueRouter({
   routes: [
     //{ path: '/view', component: view ,props:(route)=>({query:route.query})},
     //{ path: '/table', component: table},
-    { path: '/', component: index},    
+    { path: '/', component: index,props:(route)=>({query:route.query})},    
     //{ path: '/components', component: components},
   ]
 });
