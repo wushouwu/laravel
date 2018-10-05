@@ -21,7 +21,7 @@
             </span>
             <elementButton
                 :config="addButton"
-                @buttonClick="config.add($event,config,form)"
+                @buttonClick="add"
             ></elementButton>            
         </div>                
         <el-tree
@@ -177,7 +177,12 @@
                     vue.delShow=true;
                     vue.$set(vue.form,'show',true);
                 });
-            },  
+            },
+            add(event){
+                if(typeof(this.config.add)=='function'){
+                    this.config.add(event,this.config,this.form,this);
+                }
+            },
             //删除节点   
             del(event,node,data){
                 this.$refs.elementTree.remove(node);
