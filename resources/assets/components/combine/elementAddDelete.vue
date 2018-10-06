@@ -72,7 +72,22 @@
             <elementText 
                 :config="configHandle(optionValue,key)"
                 :form="form[config.name]"
+                v-if="typeof(option)!='object'"
             ></elementText>
+            <div 
+                v-else
+                v-for="(value,k,i) in option"
+                :key="k"
+            >
+                <elementText 
+                    :config="configHandle(optionValue,String(i))"
+                    :form="Object.keys(form[config.name][key])"
+                ></elementText> 
+                <elementText 
+                    :config="configHandle(optionValue,k)"
+                    :form="form[config.name][key]"
+                ></elementText>                                
+            </div>            
             <elementButton
                 :config="Object.assign({},config.itemDefault,deleteButton)"
                 style="width:auto;"
@@ -108,6 +123,7 @@
                     noText:true
                 },
                 formKey:[],
+                formK:[],
                 optionKey:{
                     type:'elementSelect',
                     name:'',
@@ -133,14 +149,23 @@
             }
         },
         created(){
-            this.formKey=Object.keys(this.form[this.config.name]);
+            if(this.config.options.length===undefined){
+                this.formKey=Object.keys(this.form[this.config.name]);
+
+                /* let formValue=Object.values(this.form[this.config.name]);
+                for(var key in formValue){
+                    if(typeof(formValue[key])=='object'){
+                        this.formK=this.formK.concat(Object.keys(formValue[key]));
+                    }
+                }  */               
+            }
         },
         mounted(){
             this.labelPositionTop();
         },
         updated(){           
            this.labelPositionTop();
-        }, 
+        },          
         watch:{
             option:{
                 handler(newValue,oldValue){
