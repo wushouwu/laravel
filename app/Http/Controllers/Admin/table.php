@@ -15,6 +15,7 @@ class table extends Controller{
     public function query(Request $request,$tables,$queryName){
         if($request->has($queryName)){
             $query=$request->input($queryName);
+            $query['value']=eval("return {$query['value']};");
             switch($query['operator']){
                 case 'like':
                 case 'not like':
