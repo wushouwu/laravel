@@ -33927,7 +33927,7 @@ function resizable(el, binding) {
             }
         },
 
-        click: function click(event) {
+        rightClick: function rightClick(event) {
             this.$emit('config', event, this.config, {
                 header: {
                     type: "elementComponents",
@@ -35634,8 +35634,10 @@ var render = function() {
         _vm.config.style,
       attrs: { shadow: _vm.config.shadow, "body-style": _vm.config.bodyStyle },
       nativeOn: {
-        click: function($event) {
-          return _vm.click($event)
+        contextmenu: function($event) {
+          $event.preventDefault()
+          $event.stopPropagation()
+          return _vm.rightClick($event)
         }
       }
     },
@@ -35806,11 +35808,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     components: {
         elementSubmenu: {
             name: "elementSubmenu",
-            template: '\n                <el-submenu\n                    v-if="config.children&&config.children.length"\n                    :index="id"\n                    :id="id"\n                    @click.prevent.stop.native.right="itemClick($event,config)" \n                >\n                    <template slot="title">\n                        <i :class="config.icon"></i>\n                        <span slot="title">{{config.label}}</span>\n                    </template>\n                    <template \n                        v-for="(menu,key) in config.children"\n                    >\n                        <elementSubmenu\n                            v-if="menu.children&&menu.children.length"\n                            :config="menu"\n                            :key="key"\n                            :id="id+\'-\'+key"\n                            @itemClick="itemClick"\n                        >\n                        </elementSubmenu>\n                        <el-menu-item\n                            v-if="(!menu.children || menu.children&&!menu.children.length) && !menu.hide"\n                            :index="id+\'-\'+key"\n                            :id="id+\'-\'+key"                       \n                            :content="menu.content" \n                            :query="JSON.stringify(menu.query)" \n                            @click.prevent.stop.native.right="itemClick($event,menu)"                     \n                        >\n                            <i :class="menu.icon"></i>\n                            <span slot="title">{{menu.label}}</span>\n                        </el-menu-item>\n                    </template>\n                </el-submenu>                \n            ',
+            template: '\n                <el-submenu\n                    v-if="config.children&&config.children.length"\n                    :index="id"\n                    :id="id"\n                    @click.prevent.stop.native.right="itemRightClick($event,config)" \n                >\n                    <template slot="title">\n                        <i :class="config.icon"></i>\n                        <span slot="title">{{config.label}}</span>\n                    </template>\n                    <template \n                        v-for="(menu,key) in config.children"\n                    >\n                        <elementSubmenu\n                            v-if="menu.children&&menu.children.length"\n                            :config="menu"\n                            :key="key"\n                            :id="id+\'-\'+key"\n                            @itemRightClick="itemRightClick"\n                        >\n                        </elementSubmenu>\n                        <el-menu-item\n                            v-if="(!menu.children || menu.children&&!menu.children.length) && !menu.hide"\n                            :index="id+\'-\'+key"\n                            :id="id+\'-\'+key"                       \n                            :content="menu.content" \n                            :query="JSON.stringify(menu.query)" \n                            @click.prevent.stop.native.right="itemRightClick($event,menu)"                     \n                        >\n                            <i :class="menu.icon"></i>\n                            <span slot="title">{{menu.label}}</span>\n                        </el-menu-item>\n                    </template>\n                </el-submenu>                \n            ',
             props: ['config', 'id'],
             methods: {
-                itemClick: function itemClick(event, menu) {
-                    this.$emit('itemClick', event, menu);
+                itemRightClick: function itemRightClick(event, menu) {
+                    this.$emit('itemRightClick', event, menu);
                 }
             }
         }
@@ -35825,7 +35827,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
 
     methods: {
-        click: function click(event) {
+        rightClick: function rightClick(event) {
             this.$emit('config', event, this.config, {
                 uniqueOpened: {
                     type: "elementSwitch",
@@ -35886,7 +35888,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 this.$emit('menuSelect', key, keyPath, event);
             }
         },
-        itemClick: function itemClick(event, menu) {
+        itemRightClick: function itemRightClick(event, menu) {
             if (!menu.priv) {
                 this.$set(menu, 'priv', { role: [], dept: [], user: [] });
             }
@@ -36071,7 +36073,7 @@ var render = function() {
       nativeOn: {
         contextmenu: function($event) {
           $event.preventDefault()
-          return _vm.click($event)
+          return _vm.rightClick($event)
         }
       }
     },
@@ -36083,7 +36085,7 @@ var render = function() {
                 ? _c("elementSubmenu", {
                     key: key,
                     attrs: { config: menu, id: "menu" + key },
-                    on: { itemClick: _vm.itemClick }
+                    on: { itemRightClick: _vm.itemRightClick }
                   })
                 : _vm._e(),
               _vm._v(" "),
@@ -36103,7 +36105,7 @@ var render = function() {
                         contextmenu: function($event) {
                           $event.preventDefault()
                           $event.stopPropagation()
-                          _vm.itemClick($event, menu)
+                          _vm.itemRightClick($event, menu)
                         }
                       }
                     },
