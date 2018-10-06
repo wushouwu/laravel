@@ -158,6 +158,9 @@
                 }
                 if(!menu.query){
                     this.$set(menu,'query',{});
+                }
+                if(!menu.content){
+                    this.$set(menu,'content','');
                 }                
                 let target=event.currentTarget;//处理currentTarget丢失的问题
                 if(!this.role.length||!this.user.length){
