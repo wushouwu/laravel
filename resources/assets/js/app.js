@@ -4,13 +4,15 @@
  * includes Vue and other libraries. It is a great starting point when
  * building robust, powerful web applications using Vue and Laravel.
  */
-
+ 
 require('./bootstrap');
 
 window.Vue = require('vue');
 
 import ElementUI from 'element-ui';    //引入element－ui
 import 'element-ui/lib/theme-chalk/index.css'; //引入element－ui所需的css样式资源文件
+import 'font-awesome/scss/font-awesome.scss';
+
 //import locale from 'element-ui/lib/locale/lang/en'
 //Vue.use(ElementUI, { locale })
 Vue.use(ElementUI);    //把引入的ElementUI装入我们的Vue
