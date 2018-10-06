@@ -61,17 +61,23 @@
                 },
                 success:function(response,option){
                     option.vue=Object.assign(option.vue,response.data.data);
-                    if(option.vue.query.row && option.vue.query.row.id){
+                    if(option.vue.query.row && option.vue.query.row.id || option.vue.query.where){
                         //表单数据
+                        let data={
+                            TABLE_NAME:option.vue.query.TABLE_NAME,
+                            row:option.vue.query.row
+                        }
+                        if(option.vue.query.row && option.vue.query.row.id){
+                            data['id']=option.vue.query.row.id;                       
+                        }
+                        if(option.vue.query.where){
+                            data['where']= option.vue.query.where;
+                        }
                         option.vue.my.axios({
                             vue: option.vue,
                             axiosOption:{
                                 url:'admin/table/row',
-                                data:{
-                                    TABLE_NAME:option.vue.query.TABLE_NAME,
-                                    id:option.vue.query.row.id,
-                                    row:option.vue.query.row
-                                }
+                                data:data
                             },
                             success:function(response,option){
                                 option.vue.form=response.data.data;
