@@ -5,7 +5,7 @@
         :label="config.label"
         :label-width="config.labelWidth"
         :class="{'size-small-font':config.size==='small'||config.size==='mini'?true:false}"
-        @click.native="click"
+        @click.prevent.stop.native.right="rightClick"
     >
         <el-input-number 
             v-model="form[config.name]"  
@@ -43,7 +43,7 @@
             this.$el.appendChild(span);
         },         
         methods: {
-            click: function(event){
+            rightClick: function(event){
                 this.$emit('config',event,this.config,{
                     name:{
                         type:"elementSelect",

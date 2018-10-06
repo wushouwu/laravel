@@ -4,9 +4,9 @@
         :label-width="config.labelWidth"
         :prop="config.name"
         :rules="rules"
-        @click.native="click" 
         :class="{'size-small-font':config.size==='small'||config.size==='mini'?true:false}"
         :style="config.style"
+        @click.prevent.stop.native.right="rightClick"
     >
         <el-input 
             v-model="form[config.name]"
@@ -97,7 +97,7 @@
             }
         },
         methods:{            
-            click: function(event){
+            rightClick: function(event){
                 this.$emit('config',event,this.config,{
                     name:{
                         type:"elementSelect",

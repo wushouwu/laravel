@@ -50,7 +50,7 @@
 						:config="tool" 
 						:form="tool"
                     	:class="{active:activeField===key}"
-                    	@click.native="activeField=key;activeButton='';"
+                    	@click.prevent.stop.native.right="activeField=key;activeButton='';"
 						@config	="toConfig"
                    		@close="del(key,'tools')"
 					></tool>
@@ -66,7 +66,7 @@
 				:stripe="Boolean(configs.table.stripe)"
 				:default-sort="configs.table.defaultSort"
 				:fit="true"
-				@header-click="headerClick"
+				@click.prevent.stop.native.right="rightClick"
 			>
 				<el-table-column 
 					v-for="(head,headkey) in configs.table.header.column"
@@ -531,7 +531,124 @@
 					});
 
 				}
-			},		
+			},
+			//配置表格列
+			rightClick(event){
+				if(event.target.innerText=='操作'){
+					let operator=JSON.parse(JSON.stringify(this.configs.table.operator));
+					this.$emit('toConfig',event,this.configs.table,{
+						operator:{
+							type:"elementAddDelete",
+							name:"operator",
+							label:"操作项",	
+							labelPositionTop:true,					
+							labels:[{label:'按钮'}],
+							itemDefault:{
+								style:"width:60%;display:inline-block;margin-right:2%;text-align:center;",
+								size:"mini",
+								delScript:`this.$delete(this.$parent.$children[1].config.options[0],'options');`						
+							},
+							options:operator.map((item,index,arr)=>{
+								item.script=`
+									this.$set(this.attrs['button'].options[0],'options',option.attr);
+									this.$set(this.attrs['button'].options[0],'name',String(option.index));
+								`;
+								return item;
+							})
+						},
+						button:{
+							type:"elementComponents",
+							name:"operator",
+							label:"按钮设置",
+							labelPositionTop:true,
+							itemDefault:{
+								size:"small"
+							},
+							options:[{
+								type:"elementComponents",
+								name:"0",
+								itemDefault:{
+									size:"small"
+								},							
+								options:[]
+							}]
+						}
+					});
+				}else{
+					let vue=this,
+						defaultCheckedKeys=[];
+					this.configs.table.header.column.map((item,index,arr)=>{ 
+						item.fixed=Boolean(item.fixed);
+						item.resizable=Boolean(item.resizable);
+						item.sortable=Boolean(item.sortable);
+						item.showOverflowTooltip=Boolean(item.showOverflowTooltip);
+						defaultCheckedKeys.push(item.value);
+						return item;
+					});
+					//表头配置
+					this.$emit('toConfig',event,this.configs.table.header,{
+						column:{
+							type:"elementTree",
+							name:"column",
+							labelWidth:'0px',	
+							expandOnClickNode:false,
+							itemDefault:{
+								size:"small"
+							},
+							delShow:(node,data)=>(!data.children || data.children && !data.children.length) && !data.value,
+							add:function(event,config,form){
+								config.data.push({
+									label:"点击设置",
+									align:"center",
+									resizable:true	
+								});
+								form.column.push({
+									label:"点击设置",
+									align:"center",
+									resizable:true	
+								})
+							},
+							defaultCheckedKeys:defaultCheckedKeys,
+							checkChange:function(vue,data, checked, indeterminate){
+								vue.$set(data,'hide',!checked);
+							},
+							allowDrop:(draggingNode, dropNode, type)=>dropNode.data.value&&type=='inner'?false:true,
+							draggable:true,
+							showCheckbox:true,
+							data:Object.assign([],this.configs.table.header.column),
+							labelDefault:{
+								style:"padding: 4px;"
+							},
+							labels:[{
+								label:"拖动"
+							},{
+								label:"排序"
+							},{
+								label:"固定"
+							}],
+							item:{
+								type:"elementComponents",
+								name:"data",
+								wrapper:"span",
+								itemDefault:{
+									style:"margin-left:10px;"
+								},
+								options:[{
+									type:"el-checkbox",
+									name:"resizable"
+								},{
+									type:"el-checkbox",
+									name:"sortable"
+								},{
+									type:"el-checkbox",
+									name:"fixed"
+								}]
+							}
+						}
+					});
+
+				}
+			},					
 			/*	删除组件
 				@key index
 				@type 组件类型
@@ -543,7 +660,8 @@
 			//工具框点击
 			toolsClick(event){
 				this.$emit('fieldsClick',event);
-			}		
+			},
+	
 		}
 	}
 </script>

@@ -16,6 +16,7 @@
             :options="{group:{ name:'view',  pull:false, put: true},preventOnFilter: true,animation: 250}"
             @change="sort"
             @click.native="fieldsClick"
+            @click.prevent.stop.native.right="fieldsRightClick"
         >
             <component 
                 v-for="(field, key,index) in configs.fields" 
@@ -25,7 +26,7 @@
                 :form="configs.form"
                 :class="{active:activeField===key}"
                 @config="toConfig"
-                @click.native="activeField=key;activeButton='';"
+                @click.prevent.stop.native.right="activeField=key;activeButton='';"
                 @close="del(key,'fields')"
             >
             </component>
@@ -35,7 +36,6 @@
             v-model="configs.tools" 
             :options="{group:{ name:'view',  pull:false, put: true},preventOnFilter: true,animation: 250}"
             @change="buttonChange"
-            @click.native="toolsClick"
         >
             <elementButton
                 v-for="(tool,key) in configs.tools"
@@ -44,7 +44,7 @@
                 :form="tool"
                 :class="{active:activeButton===key}"
                 @config="toConfig"
-                @click.native="activeButton=key;activeField='';"
+                @click.prevent.stop.native.right="activeButton=key;activeField='';"
                 @close="del(key,'tools')"
             ></elementButton>
         </draggable>               
@@ -173,7 +173,7 @@
                 this.$emit('accordionChange',event,'组件')
             },
             //form配置
-            toolsClick(event){
+            fieldsRightClick(event){
                 if(event.target==event.currentTarget ){ 
                     this.activeField='';this.activeButton=''                
                     this.$emit('toConfig',event,this.configs.forms,[{
@@ -286,6 +286,5 @@
         bottom:21px;
         margin-left: 10%;
         border:1px dashed #c0c4cc;
-        cursor:pointer;
     }
 </style>

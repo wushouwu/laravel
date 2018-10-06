@@ -6,7 +6,7 @@
         :label-width="config.labelWidth"
         :class="{'size-small-font':config.size==='small'||config.size==='mini'?true:false}"
         :style="config.style"
-        @click.native="click"
+        @click.prevent.stop.native.right="rightClick"
     >
         <el-select 
             v-model="form[config.name]" 
@@ -126,7 +126,7 @@
                     this.options=this.config.options;
                 }               
             },                 
-            click: function(event){             
+            rightClick: function(event){             
                 //配置
                 if(this.config.source=='tableField' && this.config.tableField){
                     if(!this.tables.length || !this.fields.length){

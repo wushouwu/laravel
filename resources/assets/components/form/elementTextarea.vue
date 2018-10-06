@@ -4,7 +4,7 @@
         :label-width="config.labelWidth"
         :prop="config.name"
         :rules="rules"
-        @click.native="click"
+        @click.prevent.stop.native.right="rightClick"
     >
         <el-input 
             type="textarea" 
@@ -75,7 +75,7 @@
             }
         },      
         methods:{         
-            click: function(event){
+            rightClick: function(event){
                 this.$emit('config',event,this.config,{
                     name:{
                         type:"elementSelect",

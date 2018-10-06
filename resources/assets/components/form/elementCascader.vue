@@ -2,8 +2,8 @@
     <el-form-item  
         :label="config.label"
         :label-width="config.labelWidth"
-        @click.native="click" 
         :style="config.style"
+        @click.prevent.stop.native.right="rightClick"
     >
         <el-cascader
             :options="config.options"
@@ -26,7 +26,7 @@
             this.$el.appendChild(span);
         },          
         methods:{
-            click: function(event){
+            rightClick: function(event){
                 this.$emit('config',event,this.config,{
                     name:{
                         type:"elementSelect",

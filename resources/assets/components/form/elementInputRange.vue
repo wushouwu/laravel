@@ -2,7 +2,7 @@
     <el-form-item  
         :label="config.label" 
         :label-width="config.labelWidth"
-        @click.native="click"
+        @click.prevent.stop.native.right="rightClick"
     >
         <el-input-number v-model="form[config.name][0]"></el-input-number>
         <el-input-number v-model="form[config.name][1]"></el-input-number>
@@ -23,7 +23,7 @@
             this.$el.appendChild(span);
         },         
         methods:{
-            click: function(event){
+            rightClick: function(event){
                 this.$emit('config',event,this.config,{
                     name:{
                         type:"elementText",

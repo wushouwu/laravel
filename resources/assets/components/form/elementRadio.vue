@@ -3,8 +3,8 @@
         :label-width="config.labelWidth"
         :label="config.label" 
         :prop="config.name" 
-        @click.native="click"
         :class="{'size-small-font':config.size==='small'||config.size==='mini'?true:false}"
+        @click.prevent.stop.native.right="rightClick"
     >
         <el-radio-group 
             v-model="form[config.name]"
@@ -12,7 +12,7 @@
             @change="change"
         >
             <item
-                v-for="(option,key,index) in config.options"
+                v-for="(option,key) in config.options"
                 :key="key"
                 :is="option.type"
                 :border="option.border"
@@ -39,7 +39,7 @@
             this.$el.appendChild(span);
         },         
         methods: {
-            click: function(event){
+            rightClick: function(event){
                 this.$emit('config',event,this.config,{
                     name:{
                         type:"elementSelect",

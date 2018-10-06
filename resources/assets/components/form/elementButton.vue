@@ -2,11 +2,10 @@
     <wrapper
         :is="config.wrapper||'el-form-item'"
         :label="config.label"
-        :label-width="config.labelWidth||'0px'"
-        @click="click"
-        @click.native="click"        
+        :label-width="config.labelWidth||'0px'"       
         class="elementButton"
         :style="config.style"
+        @click.prevent.stop.native.right="rightClick"
     >
         <el-button 
             :type="config.buttonType" 
@@ -55,7 +54,7 @@
             buttonClick: function(event){
                 this.$emit('buttonClick',event,this.config);
             },
-            click(event){
+            rightClick(event){
                 let target=event.currentTarget;//处理currentTarget丢失的问题
                 if(!this.role.length||!this.user.length){
                     this.my.axiosAll({
