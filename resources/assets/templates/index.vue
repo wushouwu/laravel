@@ -115,6 +115,15 @@ export default {
     .el-menu:not(.el-menu--collapse) {
         width: 300px;
     }
+    /* 菜单图标 */    
+    .el-submenu [class^=fa],
+    .el-menu-item [class^=fa]{
+        vertical-align: middle;
+        margin-right: 5px;
+        width: 24px;
+        text-align: center;
+        font-size: 18px;
+    } 
     .el-tabs{
         display:flex;
         flex-flow:column;
