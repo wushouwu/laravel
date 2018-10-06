@@ -1,6 +1,6 @@
 <template>
     <el-container  style="height:100%;">
-        <el-aside style="width:auto;min-width:300px;"  @mouseover.native="configs.isFullscreen=false">
+        <el-aside style="width:auto;"  @mouseover.native="configs.isFullscreen=false">
             <keep-alive>
                 <elementMenu 
                     ref="elementMenu"
@@ -8,7 +8,7 @@
                     @menuSelect="menuSelect"
                     @config="toConfig"
                     v-if="configs.show"
-                    style="width:99%;"
+                    :style="{minWidth:configs.isFullscreen?'64px':'300px'}"
                 ></elementMenu>
             </keep-alive>
         </el-aside>
