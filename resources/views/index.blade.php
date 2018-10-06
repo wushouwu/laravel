@@ -17,6 +17,9 @@
 <body>
     <div id="app"><router-view></router-view></div>  
 </body>
+<script>
+    const user=@json(Auth::user());
+</script>
 <script src="{{ mix('js/manifest.js') }}"></script>
 <script src="{{ mix('js/vendor.js') }}"></script>
 <script src="{{ mix('js/app.js') }}"></script>  
