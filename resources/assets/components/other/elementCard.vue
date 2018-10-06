@@ -5,7 +5,7 @@
         :style="'width:'+config.width+';'+'height:'+config.height+';'+config.style"
         :body-style="config.bodyStyle"
         v-resizable="config"
-        @click.native="click" 
+        @click.prevent.stop.native.right="rightClick" 
     >
         <div 
             slot="header" 
@@ -91,7 +91,7 @@
 
                 }
             },
-            click: function(event){
+            rightClick: function(event){
                 this.$emit('config',event,this.config,{
                     header:{
                         type:"elementComponents",

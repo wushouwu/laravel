@@ -6,7 +6,7 @@
         :unique-opened="'uniqueOpened' in config?config.uniqueOpened:true"
         style="height:100%;"
         @select="select"
-        @click.prevent.native.right="click"
+        @click.prevent.native.right="rightClick"
     >
         <template 
             ref="elementSubmenu"
@@ -18,7 +18,7 @@
                 :config="menu"
                 :key="key"
                 :id="'menu'+key"
-                @itemClick='itemClick'
+                @itemRightClick='itemRightClick'
             >
             </elementSubmenu>
             <el-menu-item
@@ -28,7 +28,7 @@
                 :id="'menu'+key"                       
                 :content="menu.content" 
                 :query="JSON.stringify(menu.query)" 
-                @click.prevent.stop.native.right="itemClick($event,menu)"
+                @click.prevent.stop.native.right="itemRightClick($event,menu)"
             >
                 <i :class="menu.icon"></i>
                 <span slot="title">{{menu.label}}</span>
@@ -47,7 +47,7 @@
                         v-if="config.children&&config.children.length"
                         :index="id"
                         :id="id"
-                        @click.prevent.stop.native.right="itemClick($event,config)" 
+                        @click.prevent.stop.native.right="itemRightClick($event,config)" 
                     >
                         <template slot="title">
                             <i :class="config.icon"></i>
@@ -61,7 +61,7 @@
                                 :config="menu"
                                 :key="key"
                                 :id="id+'-'+key"
-                                @itemClick="itemClick"
+                                @itemRightClick="itemRightClick"
                             >
                             </elementSubmenu>
                             <el-menu-item
@@ -70,7 +70,7 @@
                                 :id="id+'-'+key"                       
                                 :content="menu.content" 
                                 :query="JSON.stringify(menu.query)" 
-                                @click.prevent.stop.native.right="itemClick($event,menu)"                     
+                                @click.prevent.stop.native.right="itemRightClick($event,menu)"                     
                             >
                                 <i :class="menu.icon"></i>
                                 <span slot="title">{{menu.label}}</span>
@@ -80,8 +80,8 @@
                 `,
                 props:['config','id'],
                 methods:{
-                    itemClick(event,menu){
-                        this.$emit('itemClick',event,menu);
+                    itemRightClick(event,menu){
+                        this.$emit('itemRightClick',event,menu);
                     }
                 }
             }           
@@ -95,7 +95,7 @@
             }
         },
         methods:{ 
-            click: function(event){
+            rightClick: function(event){
                 this.$emit('config',event,this.config,{
                     uniqueOpened:{
                         type:"elementSwitch",
@@ -152,7 +152,7 @@
                     this.$emit('menuSelect',key, keyPath,event);
                 }
             },
-            itemClick(event,menu){
+            itemRightClick(event,menu){
                 if(!menu.priv){
                     this.$set(menu,'priv',{role:[],dept:[],user:[]});
                 }
