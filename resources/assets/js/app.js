@@ -62,6 +62,6 @@ const router = new VueRouter({
 import {my} from '../js/my.js';
 Vue.prototype.my=my;
 Vue.prototype.camelCase=camelCase;
-const app = new Vue({
+window.APP = new Vue({
     router
-}).$mount('#app')
+}).$mount('#app');
