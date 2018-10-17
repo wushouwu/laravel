@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
+use \App\Events\notice;
 class table extends Controller{
     public function __construct(){
         $this->db=config('database.connections.mysql.database');
@@ -15,7 +16,7 @@ class table extends Controller{
     public function query(Request $request,$tables,$queryName){
         if($request->has($queryName)){
             $query=$request->input($queryName);
-            $query['value']=eval("return {$query['value']};");
+            $query['value']=eval('return "'.$query['value'].'";');
             switch($query['operator']){
                 case 'like':
                 case 'not like':
@@ -94,7 +95,7 @@ class table extends Controller{
     //DB::connection()->enableQueryLog();
     //dd(DB::getQueryLog());
     //获取视图配置
-    public function view(Request $request){ 
+    public function view(Request $request){       
         $view=$request->input('view_name','');
         $type=$request->input('type','');
         $TABLE_NAME=$request->input('TABLE_NAME');
@@ -176,6 +177,7 @@ class table extends Controller{
                             WHEN "varchar" THEN "text" 
                             WHEN "text" THEN "textarea"
                             WHEN "longtext" THEN "textarea"
+                            WHen "timestamp" THEN "datetime"
                             ELSE `DATA_TYPE`
                         end `type`'
                     ))
@@ -573,5 +575,9 @@ class table extends Controller{
             $data=['msg'=>$TABLE_NAME?_('表单信息未提交'):_('表名不存在')];
         }
         return response()->json($data);
-    }    
+    } 
+    public function test(){
+        $notice=\App\Notice::first();
+        event(new notice($notice));
+    }   
 }
