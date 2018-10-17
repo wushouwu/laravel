@@ -6,6 +6,7 @@
         class="elementButton"
         :style="config.style"
         @click.prevent.stop.native.right="rightClick"
+        @click.prevent.stop.right="rightClick"
     >
         <el-button 
             :type="config.buttonType" 
