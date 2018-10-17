@@ -209,4 +209,13 @@ export default {
     .containers .elementCard{
         cursor:move;
     }
+    /* 通知 */
+    .el-notification__group{
+        overflow: hidden;
+    }
+    .el-notification__group .el-notification__title{
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
 </style>
