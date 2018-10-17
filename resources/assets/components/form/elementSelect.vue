@@ -14,6 +14,7 @@
             :multiple="config.multiple"
             :filterable="config.filterable||config.allowCreate" 
             :placeholder="config.placeholder||'请选择'"
+            :disabled="config.disabled"
             :size="config.size"
             @change="change"
             @click.native="selectClick"
@@ -260,6 +261,11 @@
                             }
                         }]
                     },
+                    disabled:{
+                        type:"elementSwitch",
+                        label:"只读",
+                        name:"disabled"
+                    },                    
                     transfer:{
                         type:"elementSwitch",
                         label:"穿梭框",
@@ -329,6 +335,9 @@
                 if(this.config.transfer){
                     this.$refs.elementSelect.blur();
                     this.transfer=true;
+                }
+                if(this.config.readonly){
+                    this.$refs.elementSelect.blur();
                 }
             }            
         }   
