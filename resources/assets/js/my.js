@@ -43,7 +43,7 @@ export var my={
                 type: 'error',
                 duration: 0
             });
-            if(error.message.indexOf(401)>=0 || error.message.indexOf(419)>=0){
+            if(error.message.indexOf(401)>=0 || error.message.indexOf(419)>=0 || error.message.indexOf(302)>=0){
                 location.href='login';
             }
         });
@@ -75,7 +75,7 @@ export var my={
                 type: 'error',
                 duration: 0
             });
-            if(error.message.indexOf(401)>=0 || error.message.indexOf(419)>=0){
+            if(error.message.indexOf(401)>=0 || error.message.indexOf(419)>=0 || error.message.indexOf(302)>=0){
                 location.href='login';
             }
         });
