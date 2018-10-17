@@ -340,8 +340,11 @@
 			},
 			//添加
 			add(event,config){
-				let query=Object.assign({},this.query,config.query);
-				let title=query.TABLE_COMMENT+'-'+query.view_name;
+				let title=(this.query.title?this.query.title:'表格')+'-'+config.text;
+				let query=Object.assign({},this.query);
+				delete query.where;
+				query=Object.assign({},query,config.query);
+				console.log(query,config);
 				this.addTab({
 					value: title,
 					content: query.content||'formVue',
@@ -364,15 +367,17 @@
 			},
 			//查看数据
 			view(row,operator){
+				console.log(this.query.view_name,operator.query.view_name)
 				this.addTab({
-					value: this.query.TABLE_NAME+'-'+row.id+'-'+operator.text,
+					value: this.query.title+'-'+row.id+'-'+operator.text,
 					content: 'formVue',
 					query:Object.assign({},this.query,{row:row},operator.query)
 				});
 			},
 			//编辑数据
 			edit(row,operator){
-				let title=this.query.TABLE_COMMENT+'-'+this.query.view_name+'-'+row.id+'-'+operator.text;
+				console.log(this.query.view_name,operator.query.view_name)
+				let title=this.query.title+'-'+row.id+'-'+operator.text;
 				this.addTab({
 					value: title,
 					content: operator.query.content||'formVue',
