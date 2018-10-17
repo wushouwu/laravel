@@ -1,0 +1,1 @@
+schtasks /create /sc minute /mo 1 /tn "laraval" /tr D:\program\wamp64\www\laravel\install\windows\scheduling.vbs

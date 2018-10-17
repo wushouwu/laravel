@@ -4,7 +4,8 @@ namespace App\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
-
+use Illuminate\Support\Facades\Log;
+use \App\Events\notice;
 class Kernel extends ConsoleKernel
 {
     /**
@@ -26,6 +27,16 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')
         //          ->hourly();
+        
+        $schedule->call(function(){
+            $notice=\App\Notice::first();
+            event(new notice($notice));
+        })
+        ->everyMinute()
+        ->appendOutputTo('test.txt');    
+        /* $schedule->command('emails:send')
+        ->everyMinute()
+        ->appendOutputTo('test.txt'); */      
     }
 
     /**
