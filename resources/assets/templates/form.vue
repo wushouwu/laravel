@@ -61,6 +61,9 @@
                 },
                 success:function(response,option){
                     option.vue=Object.assign(option.vue,response.data.data);
+                    if(option.vue.query.TABLE_NAME=='INFORMATION_SCHEMA.COLUMNS' && !option.vue.query.row){
+                        return;
+                    }
                     if(option.vue.query.row && option.vue.query.row.id || option.vue.query.where){
                         //表单数据
                         let data={
