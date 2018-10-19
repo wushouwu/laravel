@@ -464,7 +464,7 @@ class table extends Controller{
                     continue;
                 }
                 $data['data']['fields'][$key]=[
-                    "type"=> "elementText",
+                    "type"=> 'element'.ucfirst($val->type),
                     "label"=> $val->label,
                     "name"=> $val->name,
                     "rules"=> [
@@ -517,7 +517,7 @@ class table extends Controller{
             ]];
             foreach($fields as $key=>$val){
                 $data['data']['fields'][$key]=[
-                    "type"=> "elementText",
+                    "type"=> $val->type=='textarea'?"elementTextarea":"elementText",
                     "label"=> $val->label,
                     "name"=> $val->name,
                     "readonly"=>true                    
