@@ -13,7 +13,6 @@ class notice implements ShouldBroadcast
     use SerializesModels;
 
     public $notice;
-    public $role;
 
     /**
      * 创建一个新的事件实例
