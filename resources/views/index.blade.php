@@ -15,7 +15,7 @@
     </style>
 </head>
 <body>
-    <div id="app"><router-view></router-view></div>  
+    <div id="app"><router-view></router-view></div> 
 </body>
 <script>
     const USER=@json(Auth::user());
@@ -29,11 +29,10 @@ try{
     window.Echo = new echo({
         broadcaster: 'socket.io',
         host: window.location.hostname + ':6001'
-        //key: process.env.MIX_PUSHER_APP_KEY,
-        //cluster: process.env.MIX_PUSHER_APP_CLUSTER,
-        //encrypted: true
     });
-    console.log(USER);
+    var audio=document.createElement("audio");
+    audio.src="media/audio/notice.mp3";
+    document.body.appendChild(audio);
     Echo.channel('notice')
     .listen('notice', (e) => {
         if(e.notice.role.indexOf(USER.role)>=0 || e.notice.dept.indexOf(USER.dept)>=0 || e.notice.user.indexOf(USER.id)>=0){
@@ -54,6 +53,7 @@ try{
                     Notification.close();
                 }
             });
+            audio.play();
         } 
     });   
 }catch(e){
