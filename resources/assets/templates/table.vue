@@ -342,7 +342,7 @@
 			add(event,config){
 				let title=(this.query.title?this.query.title:'表格')+'-'+config.text;
 				let query=Object.assign({},this.query);
-				delete query.where;
+				//delete query.where;
 				query=Object.assign({},query,config.query);
 				console.log(query,config);
 				this.addTab({
