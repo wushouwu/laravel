@@ -84,8 +84,8 @@ if (token) {
  * allows your team to easily build robust real-time web applications.
  */
 
-// import Echo from 'laravel-echo'
-
+import Echo from 'laravel-echo'
+window.echo=Echo;
 // window.Pusher = require('pusher-js');
 
 // window.Echo = new Echo({
