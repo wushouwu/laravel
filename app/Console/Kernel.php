@@ -6,6 +6,7 @@ use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use Illuminate\Support\Facades\Log;
 use \App\Events\notice;
+use \App\Task;
 class Kernel extends ConsoleKernel
 {
     /**
@@ -16,7 +17,6 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         //
     ];
-
     /**
      * Define the application's command schedule.
      *
@@ -25,18 +25,19 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')
-        //          ->hourly();
-        
-        $schedule->call(function(){
-            $notice=\App\Notice::first();
-            event(new notice($notice));
-        })
-        ->everyMinute()
-        ->appendOutputTo('test.txt');    
-        /* $schedule->command('emails:send')
-        ->everyMinute()
-        ->appendOutputTo('test.txt'); */      
+        $this->tasks=Task::all();        
+        foreach($this->tasks as $key=>$val){
+            $action=$val->type;
+            $this->val=$val;
+            $schedule->$action(function(){
+                $val=$this->val;
+                if($val->type=='call'){
+                    //$json=json_decode($val->json);
+                    //eval($json->script);
+                    eval($val->json);
+                }
+            })->cron($val->plan)->runInBackground();
+        }
     }
 
     /**
