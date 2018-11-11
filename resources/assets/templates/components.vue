@@ -111,15 +111,6 @@
                         "fieldValue":""
                     }
                 },{
-                    "type": "elementSwitch",
-                    "label": "开关",
-                    "name": "switch"
-                },{
-                    "type": "elementTextarea",
-                    "label": "多行文本",
-                    "name": "textarea",
-                    "autosize":{"minRows":3,"maxRows":5}
-                },{
                     "type": "elementDatetime",
                     "label": "日期时间",
                     "name": "datetime"
@@ -135,6 +126,28 @@
                     "shape":"plain",
                     "buttonType":"primary",
                     "name": "button"
+                },{
+                    "type": "elementSwitch",
+                    "label": "开关",
+                    "name": "switch"
+                },{
+                    "type": "elementTextarea",
+                    "label": "多行文本",
+                    "name": "textarea",
+                    "autosize":{"minRows":3,"maxRows":5}
+                },{
+                    "type": "elementEditor",
+                    "label": "编辑器",
+                    "name": "editor",
+                    "style":"padding-right: 1px;",
+                    "readonly":false,
+                    "editorType":"multy",                    
+                    "options":{
+                        "minWidth":0,
+                        "width":"100%",
+                        "height":296,
+                        "resizeType":1
+                    }
                 }]`,
                 initContainers:`[{
                     "type":"elementCard",
