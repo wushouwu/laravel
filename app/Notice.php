@@ -7,4 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class Notice extends Model
 {
     //
+    public $timestamps = false;
+    protected $guarded = [];    
 }
