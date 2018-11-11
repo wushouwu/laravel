@@ -7,6 +7,7 @@ use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use Illuminate\Support\Facades\Log;
 use \App\Events\notice;
 use \App\Task;
+use Illuminate\Support\Facades\DB;
 class Kernel extends ConsoleKernel
 {
     /**
@@ -25,7 +26,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $this->tasks=Task::all();        
+        $this->tasks=Task::all();       
         foreach($this->tasks as $key=>$val){
             $action=$val->type;
             $this->val=$val;
