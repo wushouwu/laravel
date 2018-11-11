@@ -1,21 +1,62 @@
 <template>
 	<div style="display:flex;flex-flow:column;height:100%;"  ref="tableParent">
-		<el-dialog title="高级搜索" 
-			:visible.sync="multiSearch" 
+		<el-dialog :title="(query.title?query.title:'表格')+'-高级搜索'" 
+			:visible.sync="configs.multiSearch" 
 			:modal-append-to-body="false" 
 			:modal="true"
 			:fullscreen="false" 
-			:close-on-click-modal="false"
+			width="55%"
+			:close-on-click-modal="true"
 		>
-			<el-form >
-				<el-form-item label="活动名称" >
-				<el-input  auto-complete="off"></el-input>
-				</el-form-item>
+			<el-form>
+				<div 
+					class="multisearch-condition"
+					v-for="(condition,key) in configs.multiSearchTools"
+					:key="key"
+				>	
+					<tool
+						v-for="(tool,k) in condition"
+						:is="tool.type"
+						v-if="tool.length===undefined"
+						:style="{width:tool.width}"
+						:key="k"
+						:config="Object.assign({disabled:key==0&&(k=='delete'||k=='connective')},tool)"
+						:form="configs.form.multiSearch[key]"
+						@buttonClick="addOrDelete($event,tool,key)"
+					>
+					</tool>
+					<div 
+						class="multisearch-field-condition"
+						v-else
+					>
+						<div 
+							class="multisearch-condition"
+							v-for="(fieldCondition,fieldCondition_k) in tool"
+							:key="fieldCondition_k"
+						>
+							<tool
+								v-for="(t,t_k) in fieldCondition"
+								:is="t.type"
+								:style="{width:t.width}"
+								:key="t_k"
+								:config="Object.assign({disabled:fieldCondition_k==0&&(t_k=='delete'||t_k=='connective')},t)"
+								:form="configs.form.multiSearch[key].fieldCondition[fieldCondition_k]"
+								@buttonClick="fieldConditionDelete($event,t,key,fieldCondition_k)"
+							>
+							</tool>						
+						</div>						
+					</div>															
+				</div>				
 			</el-form>
-			<div slot="footer" class="dialog-footer">
-				<el-button @click="multiSearch = false">取 消</el-button>
-				<el-button type="primary" @click="multiSearch = false">确 定</el-button>
-			</div>
+				<div slot="footer" class="dialog-footer">
+					<elementButton
+						v-for="(button,key) in this.multiSearchButton"
+						:key="key"
+						:config="button"
+						style="margin-right:5px;"
+						@buttonClick="buttonClick"
+					></elementButton>
+				</div>			
 		</el-dialog>		
 		<div style="height:auto;">
 			<el-form 
@@ -33,7 +74,7 @@
 					:form="configs.form"
 					@buttonClick="buttonClick"
 					@buttonItemClick="buttonItemClick"
-					@enter="currentChange(1)"
+					@enter="search('event',{name:'search'})"
 				></searchTool>
 				<tool
 					v-for="(tool, key,index) in configs.tools" 
@@ -105,7 +146,7 @@
 			@size-change="sizeChange"
 			background
 			:current-page="configs.pagination.currentPage"
-			:page-sizes="[1,5,10, 20, 30, 50,100]"
+			:page-sizes="[5,10, 20, 30, 50,100]"
 			:page-size="configs.pagination.pageSize"
 			layout="total, sizes, prev, pager, next, jumper"
 			:total="data.total"
@@ -119,9 +160,155 @@
 		props:['query'],
 		data() {
 			return {
-				multiSearch:false,
 				tableHeight:400,
+				multiSearchTools:[{
+					"connective":{
+						"name":"connective",
+						"type": "elementSelect",
+						"placeholder":" ",
+						"width":"90px",
+						"options": [{
+							value:"and",
+							label:"并且"
+						},{
+							value:"or",
+							label:"或者"
+						}]			
+					},
+					"field":{
+						"name":"field",
+						"type": "elementSelect",
+						"options": []			
+					},
+					"add":{
+						type:"elementButton",
+						icon:"el-icon-plus",
+						name:"add",
+						buttonType:"primary",
+						plain:true,
+						circle:true,
+						noText:true	,
+						size:"small"					
+					},
+					"fieldCondition":[{
+						"connective":{
+							"placeholder":" ",
+							"name":"connective",
+							"type": "elementSelect",
+							"size":"mini",
+							"width":"90px",
+							"options": [{
+								value:"and",
+								label:"并且"
+							},{
+								value:"or",
+								label:"或者"
+							}]			
+						},
+						"operator":{
+							"name":"operator",
+							"type": "elementSelect",
+							"size":"mini",
+							"width": "95px",	
+							"options": [{
+								"value": "like",
+								"label": "包含"
+							}, {
+								"value": "=",
+								"label": "等于"
+							}, {
+								"value": "not like",
+								"label": "不包含"
+							}, {
+								"value": "!=",
+								"label": "不等于"
+							}, {
+								"value": ">",
+								"label": "大于"
+							}, {
+								"value": "<",
+								"label": "小于"
+							},{
+								"value": "between",
+								"label": "间于"
+							},{
+								"value": "not between",
+								"label": "非间于"
+							}]			
+						},
+						"value":{
+							"name":"value",
+							"type": "elementText",
+							"size":"mini",
+						},
+						"delete":{
+							name:"delete",
+							type:"elementButton",
+							icon:"el-icon-minus",
+							buttonType:"primary",
+							plain:true,
+							circle:true,
+							noText:true	,
+							size:"mini"					
+						}
+					}],
+					"delete":{
+						type:"elementButton",
+						name:"delete",
+						icon:"el-icon-minus",
+						buttonType:"primary",
+						plain:true,
+						circle:true,
+						noText:true	,
+						size:"small"					
+					}
+				}],
+				multiSearchButton:{
+					add:{
+						style:"position: absolute;left: 0;",
+						type:"elementButton",
+						icon:"el-icon-plus",
+						buttonType:"primary",
+						wrapper:"span",
+						"title":"添加",
+						circle:true,
+						noText:true,
+						"script":"this.multiSearchAdd()"					
+					},					
+					cancel:{
+						"type":"elementButton",
+						wrapper:"span",
+						circle:true,
+						noText:true	,
+						"title":"取消",
+						"icon":"el-icon-close",
+						"script":"this.configs.multiSearch = false"				
+					},
+					reset:{
+						"type":"elementButton",
+						wrapper:"span",
+						"buttonType":"primary",
+						plain:true,
+						circle:true,
+						noText:true	,
+						"title":"重置",
+						"icon":"el-icon-refresh",
+						"script":"this.reset(event,config);"				
+					},
+					multiSearch:{
+						name:"multiSearch",
+						"type":"elementButton",
+						wrapper:"span",
+						"buttonType":"primary",
+						circle:true,
+						noText:true	,
+						"title":"搜索",
+						"icon":"el-icon-search",
+						"script":"this.multiSearch(event,config);"				
+					}
+				},
 				configs:{
+					multiSearch:false,
 					searchTools:{
 						"field":{
 							"name":"field",
@@ -240,6 +427,22 @@
 					option.vue.$set(option.vue.configs.table.header,'show',true);
 					//搜索字段
 					option.vue.$set(option.vue.configs.searchTools.field,'options',option.vue.configs.table.header.fields);
+					option.vue.$set(option.vue.multiSearchTools[0].field,'options',option.vue.configs.table.header.fields);
+					//高级搜索
+					if(!option.vue.configs.form.multiSearch){										
+						option.vue.$set(option.vue.configs.form,'multiSearch',[{
+							connective:"",
+							field:"",
+							fieldCondition:[{
+								connective:"",
+								operator:"like",
+								value:""
+							}]
+						}]);
+					}
+					if(!option.vue.configs.multiSearchTools){
+						option.vue.$set(option.vue.configs,'multiSearchTools',JSON.parse(JSON.stringify(option.vue.multiSearchTools)));
+					}
 					//搜索值类型为搜索字段的类型
 					let defaultSearch=option.vue.configs.searchTools.field.options.find((item,index,arr)=>item.value==data.form.field);
 					option.vue.$set(option.vue.configs.searchTools.value,'type',defaultSearch?option.vue.camelCase('element-'+defaultSearch.type):'elementText');					
@@ -282,7 +485,7 @@
 							this.$set(this.configs.form,'value','');
 						}	
 						break;
-				}			
+				}		
 			}
 		},
 		computed:{
@@ -300,7 +503,7 @@
 			//请求数据
 			request(){
 				let data=Object.assign({},this.query,this.configs.pagination);
-				if(this.configs.form.search){
+				if(this.configs.form.search=='search'||this.configs.form.search=='multiSearch'){
 					data.query=this.configs.form;
 				}
 				this.my.axios({
@@ -329,14 +532,56 @@
 				eval(config.script);
 			},
 			//搜索
-			search(event,config){
-				this.$set(this.configs.pagination,'currentPage',1);
-				this.$set(this.configs.form,'search',config.name=='search'?true:false);			
-				this.request(this.configs.pagination);
+			search(event,config,page=1){
+				if(page){
+					this.$set(this.configs.pagination,'currentPage',page);
+				}
+				this.$set(this.configs.form,'search',config.name);
+				this.request();
 			},
+			//搜索
+			multiSearch(event,config,page=1){
+				if(page){
+					this.$set(this.configs.pagination,'currentPage',page);
+				}
+				this.$set(this.configs.form,'search',config.name);		
+				this.request();
+			},			
+			//高级搜索增加条件
+            multiSearchAdd(event,config){
+				this.configs.multiSearchTools.push(JSON.parse(JSON.stringify(this.multiSearchTools[0])));
+				this.configs.form.multiSearch.push({
+					connective:"and",
+					field:"",
+					fieldCondition:[{
+						connective:"",
+						operator:"like",
+						value:""
+					}]
+				});
+			},
+			//高级搜索增减条件
+			addOrDelete($event,config,index){
+				if(config.name=='delete'){
+					this.$delete(this.configs.multiSearchTools,index);
+					this.$delete(this.configs.form.multiSearch,index);
+				}else{
+					this.configs.multiSearchTools[index].fieldCondition.push(JSON.parse(JSON.stringify(this.multiSearchTools[0].fieldCondition[0])));
+					this.configs.form.multiSearch[index].fieldCondition.push({
+						connective:"and",
+						operator:"like",
+						value:""
+					});
+				}
+			},
+			//高级搜索减字段条件
+			fieldConditionDelete($event,config,index,i){
+				this.$delete(this.configs.multiSearchTools[index].fieldCondition,i);
+				this.$delete(this.configs.form.multiSearch[index].fieldCondition,i);
+			},		
 			//重置
 			reset(event,config){
-				this.search(event,config);
+				this.search(event,config,false);
 			},
 			//添加
 			add(event,config){
@@ -354,7 +599,7 @@
 			//高级搜索弹窗
 			buttonItemClick(event,command){
 				if(command==0){
-					this.multiSearch=true;
+					this.configs.multiSearch=true;
 				}
 			},
 			//表格操作
@@ -399,7 +644,7 @@
 							data:Object.assign({},this.query,{row:row},operator.query)
 						},
 						success:function(response,option){
-							option.vue.search('event',{name:"search"});
+							option.vue.search('event',option.vue.configs.form.search?{name:"search"}:{},false);
 						},
 						successMsg:"删除成功"
 					});
@@ -410,3 +655,33 @@
 		}
 	}
 </script>
+<style>
+	.el-table td, .el-table th{
+		padding:6.5px 0px;
+	}
+	.multisearch-condition{
+		display: flex;
+		justify-content: flex-start;
+		align-items: center;
+	}
+	.multisearch-field-condition{
+		display: flex;
+		justify-content: flex-start;
+		align-items: center;
+		margin-right:10px;
+		flex-flow:column;
+	}
+	.multisearch-condition>.el-form-item{
+		margin-right:10px;
+		margin-bottom:5px;
+	}
+	.el-form>.multisearch-condition{
+		margin:15px 0px;	
+	}
+	.el-dialog{
+		min-width:700px;	
+	}	
+	.dialog-footer{
+		position: relative;
+	}	
+</style>

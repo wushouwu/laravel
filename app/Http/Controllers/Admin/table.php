@@ -12,26 +12,53 @@ class table extends Controller{
     public function __construct(){
         $this->db=config('database.connections.mysql.database');
     }
+    //条件转换
+    public function operator($tables,$query){
+        switch($query['operator']){
+            case 'like':
+            case 'not like':
+                $tables->where($query['field'],$query['operator'],'%'.$query['value'].'%');
+                break;
+            case 'between':
+                $tables->whereBetween($query['field'],$query['value']);
+                break;
+            case 'not between':
+                $tables->whereNotBetween($query['field'],$query['value']);
+                break;
+            default:
+                $tables->where($query['field'],$query['operator'],$query['value']);
+        }
+    }
     //条件搜索
     public function query(Request $request,$tables,$queryName){
         if($request->has($queryName)){
             $query=$request->input($queryName);
-            $query['value']=eval('return "'.$query['value'].'";');
-            switch($query['operator']){
-                case 'like':
-                case 'not like':
-                    $tables->where($query['field'],$query['operator'],'%'.$query['value'].'%');
-                    break;
-                case 'between':
-                    $tables->whereBetween($query['field'],$query['value']);
-                    break;
-                case 'not between':
-                    $tables->whereNotBetween($query['field'],$query['value']);
-                    break;
-                default:
-                    $tables->where($query['field'],$query['operator'],$query['value']);
+            //多条件高级搜索
+            if(isset($query['search'])&&$query['search']=='multiSearch'){
+                foreach($query['multiSearch'] as $key=>$val){
+                    $fun=function($query) use($val){
+                        foreach($val['fieldCondition'] as $k=>$v){
+                            $v['field']=$val['field'];
+                            $fun=function($query) use($v){
+                                $this->operator($query,$v);
+                            };
+                            if($v['connective']=='or'){
+                                $query->orWhere($fun);
+                            }else{
+                                $query->where($fun);
+                            }
+                        }
+                    };
+                    if($val['connective']=='or'){
+                        $tables->orWhere($fun);
+                    }else{
+                        $tables->where($fun);
+                    }
+                }
+            }else{
+                $query['value']=is_string($query['value'])?eval('return "'.$query['value'].'";'):$query['value'];
+                $this->operator($tables,$query);
             }
-            
         }
     }
     //获取相应表分页数据
@@ -195,8 +222,7 @@ class table extends Controller{
         $where=$request->input('where',['value'=>'']);
         $table=$where['value'];
         if (Schema::hasTable($table)) {
-            Schema::table($table, function (Blueprint $table) {
-                $request=$GLOBALS['request'];
+            Schema::table($table, function (Blueprint $table) use($request) {
                 $form=$request->input('form',[]);
                 $row=$request->input('row',[]);
                 if($form){
@@ -204,10 +230,7 @@ class table extends Controller{
                     //重命名
                     if($row && $form['COLUMN_NAME']!=$row['COLUMN_NAME']){
                         $where=$request->input('where',['value'=>'']);
-                        Schema::table($where['value'], function (Blueprint $table) {
-                            $request=$GLOBALS['request'];
-                            $form=$request->input('form',[]);
-                            $row=$request->input('row',[]);
+                        Schema::table($where['value'], function (Blueprint $table) use($form,$row){
                             $table->renameColumn($row['COLUMN_NAME'], $form['COLUMN_NAME']);
                         });                        
                     }
