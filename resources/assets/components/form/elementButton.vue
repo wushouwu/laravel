@@ -17,6 +17,7 @@
             :native-type="config.nativeType"
             :title="config.title"
             :size="config.size"
+            :disabled="config.disabled"
             :class="{noText:!config.textShow}"
             @click="buttonClick"
         >{{config.text}}</el-button>
