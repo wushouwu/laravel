@@ -82,6 +82,7 @@ export default {
                 if(!option.label){
                     option.label=option.value;
                 }
+                option.value=isNaN(parseInt(option.value))?option.value:'_'+option.value;
                 this.configs.tabs[option.value]=option;  
                 this.configs.activeTabs.push(option.value);
             }
