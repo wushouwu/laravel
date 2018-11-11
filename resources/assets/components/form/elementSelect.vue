@@ -329,7 +329,7 @@
             },
             change(value){
                 this.$emit('selectChange',value,this.config);
-                this.$emit('e',value,this.config);
+                this.$emit('e',value,{config:this.config});
             },
             selectClick(event){
                 if(this.config.transfer){
