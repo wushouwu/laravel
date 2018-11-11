@@ -16,7 +16,8 @@
             :placeholder="config.placeholder||'请输入'"
             :readonly="config.readonly"
             :disabled="config.disabled"
-            @click.native="inputClick"          
+            @click.native="inputClick" 
+            @keyup.enter.native="enter"      
         ></el-input>
 		<el-dialog 
             title="选择" 
